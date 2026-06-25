@@ -62,12 +62,44 @@
         .music-btn {background: #ff3366 !important; color: white !important;}
         .music-btn:hover:not(:disabled) {background: #dd2255 !important;}
         
+        /* Result & Video Preview Customization */
         .result {margin-top: 25px; padding: 25px; background: #0f1c2e; border-radius: 18px; display: none; border: 2px solid #00ff88;}
-        video {width: 100%; max-width: 400px; border-radius: 16px; margin: 15px 0; background: #000;}
+        
+        /* Menyembunyikan kontrol spesifik pada video player bawan browser (Volume, Fullscreen, 3-dots) */
+        video {
+            width: 100%; max-width: 400px; border-radius: 16px; margin: 15px 0; background: #000;
+        }
+        video::-webkit-media-controls-volume-control-container,
+        video::-webkit-media-controls-mute-button,
+        video::-webkit-media-controls-volume-slider {
+            display: none !important;
+        }
+        video::-webkit-media-controls-fullscreen-button {
+            display: none !important;
+        }
+        video::-internal-media-controls-download-button {
+            display: none !important;
+        }
+        video::-webkit-media-controls-enclosure {
+            overflow: hidden !important;
+        }
+
+        /* Desain Info Kreator & Caption */
+        .video-profile {
+            background: #16213e; padding: 12px 15px; border-radius: 12px;
+            margin-bottom: 12px; text-align: left; border-left: 4px solid #00bfff;
+        }
+        .video-username {
+            color: #00bfff; font-weight: 700; font-size: 15px; margin: 0 0 5px 0;
+        }
+        .video-caption {
+            color: #eee; font-size: 14px; margin: 0; line-height: 1.4;
+        }
+
         .note {font-size: 14px; color: #ffcc00; margin: 15px 0;}
         .copyright {font-size: 13px; color: #666; margin-top: 20px;}
 
-        /* Loading Spinner Tombol */
+        /* Loading Spinner */
         .spinner {
             width: 20px; height: 20px;
             border: 3px solid rgba(255,255,255,0.3);
@@ -155,7 +187,6 @@
         let currentTitle = '';
         let downloadController = null;
 
-        // Toast Standar (Masuk ke bagian bawah / Mengalah)
         function showToast(message, type = 'info') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -166,8 +197,6 @@
             if(type === 'error') icon = '❌';
 
             toast.innerHTML = `<span style="font-size:20px;">${icon}</span><div>${message}</div>`;
-            
-            // Menggunakan appendChild agar teks info biasa muncul di bawah progress download
             container.appendChild(toast);
 
             setTimeout(() => toast.classList.add('show'), 50);
@@ -177,7 +206,6 @@
             }, 4000);
         }
 
-        // Toast Progress Download (DI-PRIORITAS-KAN DI PALING ATAS)
         function createProgressToast(titleText) {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -187,7 +215,7 @@
             
             toast.innerHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: center; gap: 15px;">
-                    <span style="font-weight: 700;">⏳ ${titleText}</span>
+                    <span style="font-weight: 700;" id="toastTitle">⏳ ${titleText}</span>
                     <button class="toast-cancel-btn" onclick="cancelDownload()">BATAL</button>
                 </div>
                 <div class="toast-progress-container">
@@ -201,11 +229,14 @@
                 </div>
             `;
             
-            // MENGGUNAKAN PREPEND: Memaksa toast download ini berada di urutan paling atas!
             container.prepend(toast);
             setTimeout(() => toast.classList.add('show'), 50);
 
             return {
+                updateTitle: (newTitle) => {
+                    const titleEl = toast.querySelector('#toastTitle');
+                    if(titleEl) titleEl.innerText = `⏳ ${newTitle}`;
+                },
                 update: (bytesText, percent) => {
                     const txtBytes = toast.querySelector('#pgBytes');
                     const txtPercent = toast.querySelector('#pgPercent');
@@ -219,8 +250,11 @@
                             fill.classList.remove('indeterminate');
                             fill.style.width = percent + '%';
                         }
-                    } else {
+                    } else if (percent === -1) {
                         if(txtPercent) txtPercent.innerText = 'Proses...';
+                        if(fill && !fill.classList.contains('indeterminate')) {
+                            fill.classList.add('indeterminate');
+                        }
                     }
                 },
                 close: () => {
@@ -270,16 +304,27 @@
                     currentVideoUrl = v.hdplay || v.play || '';
                     currentMusicUrl = v.music || '';
                     currentTitle = v.title || 'rezyyxy_tiktok';
+                    
+                    // Mengambil data pembuat video jika didukung API
+                    const username = v.author?.unique_id || "kreator_tiktok";
+                    const nickname = v.author?.nickname || "";
 
-                    let html = `<p style="color:#00ff88;">✅ Video ketemu!</p>
-                        <video id="previewVideo" controls><source src="${currentVideoUrl}" type="video/mp4"></video>
+                    let html = `
+                        <div class="video-profile">
+                            <p class="video-username">👤 @${username} ${nickname ? `(${nickname})` : ''}</p>
+                            <p class="video-caption">📝 ${currentTitle}</p>
+                        </div>
+                        
+                        <video id="previewVideo" controls controlsList="nodownload nofullscreen noremoteplayback">
+                            <source src="${currentVideoUrl}" type="video/mp4">
+                        </video>
+                        
                         <button id="btnVid" class="main-btn" onclick="downloadVideo()"><div class="spinner"></div><span class="text">⬇️ DOWNLOAD VIDEO</span></button>`;
 
                     if (currentMusicUrl) {
                         html += `<button id="btnMus" class="main-btn music-btn" onclick="downloadMusic()"><div class="spinner"></div><span class="text">🎵 DOWNLOAD MUSIK</span></button>`;
                     }
 
-                    html += `<p class="note">${currentTitle}</p>`;
                     resultDiv.innerHTML = html;
                     showToast("Video berhasil dimuat!", "success");
                 } else {
@@ -292,9 +337,37 @@
             }
         }
 
-        async function forceDownload(fileUrl, fileName, onProgress) {
+        // Fungsi Inti dengan Sistem Manajemen Delay Interaktif 5 Detik
+        async function forceDownload(fileUrl, fileName, pToast, onProgress) {
             downloadController = new AbortController();
             const signal = downloadController.signal;
+
+            // --- TAHAP 1: SISTEM JEDA KONFIRMASI 5 DETIK ---
+            let countdown = 5;
+            pToast.update(`Bersiap... (${countdown}s)`, 0);
+            
+            let delayPassed = await new Promise((resolve) => {
+                let interval = setInterval(() => {
+                    countdown--;
+                    if (countdown > 0) {
+                        pToast.update(`Bersiap... (${countdown}s)`, 0);
+                    } else {
+                        clearInterval(interval);
+                        resolve(true);
+                    }
+                }, 1000);
+                
+                signal.addEventListener('abort', () => {
+                    clearInterval(interval);
+                    resolve(false);
+                });
+            });
+
+            if (!delayPassed) return 'dibatalkan';
+
+            // --- TAHAP 2: PROSES DOWNLOAD REAL-TIME DIMULAI ---
+            pToast.updateTitle("Mengunduh File...");
+            pToast.update("Menghubungkan...", -1); // Aktifkan garis jalan-jalan semula
 
             try {
                 const response = await fetch(fileUrl, { signal });
@@ -340,7 +413,7 @@
             } catch (error) {
                 if (error.name === 'AbortError') return 'dibatalkan';
                 
-                console.warn("Stream blocked by CORS, using silent iframe strategy...");
+                console.warn("Stream blocked by CORS, using fallback...");
                 const iframe = document.getElementById('download_iframe');
                 let downloadUrl = fileUrl;
                 if (!downloadUrl.includes('hd=1') && fileUrl.includes('tikwm.com')) {
@@ -363,16 +436,14 @@
             const btnText = btn.querySelector('.text');
             
             btn.disabled = true;
-            btnText.innerText = "Mengunduh...";
+            btnText.innerText = "Konfirmasi...";
             
-            // Ini akan muncul paling atas
-            const pToast = createProgressToast("Ngunduh Video");
-            // Ini akan mengalah muncul di bawah pToast
-            showToast("Memulai unduhan video...", "info");
+            const pToast = createProgressToast("Menunggu Konfirmasi");
+            showToast("Proses dijeda 5 detik. Klik BATAL di atas jika ingin membatalkan!", "info");
 
             const safeName = currentTitle.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 30) + '.mp4';
             
-            const status = await forceDownload(currentVideoUrl, safeName, (received, total) => {
+            const status = await forceDownload(currentVideoUrl, safeName, pToast, (received, total) => {
                 const MBDownloaded = (received / 1024 / 1024).toFixed(1);
                 if (total > 0) {
                     const percent = Math.round((received / total) * 100);
@@ -389,7 +460,7 @@
             if (status === 'sukses') {
                 showToast("Video berhasil diunduh! Selesai asu! 🖕", "success");
             } else if (status === 'dibatalkan') {
-                showToast("Unduhan dibatalkan!", "error");
+                showToast("Unduhan video dibatalkan!", "error");
             }
         }
 
@@ -399,35 +470,6 @@
             const btnText = btn.querySelector('.text');
             
             btn.disabled = true;
-            btnText.innerText = "Mengunduh...";
+            btnText.innerText = "Konfirmasi...";
             
-            // Ini akan muncul paling atas
-            const pToast = createProgressToast("Mengekstrak Musik");
-            // Ini akan mengalah muncul di bawah pToast
-            showToast("Memulai unduhan audio...", "info");
-
-            const safeName = currentTitle.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 30) + '.mp3';
-            
-            const status = await forceDownload(currentMusicUrl, safeName, (received, total) => {
-                const MBDownloaded = (received / 1024 / 1024).toFixed(1);
-                if (total > 0) {
-                    const percent = Math.round((received / total) * 100);
-                    pToast.update(`${MBDownloaded} MB`, percent);
-                } else {
-                    pToast.update(`${MBDownloaded} MB..`, -1);
-                }
-            });
-            
-            pToast.close();
-            btn.disabled = false;
-            btnText.innerText = "🎵 DOWNLOAD MUSIK";
-            
-            if (status === 'sukses') {
-                showToast("Musik berhasil disimpan! 🔥", "success");
-            } else if (status === 'dibatalkan') {
-                showToast("Unduhan musik dibatalkan!", "error");
-            }
-        }
-    </script>
-</body>
-</html>
+            const pToast = createProgressToast("Menunggu Konfirmasi"
