@@ -25,40 +25,66 @@
             box-shadow: 0 15px 40px rgba(0, 255, 100, 0.15);
         }
         h1 {color: #00ff88; margin-bottom: 8px; font-size: 28px;}
+        
+        /* Input & Mini Buttons Layout */
+        .input-group {
+            position: relative;
+            margin: 15px 0;
+        }
         input {
-            width: 100%; padding: 18px; margin: 15px 0; font-size: 17px;
+            width: 100%; padding: 18px; font-size: 17px;
             background: #0f1c2e; border: 3px solid #00ff88; border-radius: 16px;
             color: #eee; box-sizing: border-box; outline: none;
         }
-        button {
+        .input-utilities {
+            display: flex; gap: 10px; margin-top: -5px; margin-bottom: 15px;
+        }
+        .util-btn {
+            flex: 1; padding: 10px; font-size: 14px; font-weight: 600;
+            border-radius: 10px; border: none; cursor: pointer; transition: 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 5px;
+        }
+        .paste-btn { background: #00bfff; color: #000; }
+        .paste-btn:hover { background: #0099cc; }
+        .clear-btn { background: #333; color: #fff; }
+        .clear-btn:hover { background: #444; }
+
+        /* Main Buttons */
+        button.main-btn {
             width: 100%; padding: 18px; font-size: 18px; font-weight: 700;
             background: #00ff88; color: #000; border: none; border-radius: 16px;
             cursor: pointer; margin: 10px 0; transition: 0.3s;
             display: flex; align-items: center; justify-content: center; gap: 10px;
         }
-        button:hover:not(:disabled) {background: #00cc6a; transform: scale(1.04);}
-        button:disabled {background: #555 !important; color: #aaa !important; cursor: not-allowed;}
+        button.main-btn:hover:not(:disabled) {background: #00cc6a; transform: scale(1.04);}
+        button.main-btn:disabled {background: #555 !important; color: #aaa !important; cursor: not-allowed;}
+        
         .music-btn {background: #ff3366 !important; color: white !important;}
         .music-btn:hover:not(:disabled) {background: #dd2255 !important;}
+        
+        /* Cancel Button Style */
+        .cancel-btn {
+            background: #ff3333 !important; color: white !important;
+            margin-top: 5px; font-size: 15px; padding: 12px; display: none;
+        }
+        .cancel-btn:hover { background: #cc2222 !important; }
         
         .result {margin-top: 25px; padding: 25px; background: #0f1c2e; border-radius: 18px; display: none; border: 2px solid #00ff88;}
         video {width: 100%; max-width: 400px; border-radius: 16px; margin: 15px 0; background: #000;}
         .note {font-size: 14px; color: #ffcc00; margin: 15px 0;}
         .copyright {font-size: 13px; color: #666; margin-top: 20px;}
 
-        /* Animasi Loading Spinner */
+        /* Loading Spinner */
         .spinner {
             width: 20px; height: 20px;
             border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 0.8s linear infinite;
-            display: none;
+            border-radius: 50%; border-top-color: #fff;
+            animation: spin 0.8s linear infinite; display: none;
         }
         button:disabled .spinner {display: inline-block;}
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Desain Toast Notifikasi Modern */
+        /* Toast Notifikasi */
         #toast-container {
             position: fixed; top: 20px; right: 20px;
             z-index: 9999; max-width: 350px; width: calc(100% - 40px);
@@ -85,8 +111,17 @@
         <h1>🔥 Rezyyxy TikTok Downloader</h1>
         <p style="color:#00ff88;">Video + Musik • No Watermark</p>
         
-        <input type="text" id="urlInput" placeholder="Paste link TikTok di sini...">
-        <button onclick="processTikTok()">🔍 CEK VIDEO & MUSIK</button>
+        <div class="input-group">
+            <input type="text" id="urlInput" placeholder="Paste link TikTok di sini...">
+        </div>
+
+        <!-- Tombol Utilitas Pasang & Hapus -->
+        <div class="input-utilities">
+            <button class="util-btn paste-btn" onclick="pasteLink()">📋 Tempel Link</button>
+            <button class="util-btn clear-btn" onclick="clearLink()">❌ Clear Link</button>
+        </div>
+
+        <button class="main-btn" onclick="processTikTok()">🔍 CEK VIDEO & MUSIK</button>
 
         <div id="result" class="result"></div>
         
@@ -99,6 +134,7 @@
         let currentVideoUrl = '';
         let currentMusicUrl = '';
         let currentTitle = '';
+        let downloadController = null; // Pengendali untuk batalkan download
 
         function showToast(message, type = 'info') {
             const container = document.getElementById('toast-container');
@@ -113,11 +149,41 @@
             container.appendChild(toast);
 
             setTimeout(() => toast.classList.add('show'), 50);
-
             setTimeout(() => {
                 toast.classList.remove('show');
                 setTimeout(() => toast.remove(), 400);
             }, 4000);
+        }
+
+        // Fungsi Tempel Otomatis
+        async function pasteLink() {
+            try {
+                const text = await navigator.clipboard.readText();
+                if (text) {
+                    document.getElementById('urlInput').value = text;
+                    showToast("Link berhasil ditempel!", "success");
+                } else {
+                    showToast("Klipbor kosong, salin link dulu!", "info");
+                }
+            } catch (err) {
+                showToast("Izin akses klipbor ditolak browser!", "error");
+            }
+        }
+
+        // Fungsi Clear Link & Reset ke Awal
+        function clearLink() {
+            document.getElementById('urlInput').value = '';
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = "none";
+            resultDiv.innerHTML = '';
+            
+            // Reset variabel data
+            currentVideoUrl = '';
+            currentMusicUrl = '';
+            currentTitle = '';
+            if(downloadController) downloadController.abort();
+
+            showToast("Kolom dibersihkan, kembali ke awal!", "info");
         }
 
         async function processTikTok() {
@@ -139,10 +205,15 @@
 
                     let html = `<p style="color:#00ff88;">✅ Video ketemu!</p>
                         <video id="previewVideo" controls><source src="${currentVideoUrl}" type="video/mp4"></video>
-                        <button id="btnVid" onclick="downloadVideo()"><div class="spinner"></div><span class="text">⬇️ DOWNLOAD VIDEO</span></button>`;
+                        
+                        <!-- Area Tombol Download Video + Batal -->
+                        <button id="btnVid" class="main-btn" onclick="downloadVideo()"><div class="spinner"></div><span class="text">⬇️ DOWNLOAD VIDEO</span></button>
+                        <button id="cancelVid" class="main-btn cancel-btn" onclick="cancelDownload('Vid')">❌ Batalkan Download Video</button>`;
 
                     if (currentMusicUrl) {
-                        html += `<button id="btnMus" class="music-btn" onclick="downloadMusic()"><div class="spinner"></div><span class="text">🎵 DOWNLOAD MUSIK</span></button>`;
+                        html += `<!-- Area Tombol Download Musik + Batal -->
+                        <button id="btnMus" class="main-btn music-btn" onclick="downloadMusic()"><div class="spinner"></div><span class="text">🎵 DOWNLOAD MUSIK</span></button>
+                        <button id="cancelMus" class="main-btn cancel-btn" onclick="cancelDownload('Mus')">❌ Batalkan Download Musik</button>`;
                     }
 
                     html += `<p class="note">${currentTitle}</p>`;
@@ -158,10 +229,14 @@
             }
         }
 
+        // Fungsi Download Inti dengan Fitur Signal Pembatalan
         async function forceDownload(fileUrl, fileName) {
+            downloadController = new AbortController(); // Buat controller baru setiap kali download
+            const signal = downloadController.signal;
+
             try {
-                const response = await fetch(fileUrl);
-                if (!response.ok) throw new Error('CORS error');
+                const response = await fetch(fileUrl, { signal });
+                if (!response.ok) throw new Error('CORS or network error');
                 const blob = await response.blob();
                 const blobUrl = window.URL.createObjectURL(blob);
                 
@@ -172,50 +247,75 @@
                 a.click();
                 document.body.removeChild(a);
                 window.URL.revokeObjectURL(blobUrl);
-                return true;
+                return 'sukses';
             } catch (error) {
+                if (error.name === 'AbortError') {
+                    return 'dibatalkan';
+                }
+                // Jika gagal karena CORS, larikan ke strategi Iframe tersembunyi
+                console.warn("Blob blocked by CORS, pushing to iframe...");
                 const iframe = document.getElementById('download_iframe');
                 let downloadUrl = fileUrl;
                 if (!downloadUrl.includes('hd=1') && fileUrl.includes('tikwm.com')) {
                     downloadUrl = fileUrl + '&attachments=1'; 
                 }
                 iframe.src = downloadUrl;
-                return true;
+                return 'sukses';
+            }
+        }
+
+        // Fungsi Aksi Membatalkan
+        function cancelDownload(type) {
+            if (downloadController) {
+                downloadController.abort(); // Putuskan fetch request instan!
+                showToast("Unduhan berhasil dibatalkan olehmu!", "error");
             }
         }
 
         async function downloadVideo() {
             if (!currentVideoUrl) return showToast("Ga ada video 💀", "error");
             const btn = document.getElementById('btnVid');
+            const cancelBtn = document.getElementById('cancelVid');
             const btnText = btn.querySelector('.text');
             
             btn.disabled = true;
             btnText.innerText = "Mengunduh Video...";
-            showToast("Memulai unduhan video, tunggu bentar...", "info");
+            cancelBtn.style.display = "flex"; // Tampilkan tombol batalkan
+            showToast("Memulai unduhan, klik tombol merah jika ingin batal.", "info");
 
             const safeName = currentTitle.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 30) + '.mp4';
-            await forceDownload(currentVideoUrl, safeName);
+            const status = await forceDownload(currentVideoUrl, safeName);
             
             btn.disabled = false;
             btnText.innerText = "⬇️ DOWNLOAD VIDEO";
-            showToast("Video berhasil diunduh!", "success");
+            cancelBtn.style.display = "none"; // Sembunyikan tombol batalkan lagi
+            
+            if (status === 'sukses') {
+                showToast("Video berhasil diunduh!", "success");
+            }
         }
 
         async function downloadMusic() {
             if (!currentMusicUrl) return showToast("Ga ada musik 💀", "error");
             const btn = document.getElementById('btnMus');
+            const cancelBtn = document.getElementById('cancelMus');
             const btnText = btn.querySelector('.text');
             
             btn.disabled = true;
             btnText.innerText = "Mengunduh Musik...";
-            showToast("Sedang mengekstrak musik...", "info");
+            cancelBtn.style.display = "flex"; // Tampilkan tombol batalkan
+            showToast("Mengekstrak musik, klik tombol merah jika ingin batal.", "info");
 
             const safeName = currentTitle.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 30) + '.mp3';
-            await forceDownload(currentMusicUrl, safeName);
+            const status = await forceDownload(currentMusicUrl, safeName);
             
             btn.disabled = false;
             btnText.innerText = "🎵 DOWNLOAD MUSIK";
-            showToast("Musik berhasil disimpan! 🔥", "success");
+            cancelBtn.style.display = "none"; // Sembunyikan tombol batalkan lagi
+            
+            if (status === 'sukses') {
+                showToast("Musik berhasil disimpan! 🔥", "success");
+            }
         }
     </script>
 </body>
