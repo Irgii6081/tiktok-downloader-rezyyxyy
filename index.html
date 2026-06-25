@@ -41,7 +41,25 @@ video{width:100%;border-radius:12px;margin:10px 0;background:#000}
 .mdl-x{position:absolute;top:12px;right:12px;background:#ff3366;color:#fff;border:0;width:30px;height:30px;border-radius:8px;font-weight:700;cursor:pointer}
 @media(min-width:768px){.f-lst{grid-template-columns:repeat(2,1fr)}}
 </style>
+
+<script>
+let abFired=0;
+function abW(){
+    if(abFired) return 1; abFired=1;
+    let s=()=>{
+        if(document.getElementById('abW_ui')) return;
+        let o=document.createElement('div'); o.id='abW_ui';
+        o.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(10,10,10,0.98);z-index:999999;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#fff;text-align:center;padding:20px;box-sizing:border-box;';
+        o.innerHTML="<h2 style='color:#ff3366;margin-bottom:10px;'>⚠️ Adblock Terdeteksi!</h2><p style='color:#ccc;line-height:1.6;max-width:400px;font-size:14px;'>Website ini beroperasi secara gratis berkat dukungan iklan.<br><br><b>Mohon matikan Adblocker Anda</b> lalu muat ulang (refresh) halaman ini untuk melanjutkan.</p><button onclick='location.reload()' style='margin-top:20px;padding:12px 24px;background:#00ff88;color:#000;border:none;border-radius:10px;font-weight:bold;cursor:pointer;font-size:14px;box-shadow:0 5px 15px rgba(0,255,136,0.3);'>🔄 Saya Sudah Mematikan Adblock</button>";
+        document.body.appendChild(o); document.body.style.overflow='hidden';
+    };
+    if(document.body) s(); else window.addEventListener('DOMContentLoaded', s);
+    return 1;
+}
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" onerror="abW()"></script>
 </head>
+
 <body>
 <div id="tBox"></div>
 <div id="uMdl" class="mdl">
@@ -66,6 +84,10 @@ video{width:100%;border-radius:12px;margin:10px 0;background:#000}
 </div>
 <button id="btnCek" class="btn b-main" onclick="cek()">🔍 CEK VIDEO & MUSIK</button>
 
+<div id="ad-wrapper-mid" style="width:100%;max-width:600px;margin:20px auto;text-align:center;">
+    <div id="container-ff0cd9d911977b5f918c3f3c787aee9e"></div>
+    <script async="async" data-cfasync="false" src="https://ambitionbookingslick.com/ff0cd9d911977b5f918c3f3c787aee9e/invoke.js" onerror="abW()"></script>
+</div>
 <div id="res" class="res"></div>
 <div id="hst"></div>
 </div>
@@ -73,11 +95,6 @@ video{width:100%;border-radius:12px;margin:10px 0;background:#000}
 <div class="info-box">
 <h2>⚡ Fitur Utama</h2><ul><li><b>Video Tanpa Watermark:</b> Unduh video TikTok dalam kualitas asli tanpa logo.</li><li><b>Dukungan Slideshow:</b> Unduh foto (slideshow) secara individu atau dalam satu arsip ZIP.</li><li><b>Ekstrak Audio:</b> Konversi cepat video ke format audio MP3 berkualitas tinggi.</li><li><b>Performa Optimal:</b> Antarmuka ringan, anti-lag, perlindungan crash memori, dan deteksi tautan otomatis.</li></ul>
 <h2>🛠️ Panduan Penggunaan</h2><p>1. <b>Salin Tautan:</b> Buka TikTok, ketuk 'Bagikan' dan pilih 'Salin Tautan'.<br>2. <b>Tempel Tautan:</b> Buka web ini, tautan akan terdeteksi otomatis (atau tempel manual).<br>3. <b>Unduh:</b> Sistem akan memproses dan menampilkan tombol unduh secara langsung.</p>
-
-<div id="ad-wrapper-bot" style="width:100%;max-width:600px;margin:20px auto;text-align:center;">
-    <div id="container-ff0cd9d911977b5f918c3f3c787aee9e"></div>
-    <script async="async" data-cfasync="false" src="https://ambitionbookingslick.com/ff0cd9d911977b5f918c3f3c787aee9e/invoke.js"></script>
-</div>
 <h2>❓ Pertanyaan Umum (FAQ)</h2><p><b>Q: Apakah Rezyyxy Downloader aman digunakan?</b><br>A: Sangat aman. Kami menerapkan sistem filter otomatis Anti-XSS (penangkal skrip jahat) dan sistem kami sama sekali tidak pernah menyimpan file, video, atau data pribadi apa pun di dalam server.</p><p><b>Q: Mengapa sistem membatasi unduhan file berukuran besar?</b><br>A: Demi menjaga kenyamanan Anda. Kami memasang RAM Protection (Perlindungan Memori) yang akan membatalkan otomatis unduhan jika file di atas 200 MB. Fitur ini menjaga agar browser HP Anda tidak lag, membeku (hang), atau keluar sendiri (force close).</p><p><b>Q: Mengapa video hasil unduhan tidak ada tanda air (watermark)?</b><br>A: Sistem cerdas kami bekerja di latar belakang untuk membersihkan metadata tanda air langsung dari video asli TikTok sebelum file tersebut Anda simpan.</p><p><b>Q: Apakah website ini menampilkan iklan?</b><br>A: Kami mungkin menampilkan iklan banner yang bersih dan terpercaya di beberapa area strategis. Keberadaan iklan ini sepenuhnya digunakan untuk membantu biaya pemeliharaan dan sewa server agar layanan ini tetap bisa Anda akses secara gratis selamanya.</p><p><b>Q: Apa yang harus dilakukan jika proses unduhan gagal?</b><br>A: Pastikan jaringan internet Anda stabil, segarkan (refresh) halaman web ini, atau coba salin kembali tautan video baru dari aplikasi TikTok.</p>
 <h2>⚠️ Penafian</h2><p>Rezyyxy Downloader tidak berafiliasi dengan TikTok. Kami hanya alat bantu pihak ketiga. Seluruh hak cipta konten adalah milik pencipta asli.</p>
 <h2>👋 Tentang Kami</h2><p>Kami berkomitmen menyediakan pengalaman mengunduh yang lancar, cepat, stabil, dan aman untuk para pengguna.</p>
@@ -87,35 +104,18 @@ video{width:100%;border-radius:12px;margin:10px 0;background:#000}
 <iframe id="ifr" style="display:none"></iframe>
 
 <script>
-// ========================================================
-// SISTEM ANTI-ADBLOCK INSTAN & AGRESIF (0 DETIK TOLERANSI)
-// ========================================================
+// Lapis ke-2 Keamanan Anti-Adblock (CSS Bait)
 let cAd=()=>{
-    if(document.getElementById('abW')) return 1; 
-    let b=document.createElement('div');
-    b.className='adBanner ad-space ad-unit text-ad pub_300x250';
-    b.style.cssText='position:absolute;top:-999px;height:10px;display:block;';
+    if(abFired)return; let b=document.createElement('div');
+    b.className='adsbygoogle adBanner ad-space pub_300x250'; b.style.cssText='position:absolute;top:-9999px;height:10px;display:block;';
     document.body.appendChild(b);
-    let x=(b.offsetHeight===0 || window.getComputedStyle(b).display==='none');
-    b.remove();
-    if(x){
-        let o=document.createElement('div');o.id='abW';
-        o.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(10,10,10,0.98);z-index:999999;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#fff;text-align:center;padding:20px;box-sizing:border-box;';
-        o.innerHTML="<h2 style='color:#ff3366;margin-bottom:10px;'>⚠️ Adblock Terdeteksi!</h2><p style='color:#ccc;line-height:1.6;max-width:400px;font-size:14px;'>Website ini bisa terus beroperasi secara gratis berkat dukungan iklan.<br><br><b>Mohon matikan Adblocker Anda</b> lalu muat ulang (refresh) halaman ini untuk dapat mengunduh video TikTok.</p><button onclick='location.reload()' style='margin-top:20px;padding:12px 24px;background:#00ff88;color:#000;border:none;border-radius:10px;font-weight:bold;cursor:pointer;font-size:14px;box-shadow:0 5px 15px rgba(0,255,136,0.3);'>🔄 Saya Sudah Mematikan Adblock</button>";
-        document.body.appendChild(o);
-        document.body.style.overflow='hidden';
-        return 1;
-    }
-    return 0;
+    let x=(b.offsetHeight===0 || window.getComputedStyle(b).display==='none'); b.remove();
+    if(x) abW(); return x;
 };
-// Eksekusi seketika saat kode dibaca
-cAd();
-// Cek ulang setiap 1.5 detik (Mencegah user menghapus layar pakai F12)
-setInterval(cAd, 1500);
+window.addEventListener('DOMContentLoaded', cAd);
+setInterval(cAd, 1500); // Penjaga aktif agar user tidak curang
 
-// ========================================================
-// FUNGSI UTAMA (Dengan Lapisan Keamanan Anti-Adblock)
-// ========================================================
+// Script Utama Downloader
 let vU='',vH='',mU='',ttl='',img=[],totImgSz=0,c=null,$=i=>document.getElementById(i),PX='https://corsproxy.io/?';let fMB=b=>b?`(${(b/1e6).toFixed(1)} MB)`:'',fKB=b=>b?`(${(b/1024).toFixed(0)} KB)`:'';let esc=s=>s?s.replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])):'';
 window.onload=()=>{rHst();cAd()};
 window.onfocus=async()=>{try{let t=await navigator.clipboard.readText();if(/tiktok\.com/i.test(t)&&$('url').value!==t){$('url').value=t;tst("Tautan diproses otomatis!");cek()}}catch{}};
@@ -124,13 +124,13 @@ let shW=()=>{if(navigator.share)navigator.share({title:'Rezyyxy Downloader',text
 let pTst=(l)=>{let t=document.createElement('div');t.className='tst';t.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center"><b>⏳ ${l}</b><button style="background:#ff3366;color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer" onclick="c?.abort()">Batal</button></div><div style="display:flex;justify-content:space-between;font-size:11px;color:#aaa;margin-top:8px"><span id="tb">Siap...</span><span id="tp">0%</span></div><div class="p-bar"><div class="p-f" id="tf"></div></div>`;$('tBox').prepend(t);return{uT:x=>t.querySelector('b').innerText='⏳ '+x,u:(b,p)=>{$('tb').innerText=b;if(p>=0){$('tp').innerText=p+'%';$('tf').style.width=p+'%'}else $('tp').innerText='...'},x:()=>t.remove()}};
 let d5s=async(p)=>{for(let i=5;i>0;i--){if(c.signal.aborted)return 0;p.u(`Jeda... (${i} detik)`,0);await new Promise(r=>setTimeout(r,1e3))}return!c.signal.aborted};
 let gSz=async(u,id,k)=>{try{let r=await fetch(PX+encodeURIComponent(u),{method:'HEAD'});let l=r.headers.get('content-length');if(l){let b=parseInt(l);if(k){totImgSz+=b;if($('totSz'))$('totSz').innerText=fMB(totImgSz);}if($(id))$(id).innerText=k?fKB(b):fMB(b);}else{if($(id))$(id).innerText='(±1 MB)';}}catch{if($(id))$(id).innerText='(±1 MB)';}};
-let pst=async()=>{if(cAd())return;try{let t=await navigator.clipboard.readText();if(/tiktok\.com/i.test(t)){$('url').value=t;tst("Ditempel!");cek()}else tst("Bukan tautan TikTok!",1)}catch{tst("Gagal mengakses clipboard",1)}};
+let pst=async()=>{if(abFired)return;try{let t=await navigator.clipboard.readText();if(/tiktok\.com/i.test(t)){$('url').value=t;tst("Ditempel!");cek()}else tst("Bukan tautan TikTok!",1)}catch{tst("Gagal mengakses clipboard",1)}};
 let clr=()=>{vU=vH=mU=ttl='';img=[];c?.abort();$('url').value='';$('res').style.display='none';$('res').innerHTML='';tst("Dibersihkan!")};
-let cek=async()=>{if(cAd())return;let u=$('url').value.trim();if(!/tiktok\.com/i.test(u))return tst("Tautan tidak valid!",1);let btnC=$('btnCek');if(btnC.disabled)return;btnC.disabled=1;btnC.innerText="⏳ MEMPROSES...";$('res').style.display='block';$('res').innerHTML='Mencari... 🔥';try{let ac=new AbortController();setTimeout(()=>ac.abort(),15000);let r=await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(u)}`,{signal:ac.signal}),d=await r.json(),v=d.data;if(!v)throw 1;vU=v.play||'';vH=v.hdplay||'';mU=v.music||'';ttl=esc(v.title||'tiktok');img=v.images||[];let usr=esc(v.author?.unique_id||"kreator");let h=`<div style="text-align:left;background:#16213e;padding:10px;border-radius:8px">👤 <b style="color:#00bfff">@${usr}</b><br><small>${ttl}</small></div>`;if(img.length){h+=`<div class="f-lst">`;img.forEach((x,i)=>{h+=`<div class="f-row"><img src="${x}" class="f-img"><div style="display:flex;flex-direction:column;justify-content:space-between;align-items:center;margin-top:12px;width:100%;gap:5px"><span style="font-size:14px;font-weight:700">Foto ${i+1} <span id="iSz_${i}" class="sz">...</span></span><button id="bI_${i}" class="btn b-pst" style="padding:8px 20px;width:100%;margin:0" onclick="dlI(${i})">Unduh</button></div></div>`});h+=`</div><button id="bIa" class="btn b-main" onclick="dlA()">⬇️ UNDUH SEMUA FOTO <span id="totSz" class="sz">...</span></button>`}else{h+=`<video controls controlsList="nodownload nofullscreen noremoteplayback"><source src="${vU}"></video><button id="bV" class="btn b-main" onclick="dl('v')">⬇️ UNDUH VIDEO <span class="sz">${fMB(v.size)}</span></button>`;if(vH)h+=`<button id="bH" class="btn b-hd" onclick="dl('h')">🚀 UNDUH (HD) <span class="sz">${fMB(v.hd_size)}</span></button>`}if(mU)h+=`<button id="bM" class="btn b-mus" onclick="dl('m')">🎵 UNDUH AUDIO <span id="mSz" class="sz">...</span></button>`;h+=`<button class="btn" style="background:#6c5ce7;color:#fff;margin-top:15px" onclick="shW()">🔗 BAGIKAN WEB INI</button>`;$('res').innerHTML=h;sHst(ttl,usr,u);totImgSz=0;if(mU)gSz(mU,'mSz',0);if(img.length)img.forEach((x,i)=>gSz(x,'iSz_'+i,1));tst("Berhasil!");}catch{tst("Waktu habis / Gagal!",1);$('res').innerHTML='<b style="color:#ff3366">Pencarian Gagal.</b>'}btnC.disabled=0;btnC.innerText="🔍 CEK VIDEO & MUSIK"};
+let cek=async()=>{if(abFired)return;let u=$('url').value.trim();if(!/tiktok\.com/i.test(u))return tst("Tautan tidak valid!",1);let btnC=$('btnCek');if(btnC.disabled)return;btnC.disabled=1;btnC.innerText="⏳ MEMPROSES...";$('res').style.display='block';$('res').innerHTML='Mencari... 🔥';try{let ac=new AbortController();setTimeout(()=>ac.abort(),15000);let r=await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(u)}`,{signal:ac.signal}),d=await r.json(),v=d.data;if(!v)throw 1;vU=v.play||'';vH=v.hdplay||'';mU=v.music||'';ttl=esc(v.title||'tiktok');img=v.images||[];let usr=esc(v.author?.unique_id||"kreator");let h=`<div style="text-align:left;background:#16213e;padding:10px;border-radius:8px">👤 <b style="color:#00bfff">@${usr}</b><br><small>${ttl}</small></div>`;if(img.length){h+=`<div class="f-lst">`;img.forEach((x,i)=>{h+=`<div class="f-row"><img src="${x}" class="f-img"><div style="display:flex;flex-direction:column;justify-content:space-between;align-items:center;margin-top:12px;width:100%;gap:5px"><span style="font-size:14px;font-weight:700">Foto ${i+1} <span id="iSz_${i}" class="sz">...</span></span><button id="bI_${i}" class="btn b-pst" style="padding:8px 20px;width:100%;margin:0" onclick="dlI(${i})">Unduh</button></div></div>`});h+=`</div><button id="bIa" class="btn b-main" onclick="dlA()">⬇️ UNDUH SEMUA FOTO <span id="totSz" class="sz">...</span></button>`}else{h+=`<video controls controlsList="nodownload nofullscreen noremoteplayback"><source src="${vU}"></video><button id="bV" class="btn b-main" onclick="dl('v')">⬇️ UNDUH VIDEO <span class="sz">${fMB(v.size)}</span></button>`;if(vH)h+=`<button id="bH" class="btn b-hd" onclick="dl('h')">🚀 UNDUH (HD) <span class="sz">${fMB(v.hd_size)}</span></button>`}if(mU)h+=`<button id="bM" class="btn b-mus" onclick="dl('m')">🎵 UNDUH AUDIO <span id="mSz" class="sz">...</span></button>`;h+=`<button class="btn" style="background:#6c5ce7;color:#fff;margin-top:15px" onclick="shW()">🔗 BAGIKAN WEB INI</button>`;$('res').innerHTML=h;sHst(ttl,usr,u);totImgSz=0;if(mU)gSz(mU,'mSz',0);if(img.length)img.forEach((x,i)=>gSz(x,'iSz_'+i,1));tst("Berhasil!");}catch{tst("Waktu habis / Gagal!",1);$('res').innerHTML='<b style="color:#ff3366">Pencarian Gagal.</b>'}btnC.disabled=0;btnC.innerText="🔍 CEK VIDEO & MUSIK"};
 let sDl=async(u,n,b=0)=>{let a=document.createElement('a');a.href=u;a.download=n;document.body.appendChild(a);a.click();a.remove();if(b)URL.revokeObjectURL(u)};
-let dlI=async(i)=>{if(cAd())return;let u=img[i],b=$('bI_'+i),o=b.innerText;b.innerText="⏳...";b.disabled=1;c=new AbortController();let p=pTst(`Foto ${i+1}`);if(!(await d5s(p))){tst("Batal",1);p.x();b.innerText=o;b.disabled=0;return}p.uT("Mengunduh...");p.u("Proses...",-1);try{let r;try{r=await fetch(u,{signal:c.signal})}catch{r=await fetch(PX+encodeURIComponent(u),{signal:c.signal})}await sDl(URL.createObjectURL(new Blob([await r.blob()],{type:'image/jpeg'})),`${ttl}_${i}.jpg`,1);tst("Sukses!")}catch{c.signal.aborted?tst("Batal",1):($('ifr').src=u,tst("Tersimpan!"))}p.x();b.innerText=o;b.disabled=0};
-let dlA=async()=>{if(cAd())return;let b=$('bIa'),o=b.innerText;b.innerText="⏳...";b.disabled=1;c=new AbortController();let p=pTst("Semua Foto");if(!(await d5s(p))){tst("Batal",1);p.x();b.innerText=o;b.disabled=0;return}for(let i=0;i<img.length;i++){if(c.signal.aborted)break;p.uT(`Mengunduh ${i+1}/${img.length}`);p.u("Proses...",-1);try{let r;try{r=await fetch(img[i],{signal:c.signal})}catch{r=await fetch(PX+encodeURIComponent(img[i]),{signal:c.signal})}await sDl(URL.createObjectURL(new Blob([await r.blob()],{type:'image/jpeg'})),`${ttl}_${i+1}.jpg`,1)}catch{}}if(!c.signal.aborted)tst("Semua Sukses!");p.x();b.innerText=o;b.disabled=0};
-let dl=async(t)=>{if(cAd())return;let u=vU,b='bV',m='video/mp4',e='.mp4';if(t=='h'){u=vH;b='bH'}if(t=='m'){u=mU;b='bM';m='audio/mp3';e='.mp3'}let ob=$(b).innerText;$(b).innerText="⏳...";$(b).disabled=1;c=new AbortController();let p=pTst(t=='m'?"Audio":"Video");if(!(await d5s(p))){tst("Batal",1);p.x();$(b).innerText=ob;$(b).disabled=0;return}p.uT("Mengunduh...");p.u("Proses...",-1);try{let r;try{r=await fetch(u,{signal:c.signal})}catch{r=await fetch(PX+encodeURIComponent(u),{signal:c.signal})}let l=r.headers.get('content-length')||0,rd=r.body.getReader(),rc=0,ch=[];while(1){let{done,value}=await rd.read();if(done)break;ch.push(value);rc+=value.length;if(rc>200000000){c.abort();tst("Ukuran > 200MB! Dicegah agar HP tidak lag.",1);break;}p.u((rc/1e6).toFixed(1)+" MB",l>0?Math.round(rc/l*100):-1)}if(!c.signal.aborted){let a=new Uint8Array(rc),ps=0;for(let x of ch){a.set(x,ps);ps+=x.length}await sDl(URL.createObjectURL(new Blob([a],{type:m})),`${ttl}${e}`,1);tst("Sukses!")}}catch{c.signal.aborted?tst("Batal",1):($('ifr').src=u+(u.includes('?')?'&':'?')+'attachments=1',tst("Selesai!"))}p.x();$(b).innerText=ob;$(b).disabled=0};
+let dlI=async(i)=>{if(abFired)return;let u=img[i],b=$('bI_'+i),o=b.innerText;b.innerText="⏳...";b.disabled=1;c=new AbortController();let p=pTst(`Foto ${i+1}`);if(!(await d5s(p))){tst("Batal",1);p.x();b.innerText=o;b.disabled=0;return}p.uT("Mengunduh...");p.u("Proses...",-1);try{let r;try{r=await fetch(u,{signal:c.signal})}catch{r=await fetch(PX+encodeURIComponent(u),{signal:c.signal})}await sDl(URL.createObjectURL(new Blob([await r.blob()],{type:'image/jpeg'})),`${ttl}_${i}.jpg`,1);tst("Sukses!")}catch{c.signal.aborted?tst("Batal",1):($('ifr').src=u,tst("Tersimpan!"))}p.x();b.innerText=o;b.disabled=0};
+let dlA=async()=>{if(abFired)return;let b=$('bIa'),o=b.innerText;b.innerText="⏳...";b.disabled=1;c=new AbortController();let p=pTst("Semua Foto");if(!(await d5s(p))){tst("Batal",1);p.x();b.innerText=o;b.disabled=0;return}for(let i=0;i<img.length;i++){if(c.signal.aborted)break;p.uT(`Mengunduh ${i+1}/${img.length}`);p.u("Proses...",-1);try{let r;try{r=await fetch(img[i],{signal:c.signal})}catch{r=await fetch(PX+encodeURIComponent(img[i]),{signal:c.signal})}await sDl(URL.createObjectURL(new Blob([await r.blob()],{type:'image/jpeg'})),`${ttl}_${i+1}.jpg`,1)}catch{}}if(!c.signal.aborted)tst("Semua Sukses!");p.x();b.innerText=o;b.disabled=0};
+let dl=async(t)=>{if(abFired)return;let u=vU,b='bV',m='video/mp4',e='.mp4';if(t=='h'){u=vH;b='bH'}if(t=='m'){u=mU;b='bM';m='audio/mp3';e='.mp3'}let ob=$(b).innerText;$(b).innerText="⏳...";$(b).disabled=1;c=new AbortController();let p=pTst(t=='m'?"Audio":"Video");if(!(await d5s(p))){tst("Batal",1);p.x();$(b).innerText=ob;$(b).disabled=0;return}p.uT("Mengunduh...");p.u("Proses...",-1);try{let r;try{r=await fetch(u,{signal:c.signal})}catch{r=await fetch(PX+encodeURIComponent(u),{signal:c.signal})}let l=r.headers.get('content-length')||0,rd=r.body.getReader(),rc=0,ch=[];while(1){let{done,value}=await rd.read();if(done)break;ch.push(value);rc+=value.length;if(rc>200000000){c.abort();tst("Ukuran > 200MB! Dicegah agar HP tidak lag.",1);break;}p.u((rc/1e6).toFixed(1)+" MB",l>0?Math.round(rc/l*100):-1)}if(!c.signal.aborted){let a=new Uint8Array(rc),ps=0;for(let x of ch){a.set(x,ps);ps+=x.length}await sDl(URL.createObjectURL(new Blob([a],{type:m})),`${ttl}${e}`,1);tst("Sukses!")}}catch{c.signal.aborted?tst("Batal",1):($('ifr').src=u+(u.includes('?')?'&':'?')+'attachments=1',tst("Selesai!"))}p.x();$(b).innerText=ob;$(b).disabled=0};
 let sHst=(t,u,l)=>{let h=JSON.parse(localStorage.getItem('h')||'[]');if(!h.some(x=>x.l==l)){h.unshift({t,u,l});localStorage.setItem('h',JSON.stringify(h));rHst()}};
 let dHst=()=>{localStorage.removeItem('h');rHst();tst("Riwayat dihapus!")};
 let rHst=()=>{let h=JSON.parse(localStorage.getItem('h')||'[]');$('hst').innerHTML=h.length?`<div class="hst"><div style="display:flex;justify-content:space-between;align-items:center;"><b style="color:#00ff88">📜 Riwayat:</b><button onclick="dHst()" style="background:#ff3366;color:#fff;border:none;padding:2px 8px;border-radius:4px;font-size:10px;cursor:pointer;">Hapus</button></div>`+h.map(x=>`<div class="h-it" onclick="document.getElementById('url').value='${x.l}';cek()"><b style="color:#00bfff">@${x.u}</b> ${x.t.slice(0,18)}...</div>`).join('')+`</div>`:''};
