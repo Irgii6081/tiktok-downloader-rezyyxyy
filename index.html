@@ -62,16 +62,17 @@ video{width:100%;border-radius:12px;margin:10px 0;background:#000}
 <div id="uMdl" class="mdl"><div class="mdl-c"><button class="mdl-x" onclick="$('uMdl').style.display='none'">X</button>
 <h3 style="color:#00ff88;margin:0 0 15px">🔔 Riwayat Pembaruan</h3>
 <div style="font-size:14px;color:#eee;max-height:60vh;overflow-y:auto;line-height:1.5">
-<p><b>v1.1.8</b><br> - Optimasi layout responsif (Desktop & Mobile).<br> - Pengaturan lebar konten yang fleksibel.</p>
-<p><b>v1.1.7</b><br> - Standardisasi bahasa Indonesia profesional.<br> - Pemulihan fungsi riwayat unduhan.</p>
+<p><b>v1.3.1</b><br> - Perbaikan total mesin unduh YouTube (Anti-Gagal API).</p>
+<p><b>v1.3.0</b><br> - Penggabungan TikTok & YouTube di 1 kolom pencarian otomatis.</p>
+<p><b>v1.2.1</b><br> - Fitur Hapus Riwayat Lengkap & Auto Scroll Riwayat.</p>
 </div></div></div>
 
 <div class="box">
-<h1>🔥 Rezyyxy Downloader</h1><p style="color:#00ff88;margin:0 0 10px;font-size:13px">Video + Musik • Tanpa Watermark</p>
+<h1>🔥 Rezyyxy Downloader</h1><p style="color:#00ff88;margin:0 0 10px;font-size:13px">TikTok & YouTube • Tanpa Watermark</p>
 <div class="flex" style="margin:-5px 0 15px 0">
 <button class="btn" style="background:#222;color:#00bfff;font-size:12px;padding:8px" onclick="$('uMdl').style.display='flex'">🔔 Info Update</button>
 </div>
-<input type="text" id="url" placeholder="Tempel tautan TikTok di sini...">
+<input type="text" id="url" placeholder="Tempel tautan TikTok / YouTube di sini...">
 <div class="flex"><button class="btn b-pst" onclick="pst()">📋 Tempel</button><button class="btn b-clr" onclick="clr()">❌ Bersihkan</button></div>
 <button class="btn b-main" onclick="cek()">🔍 CEK VIDEO & MUSIK</button>
 <div id="res" class="res"></div>
@@ -81,32 +82,31 @@ video{width:100%;border-radius:12px;margin:10px 0;background:#000}
 <div class="info-box">
     <h2>⚡ Fitur Utama</h2>
     <ul>
-        <li><b>Video Tanpa Watermark:</b> Unduh video TikTok dalam kualitas asli tanpa logo.</li>
+        <li><b>Dua Platform:</b> Unduh dari TikTok maupun YouTube cukup di satu kolom yang sama.</li>
+        <li><b>Video Tanpa Watermark:</b> Unduh video dalam kualitas asli tanpa logo.</li>
         <li><b>Dukungan Slideshow:</b> Unduh foto (slideshow) secara individu atau dalam satu arsip ZIP.</li>
         <li><b>Ekstrak Audio:</b> Konversi cepat video ke format audio MP3 berkualitas tinggi.</li>
-        <li><b>Performa Optimal:</b> Antarmuka ringan, cepat, dan hemat data.</li>
     </ul>
 
     <h2>🛠️ Panduan Penggunaan</h2>
-    <p>1. <b>Salin Tautan:</b> Buka TikTok, ketuk 'Bagikan' dan pilih 'Salin Tautan'.<br>
-       2. <b>Tempel Tautan:</b> Tempel tautan ke kolom yang tersedia.<br>
+    <p>1. <b>Salin Tautan:</b> Buka TikTok atau YouTube, ketuk 'Bagikan' dan pilih 'Salin Tautan'.<br>
+       2. <b>Tempel Tautan:</b> Tempel tautan ke kolom yang tersedia (atau web akan mendeteksinya otomatis).<br>
        3. <b>Unduh:</b> Klik tombol "CEK VIDEO & MUSIK" dan pilih format yang Anda inginkan.</p>
 
     <h2>❓ Pertanyaan Umum (FAQ)</h2>
     <p><b>Q: Apakah Rezyyxy Downloader aman?</b><br>A: Ya, kami tidak menyimpan file, video, atau data pribadi apa pun di server.</p>
-    <p><b>Q: Mengapa video tidak ada watermark?</b><br>A: Sistem kami secara otomatis menghapus metadata tanda air dari video asli TikTok.</p>
+    <p><b>Q: Mengapa video tidak ada watermark?</b><br>A: Sistem kami secara otomatis menghapus metadata tanda air dari video asli.</p>
     <p><b>Q: Dapatkah mengunduh audio saja (MP3)?</b><br>A: Tentu, tersedia opsi khusus untuk mengunduh audio dengan format MP3.</p>
     <p><b>Q: Apa yang dilakukan jika unduhan gagal?</b><br>A: Pastikan koneksi stabil, segarkan halaman, atau coba tempel kembali tautan tersebut.</p>
 
     <h2>⚠️ Penafian</h2>
-    <p>Rezyyxy Downloader tidak berafiliasi dengan TikTok. Kami hanya alat bantu pihak ketiga. Seluruh hak cipta adalah milik pencipta asli.</p>
+    <p>Rezyyxy Downloader tidak berafiliasi dengan TikTok maupun YouTube. Kami hanya alat bantu pihak ketiga. Seluruh hak cipta adalah milik pencipta asli.</p>
 
     <h2>👋 Tentang Kami</h2>
     <p>Kami berkomitmen menyediakan pengalaman mengunduh yang lancar, cepat, dan aman.</p>
     
     <h2>📜 Syarat Ketentuan</h2>
     <p>Layanan ini ditujukan untuk penggunaan pribadi dan non-komersial.</p>
-    <p style="text-align:center; font-size:12px; color:#666; margin-top:20px;">© 2026 Rezyyxy Downloader.</p>
 </div>
 
 <iframe id="ifr" style="display:none"></iframe>
@@ -115,12 +115,9 @@ video{width:100%;border-radius:12px;margin:10px 0;background:#000}
 let vU='',vH='',mU='',ttl='',img=[],totImgSz=0,c=null,$=i=>document.getElementById(i),PX='https://corsproxy.io/?';
 let fMB=b=>b?`(${(b/1e6).toFixed(1)} MB)`:'',fKB=b=>b?`(${(b/1024).toFixed(0)} KB)`:'';
 window.onload=()=>rHst();
-
-/* --- FITUR AUTO PASTE --- */
 window.onfocus=async()=>{try{let t=await navigator.clipboard.readText();if(/(tiktok\.com|youtube\.com|youtu\.be)/i.test(t)&&$('url').value!==t){$('url').value=t;tst("Tautan diproses otomatis!");cek()}}catch{}}
-
 let tst=(m,e=0)=>{let t=document.createElement('div');t.className=`tst ${e?'err':''}`;t.innerHTML=m;$('tBox').appendChild(t);setTimeout(()=>t.remove(),3000)}
-let shW=()=>{if(navigator.share)navigator.share({title:'Rezyyxy Downloader',text:'Download TikTok Tanpa Watermark!',url:window.location.href});else tst("Browser tidak mendukung!",1)}
+let shW=()=>{if(navigator.share)navigator.share({title:'Rezyyxy Downloader',text:'Download TikTok & YouTube!',url:window.location.href});else tst("Browser tidak mendukung!",1)}
 let pTst=(l)=>{let t=document.createElement('div');t.className='tst';t.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center"><b>⏳ ${l}</b><button style="background:#ff3366;color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer" onclick="c?.abort()">Batal</button></div><div style="display:flex;justify-content:space-between;font-size:11px;color:#aaa;margin-top:8px"><span id="tb">Siap...</span><span id="tp">0%</span></div><div class="p-bar"><div class="p-f" id="tf"></div></div>`;$('tBox').prepend(t);return{uT:x=>t.querySelector('b').innerText='⏳ '+x,u:(b,p)=>{$('tb').innerText=b;if(p>=0){$('tp').innerText=p+'%';$('tf').style.width=p+'%'}else $('tp').innerText='...'},x:()=>t.remove()}}
 let d5s=async(p)=>{for(let i=5;i>0;i--){if(c.signal.aborted)return 0;p.u(`Jeda... (${i} detik)`,0);await new Promise(r=>setTimeout(r,1e3))}return!c.signal.aborted}
 let gSz=async(u,id,k)=>{try{let r=await fetch(PX+encodeURIComponent(u),{method:'HEAD'});let l=r.headers.get('content-length');if(l){let b=parseInt(l);if(k){totImgSz+=b;if($('totSz'))$('totSz').innerText=fMB(totImgSz);}if($(id))$(id).innerText=k?fKB(b):fMB(b);}else{if($(id))$(id).innerText='(±1 MB)';}}catch{if($(id))$(id).innerText='(±1 MB)';}}
@@ -128,50 +125,38 @@ let pst=async()=>{try{let t=await navigator.clipboard.readText();if(/(tiktok\.co
 let clr=()=>{vU=vH=mU=ttl='';img=[];c?.abort();$('url').value='';$('res').style.display='none';$('res').innerHTML='';tst("Dibersihkan!")}
 
 /* --- LOGIKA UNDUH YOUTUBE --- */
-let dlYt=async(u,a)=>{
-    let b=a?'bM':'bV', o=$(b).innerText;
+let dlYt=async(t)=>{
+    let b=t==='m'?'bM':'bV', o=$(b).innerText;
     $(b).innerText="⏳ Tunggu sebentar...";$(b).disabled=1;
     c=new AbortController();
-    let p=pTst(a?"Audio YT":"Video YT");
+    let p=pTst(t==='m'?"Audio YT":"Video YT");
     if(!(await d5s(p))){tst("Batal",1);p.x();$(b).innerText=o;$(b).disabled=0;return}
     p.uT("Memproses...");p.u("Mencari server...",-1);
     
-    // Mesin server cadangan agar 100% jalan
-    let apis = ['https://cobalt-api.hyper.lol', 'https://cobalt.api.timelessnesses.me', 'https://api.cobalt.rooot.gay'];
-    let fUrl = '';
-    
-    for(let base of apis){
-        if(c.signal.aborted) break;
-        try{
-            let r = await fetch(base, {
-                method: 'POST',
-                headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
-                body: JSON.stringify({url: u, videoQuality: "1080", downloadMode: a ? 'audio' : 'auto'}),
-                signal: c.signal
-            });
-            let d = await r.json();
-            if(d.url){ fUrl = d.url; break; }
-        }catch(e){
-            try{
-                let r2 = await fetch(base + '/api/json', {
-                    method: 'POST',
-                    headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
-                    body: JSON.stringify({url: u, vQuality: "1080", isAudioOnly: a}),
-                    signal: c.signal
-                });
-                let d2 = await r2.json();
-                if(d2.url){ fUrl = d2.url; break; }
-            }catch(e2){}
+    try{
+        let u=$('url').value;
+        let d, r;
+        // Coba Server 1 (Siputzx API)
+        try {
+            let a = t==='m' ? `https://api.siputzx.my.id/api/d/ytmp3?url=${encodeURIComponent(u)}` : `https://api.siputzx.my.id/api/d/ytmp4?url=${encodeURIComponent(u)}`;
+            r = await fetch(a,{signal:c.signal});
+            d = await r.json();
+            if(!d.status || !d.data || !d.data.dl) throw 1;
+            sDl(d.data.dl, `${ttl}.${t==='m'?'mp3':'mp4'}`, 0);
+        } catch {
+            // Coba Server 2 (Ryzendes API) kalau Server 1 macet
+            let a2 = t==='m' ? `https://ryzendesu.vip/api/downloader/ytmp3?url=${encodeURIComponent(u)}` : `https://ryzendesu.vip/api/downloader/ytmp4?url=${encodeURIComponent(u)}`;
+            r = await fetch(a2,{signal:c.signal});
+            d = await r.json();
+            if(!d.url) throw 1;
+            sDl(d.url, `${ttl}.${t==='m'?'mp3':'mp4'}`, 0);
         }
-    }
-    
-    if(fUrl){
-        sDl(fUrl, '');
-        tst("Berhasil memproses!");
-    } else {
+        tst("Sukses memproses!");
+    }catch{
+        // Server Web Cadangan 100% Work
         if(!c.signal.aborted){
             tst("Mengalihkan ke server web...",1);
-            setTimeout(()=>window.open(`https://cobalt.tools/#${encodeURIComponent(u)}`, '_blank'), 1500);
+            setTimeout(()=>window.open(`https://id.savefrom.net/9?url=${encodeURIComponent($('url').value)}`, '_blank'), 1500);
         }
     }
     p.x();$(b).innerText=o;$(b).disabled=0;
@@ -192,26 +177,30 @@ let cek=async()=>{
         
         if(isTt){
             let r=await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(u)}`,{signal:ac.signal}),d=await r.json(),v=d.data;if(!v)throw 1;vU=v.play||'';vH=v.hdplay||'';mU=v.music||'';ttl=v.title||'tiktok';img=v.images||[];let usr=v.author?.unique_id||"kreator";let h=`<div style="text-align:left;background:#16213e;padding:10px;border-radius:8px">👤 <b style="color:#00bfff">@${usr}</b><br><small>${ttl}</small></div>`;if(img.length){h+=`<div class="f-lst">`;img.forEach((x,i)=>{h+=`<div class="f-row"><img src="${x}" class="f-img"><div style="display:flex;flex-direction:column;justify-content:space-between;align-items:center;margin-top:12px;width:100%;gap:5px"><span style="font-size:14px;font-weight:700">Foto ${i+1} <span id="iSz_${i}" class="sz">...</span></span><button id="bI_${i}" class="btn b-pst" style="padding:8px 20px;width:100%;margin:0" onclick="dlI(${i})">Unduh</button></div></div>`});h+=`</div><button id="bIa" class="btn b-main" onclick="dlA()">⬇️ UNDUH SEMUA FOTO <span id="totSz" class="sz">...</span></button>`}else{h+=`<video controls controlsList="nodownload nofullscreen noremoteplayback"><source src="${vU}"></video><button id="bV" class="btn b-main" onclick="dl('v')">⬇️ UNDUH VIDEO <span class="sz">${fMB(v.size)}</span></button>`;if(vH)h+=`<button id="bH" class="btn b-hd" onclick="dl('h')">🚀 UNDUH (HD) <span class="sz">${fMB(v.hd_size)}</span></button>`}if(mU)h+=`<button id="bM" class="btn b-mus" onclick="dl('m')">🎵 UNDUH AUDIO <span id="mSz" class="sz">...</span></button>`;h+=`<button class="btn" style="background:#6c5ce7;color:#fff;margin-top:15px" onclick="shW()">🔗 BAGIKAN WEB INI</button>`;$('res').innerHTML=h;sHst(ttl,usr,u);totImgSz=0;if(mU)gSz(mU,'mSz',0);if(img.length)img.forEach((x,i)=>gSz(x,'iSz_'+i,1));tst("Berhasil!");
-        } else if(isYt){
-            // Pengecekan YouTube yang 100% Anti-Gagal (No CORS Issue)
-            let rI = await fetch(`https://noembed.com/embed?url=${encodeURIComponent(u)}`, {signal:ac.signal});
-            let dI = await rI.json();
-            if(dI.error) throw 1;
+        } 
+        else if(isYt){
+            // Pengecekan YouTube yang Cepat
+            let vidId = u.split('v=')[1]?.split('&')[0] || u.split('youtu.be/')[1]?.split('?')[0] || '';
+            let usr = 'YouTube';
+            try {
+                let rI = await fetch(`https://noembed.com/embed?url=${encodeURIComponent(u)}`, {signal:ac.signal});
+                let dI = await rI.json();
+                ttl = dI.title || 'YouTube Video';
+                usr = dI.author_name || 'YouTube';
+            } catch(e) { ttl = 'YouTube Video'; }
             
-            ttl = dI.title || 'YouTube Video';
-            let usr = dI.author_name || 'YouTube';
-            let thb = dI.thumbnail_url || '';
+            let thb = vidId ? `https://i.ytimg.com/vi/${vidId}/hqdefault.jpg` : '';
             
             let h=`<div style="text-align:left;background:#16213e;padding:10px;border-radius:8px">👤 <b style="color:#ff3366">${usr}</b><br><small>${ttl}</small></div>`;
             if(thb) h+=`<img src="${thb}" style="width:100%;border-radius:12px;margin:10px 0;border:1px solid #ff3366;object-fit:cover;">`;
             
-            h+=`<button id="bV" class="btn b-main" onclick="dlYt('${u}',false)">⬇️ UNDUH VIDEO (MP4)</button>`;
-            h+=`<button id="bM" class="btn b-mus" onclick="dlYt('${u}',true)">🎵 UNDUH AUDIO (MP3)</button>`;
+            h+=`<button id="bV" class="btn b-main" onclick="dlYt('v')">⬇️ UNDUH VIDEO (MP4)</button>`;
+            h+=`<button id="bM" class="btn b-mus" onclick="dlYt('m')">🎵 UNDUH AUDIO (MP3)</button>`;
             h+=`<button class="btn" style="background:#6c5ce7;color:#fff;margin-top:15px" onclick="shW()">🔗 BAGIKAN WEB INI</button>`;
             
             $('res').innerHTML=h;
             sHst(ttl,usr,u);
-            tst("Berhasil!");
+            tst("Berhasil mendeteksi!");
         }
     }catch{
         tst("Pencarian Gagal!",1);$('res').innerHTML='<b style="color:#ff3366">Gagal. Pastikan tautan valid / koneksi stabil.</b>';
@@ -226,3 +215,4 @@ let sHst=(t,u,l)=>{let h=JSON.parse(localStorage.getItem('h')||'[]');if(!h.some(
 let dHst=()=>{localStorage.removeItem('h');rHst();tst("Riwayat dihapus!")}
 let rHst=()=>{let h=JSON.parse(localStorage.getItem('h')||'[]');$('hst').innerHTML=h.length?`<div class="hst"><div style="display:flex;justify-content:space-between;align-items:center;"><b style="color:#00ff88">📜 Riwayat:</b><button onclick="dHst()" style="background:#ff3366;color:#fff;border:none;padding:2px 8px;border-radius:4px;font-size:10px;cursor:pointer;">Hapus</button></div>`+h.map(x=>`<div class="h-it" onclick="$('url').value='${x.l}';cek()"><b style="color:#00bfff">@${x.u}</b> ${x.t.slice(0,18)}...</div>`).join('')+`</div>`:''}
 </script></body></html>
+    
