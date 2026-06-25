@@ -81,10 +81,11 @@
         #toast-container {
             position: fixed; top: 20px; right: 20px;
             z-index: 9999; max-width: 360px; width: calc(100% - 40px);
+            display: flex; flex-direction: column; gap: 12px;
         }
         .toast {
             background: #1f4068; color: #fff; padding: 16px 20px;
-            border-radius: 14px; margin-bottom: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border-radius: 14px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
             display: flex; gap: 12px; text-align: left;
             transform: translateX(120%); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border-left: 5px solid #00ff88; font-size: 15px;
@@ -106,7 +107,6 @@
             background: #00ff88; height: 100%; width: 0%; 
             transition: width 0.1s linear;
         }
-        /* Mode garis jalan otomatis (jika size file disembunyikan server) */
         .pg-fill.indeterminate {
             width: 40%; position: absolute; background: linear-gradient(90deg, #00ff88, #00bfff);
             animation: progress-slide 1.2s infinite linear;
@@ -116,11 +116,11 @@
             100% { left: 100%; }
         }
         .toast-cancel-btn {
-            background: #ff3366; color: #fff; border: none; padding: 5px 10px;
-            font-size: 12px; font-weight: 700; border-radius: 6px; cursor: pointer;
-            transition: 0.2s;
+            background: #ff3366; color: #fff; border: none; padding: 6px 12px;
+            font-size: 13px; font-weight: 700; border-radius: 8px; cursor: pointer;
+            transition: 0.2s; box-shadow: 0 4px 10px rgba(255, 51, 102, 0.3);
         }
-        .toast-cancel-btn:hover { background: #dd2255; }
+        .toast-cancel-btn:hover { background: #dd2255; transform: scale(1.05); }
     </style>
 </head>
 <body>
@@ -155,7 +155,7 @@
         let currentTitle = '';
         let downloadController = null;
 
-        // Toast Standar (Sukses / Error)
+        // Toast Standar (Masuk ke bagian bawah / Mengalah)
         function showToast(message, type = 'info') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -166,6 +166,8 @@
             if(type === 'error') icon = '❌';
 
             toast.innerHTML = `<span style="font-size:20px;">${icon}</span><div>${message}</div>`;
+            
+            // Menggunakan appendChild agar teks info biasa muncul di bawah progress download
             container.appendChild(toast);
 
             setTimeout(() => toast.classList.add('show'), 50);
@@ -175,7 +177,7 @@
             }, 4000);
         }
 
-        // Pembuat Toast khusus Progress Download + Tombol Batal Terintegrasi
+        // Toast Progress Download (DI-PRIORITAS-KAN DI PALING ATAS)
         function createProgressToast(titleText) {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -184,9 +186,9 @@
             toast.style.alignItems = 'stretch';
             
             toast.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-weight: 600;">⏳ ${titleText}</span>
-                    <button class="toast-cancel-btn" onclick="cancelDownload()">Batal</button>
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 15px;">
+                    <span style="font-weight: 700;">⏳ ${titleText}</span>
+                    <button class="toast-cancel-btn" onclick="cancelDownload()">BATAL</button>
                 </div>
                 <div class="toast-progress-container">
                     <div style="display: flex; justify-content: space-between; font-size: 12px; color: #aaa;">
@@ -199,7 +201,8 @@
                 </div>
             `;
             
-            container.appendChild(toast);
+            // MENGGUNAKAN PREPEND: Memaksa toast download ini berada di urutan paling atas!
+            container.prepend(toast);
             setTimeout(() => toast.classList.add('show'), 50);
 
             return {
@@ -289,7 +292,6 @@
             }
         }
 
-        // Fungsi Inti Pengunduh dengan Stream Reader & Pembatalan instan
         async function forceDownload(fileUrl, fileName, onProgress) {
             downloadController = new AbortController();
             const signal = downloadController.signal;
@@ -298,7 +300,6 @@
                 const response = await fetch(fileUrl, { signal });
                 if (!response.ok) throw new Error('Network error');
 
-                // Deteksi total file size (jika diizinkan oleh kebijakan CORS server)
                 const contentLength = response.headers.get('content-length');
                 const totalBytes = parseInt(contentLength, 10) || 0;
 
@@ -318,7 +319,6 @@
                     }
                 }
 
-                // Gabung kepingan data biner yang terkumpul
                 let chunksAll = new Uint8Array(receivedBytes);
                 let position = 0;
                 for (let chunk of chunks) {
@@ -340,7 +340,6 @@
             } catch (error) {
                 if (error.name === 'AbortError') return 'dibatalkan';
                 
-                // Fallback otomatis ke Iframe jika CORS memblokir Stream JavaScript
                 console.warn("Stream blocked by CORS, using silent iframe strategy...");
                 const iframe = document.getElementById('download_iframe');
                 let downloadUrl = fileUrl;
@@ -366,7 +365,10 @@
             btn.disabled = true;
             btnText.innerText = "Mengunduh...";
             
+            // Ini akan muncul paling atas
             const pToast = createProgressToast("Ngunduh Video");
+            // Ini akan mengalah muncul di bawah pToast
+            showToast("Memulai unduhan video...", "info");
 
             const safeName = currentTitle.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 30) + '.mp4';
             
@@ -385,7 +387,7 @@
             btnText.innerText = "⬇️ DOWNLOAD VIDEO";
             
             if (status === 'sukses') {
-                showToast("Video berhasil diunduh!", "success");
+                showToast("Video berhasil diunduh! Selesai asu! 🖕", "success");
             } else if (status === 'dibatalkan') {
                 showToast("Unduhan dibatalkan!", "error");
             }
@@ -399,7 +401,10 @@
             btn.disabled = true;
             btnText.innerText = "Mengunduh...";
             
+            // Ini akan muncul paling atas
             const pToast = createProgressToast("Mengekstrak Musik");
+            // Ini akan mengalah muncul di bawah pToast
+            showToast("Memulai unduhan audio...", "info");
 
             const safeName = currentTitle.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 30) + '.mp3';
             
@@ -425,5 +430,4 @@
         }
     </script>
 </body>
-    </html>
-    
+</html>
