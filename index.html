@@ -6,470 +6,164 @@
     <title>🔥 Rezyyxy TikTok Downloader</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-        
-        body {
-            font-family: 'Inter', Arial, sans-serif;
-            background: linear-gradient(135deg, #0a0a0a, #1a1a2e);
-            color: #eee;
-            text-align: center;
-            padding: 20px;
-            margin: 0;
-            min-height: 100vh;
-        }
-        .container {
-            max-width: 480px;
-            margin: 0 auto;
-            background: #16213e;
-            border-radius: 24px;
-            padding: 30px;
-            box-shadow: 0 15px 40px rgba(0, 255, 100, 0.15);
-        }
-        h1 {color: #00ff88; margin-bottom: 8px; font-size: 28px;}
-        
-        /* Input & Utilities Layout */
-        .input-group {
-            position: relative;
-            margin: 15px 0;
-        }
-        input {
-            width: 100%; padding: 18px; font-size: 17px;
-            background: #0f1c2e; border: 3px solid #00ff88; border-radius: 16px;
-            color: #eee; box-sizing: border-box; outline: none;
-        }
-        .input-utilities {
-            display: flex; gap: 10px; margin-top: -5px; margin-bottom: 15px;
-        }
-        .util-btn {
-            flex: 1; padding: 10px; font-size: 14px; font-weight: 600;
-            border-radius: 10px; border: none; cursor: pointer; transition: 0.2s;
-            display: flex; align-items: center; justify-content: center; gap: 5px;
-        }
-        .paste-btn { background: #00bfff; color: #000; }
-        .paste-btn:hover { background: #0099cc; }
-        .clear-btn { background: #333; color: #fff; }
-        .clear-btn:hover { background: #444; }
-
-        /* Main Buttons */
-        button.main-btn {
-            width: 100%; padding: 18px; font-size: 18px; font-weight: 700;
-            background: #00ff88; color: #000; border: none; border-radius: 16px;
-            cursor: pointer; margin: 10px 0; transition: 0.3s;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
-        button.main-btn:hover:not(:disabled) {background: #00cc6a; transform: scale(1.04);}
-        button.main-btn:disabled {background: #555 !important; color: #aaa !important; cursor: not-allowed;}
-        
-        .music-btn {background: #ff3366 !important; color: white !important;}
-        .music-btn:hover:not(:disabled) {background: #dd2255 !important;}
-        
-        /* Result & Video Preview Customization */
-        .result {margin-top: 25px; padding: 25px; background: #0f1c2e; border-radius: 18px; display: none; border: 2px solid #00ff88;}
-        
-        /* Menyembunyikan kontrol spesifik pada video player bawan browser (Volume, Fullscreen, 3-dots) */
-        video {
-            width: 100%; max-width: 400px; border-radius: 16px; margin: 15px 0; background: #000;
-        }
-        video::-webkit-media-controls-volume-control-container,
-        video::-webkit-media-controls-mute-button,
-        video::-webkit-media-controls-volume-slider {
-            display: none !important;
-        }
-        video::-webkit-media-controls-fullscreen-button {
-            display: none !important;
-        }
-        video::-internal-media-controls-download-button {
-            display: none !important;
-        }
-        video::-webkit-media-controls-enclosure {
-            overflow: hidden !important;
-        }
-
-        /* Desain Info Kreator & Caption */
-        .video-profile {
-            background: #16213e; padding: 12px 15px; border-radius: 12px;
-            margin-bottom: 12px; text-align: left; border-left: 4px solid #00bfff;
-        }
-        .video-username {
-            color: #00bfff; font-weight: 700; font-size: 15px; margin: 0 0 5px 0;
-        }
-        .video-caption {
-            color: #eee; font-size: 14px; margin: 0; line-height: 1.4;
-        }
-
-        .note {font-size: 14px; color: #ffcc00; margin: 15px 0;}
-        .copyright {font-size: 13px; color: #666; margin-top: 20px;}
-
-        /* Loading Spinner */
-        .spinner {
-            width: 20px; height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%; border-top-color: #fff;
-            animation: spin 0.8s linear infinite; display: none;
-        }
-        button:disabled .spinner {display: inline-block;}
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #0a0a0a, #1a1a2e); color: #eee; text-align: center; padding: 20px; margin: 0; }
+        .container { max-width: 480px; margin: 0 auto; background: #16213e; border-radius: 24px; padding: 25px; box-shadow: 0 15px 40px rgba(0,255,100,0.15); }
+        h1 { color: #00ff88; font-size: 26px; }
+        input { width: 100%; padding: 16px; background: #0f1c2e; border: 3px solid #00ff88; border-radius: 16px; color: #eee; box-sizing: border-box; outline: none; font-size: 16px; }
+        .u-box { display: flex; gap: 10px; margin: 15px 0; }
+        .btn { padding: 12px; font-weight: 700; border-radius: 12px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; transition: 0.2s; }
+        .btn:hover:not(:disabled) { transform: scale(1.03); }
+        .btn:disabled { background: #555!important; color: #aaa!important; cursor: not-allowed; }
+        .m-btn { width: 100%; background: #00ff88; color: #000; margin: 8px 0; padding: 16px; font-size: 17px; }
+        .paste { background: #00bfff; color: #000; flex: 1; font-size: 14px; }
+        .clear { background: #333; color: #fff; flex: 1; font-size: 14px; }
+        .music { background: #ff3366!important; color: #fff!important; }
+        .res { margin-top: 20px; padding: 20px; background: #0f1c2e; border-radius: 18px; display: none; border: 2px solid #00ff88; }
+        video { width: 100%; border-radius: 16px; margin: 10px 0; background: #000; }
+        video::-webkit-media-controls-volume-control-container, video::-webkit-media-controls-mute-button, video::-webkit-media-controls-volume-slider, video::-webkit-media-controls-fullscreen-button, video::-internal-media-controls-download-button { display: none !important; }
+        .v-prof { background: #16213e; padding: 12px; border-radius: 12px; text-align: left; border-left: 4px solid #00bfff; font-size: 14px; margin-bottom: 10px; }
+        .v-user { color: #00bfff; font-weight: 700; margin-bottom: 4px; }
+        .spin { width: 18px; height: 18px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 0.8s linear infinite; display: none; }
+        button:disabled .spin { display: inline-block; }
         @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Toast Notifikasi Layout */
-        #toast-container {
-            position: fixed; top: 20px; right: 20px;
-            z-index: 9999; max-width: 360px; width: calc(100% - 40px);
-            display: flex; flex-direction: column; gap: 12px;
-        }
-        .toast {
-            background: #1f4068; color: #fff; padding: 16px 20px;
-            border-radius: 14px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            display: flex; gap: 12px; text-align: left;
-            transform: translateX(120%); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border-left: 5px solid #00ff88; font-size: 15px;
-        }
-        .toast.show {transform: translateX(0);}
-        .toast.info {border-left-color: #00bfff;}
-        .toast.success {border-left-color: #00ff88;}
-        .toast.error {border-left-color: #ff3366;}
-        
-        /* Progress Bar di dalam Toast */
-        .toast-progress-container {
-            width: 100%; margin-top: 10px;
-        }
-        .pg-bar {
-            width: 100%; background: #0f1c2e; height: 8px; 
-            border-radius: 4px; overflow: hidden; position: relative; margin-top: 5px;
-        }
-        .pg-fill {
-            background: #00ff88; height: 100%; width: 0%; 
-            transition: width 0.1s linear;
-        }
-        .pg-fill.indeterminate {
-            width: 40%; position: absolute; background: linear-gradient(90deg, #00ff88, #00bfff);
-            animation: progress-slide 1.2s infinite linear;
-        }
-        @keyframes progress-slide {
-            0% { left: -40%; }
-            100% { left: 100%; }
-        }
-        .toast-cancel-btn {
-            background: #ff3366; color: #fff; border: none; padding: 6px 12px;
-            font-size: 13px; font-weight: 700; border-radius: 8px; cursor: pointer;
-            transition: 0.2s; box-shadow: 0 4px 10px rgba(255, 51, 102, 0.3);
-        }
-        .toast-cancel-btn:hover { background: #dd2255; transform: scale(1.05); }
+        #t-box { position: fixed; top: 20px; right: 20px; z-index: 9999; max-width: 350px; width: calc(100% - 40px); display: flex; flex-direction: column; gap: 10px; }
+        .toast { background: #1f4068; color: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.3); text-align: left; border-left: 5px solid #00ff88; font-size: 14px; display: flex; flex-direction: column; }
+        .toast.info { border-left-color: #00bfff; }
+        .toast.error { border-left-color: #ff3366; }
+        .p-bar { width: 100%; background: #0f1c2e; height: 6px; border-radius: 3px; overflow: hidden; position: relative; margin-top: 8px; }
+        .p-fill { background: #00ff88; height: 100%; width: 0%; }
+        .p-fill.indet { width: 40%; position: absolute; background: linear-gradient(90deg, #00ff88, #00bfff); animation: slide 1.2s infinite linear; }
+        @keyframes slide { 0% { left: -40%; } 100% { left: 100%; } }
+        .c-btn { background: #ff3366; color: #fff; border: none; padding: 5px 10px; font-size: 12px; font-weight: 700; border-radius: 6px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div id="toast-container"></div>
+    <div id="t-box"></div>
 
     <div class="container">
         <h1>🔥 Rezyyxy TikTok Downloader</h1>
         <p style="color:#00ff88;">Video + Musik • No Watermark</p>
-        
-        <div class="input-group">
-            <input type="text" id="urlInput" placeholder="Paste link TikTok di sini...">
+        <input type="text" id="urlInput" placeholder="Paste link TikTok di sini...">
+        <div class="u-box">
+            <button class="btn paste" onclick="pasteLink()">📋 Tempel Link</button>
+            <button class="btn clear" onclick="clearLink()">❌ Clear Link</button>
         </div>
-
-        <div class="input-utilities">
-            <button class="util-btn paste-btn" onclick="pasteLink()">📋 Tempel Link</button>
-            <button class="util-btn clear-btn" onclick="clearLink()">❌ Clear Link</button>
-        </div>
-
-        <button class="main-btn" onclick="processTikTok()">🔍 CEK VIDEO & MUSIK</button>
-
-        <div id="result" class="result"></div>
-        
+        <button class="btn m-btn" onclick="processTikTok()">🔍 CEK VIDEO & MUSIK</button>
+        <div id="res" class="res"></div>
         <div class="copyright">© Rezyyxy • All Rights Reserved 🗿</div>
     </div>
 
     <iframe id="download_iframe" style="display:none;"></iframe>
 
     <script>
-        let currentVideoUrl = '';
-        let currentMusicUrl = '';
-        let currentTitle = '';
-        let downloadController = null;
+        let vUrl='', mUrl='', title='', ctrl=null;
+        const $ = id => document.getElementById(id);
 
-        function showToast(message, type = 'info') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            
-            let icon = 'ℹ️';
-            if(type === 'success') icon = '✅';
-            if(type === 'error') icon = '❌';
-
-            toast.innerHTML = `<span style="font-size:20px;">${icon}</span><div>${message}</div>`;
-            container.appendChild(toast);
-
-            setTimeout(() => toast.classList.add('show'), 50);
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 400);
-            }, 4000);
+        function toast(msg, type='info') {
+            const t = document.createElement('div'); t.className = `toast ${type}`;
+            t.innerHTML = `<div>${type==='success'?'✅':type==='error'?'❌':'ℹ️'} ${msg}</div>`;
+            $('t-box').appendChild(t);
+            setTimeout(() => t.remove(), 3500);
         }
 
-        function createProgressToast(titleText) {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = `toast info`;
-            toast.style.flexDirection = 'column';
-            toast.style.alignItems = 'stretch';
-            
-            toast.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center; gap: 15px;">
-                    <span style="font-weight: 700;" id="toastTitle">⏳ ${titleText}</span>
-                    <button class="toast-cancel-btn" onclick="cancelDownload()">BATAL</button>
-                </div>
-                <div class="toast-progress-container">
-                    <div style="display: flex; justify-content: space-between; font-size: 12px; color: #aaa;">
-                        <span id="pgBytes">Menghubungkan...</span>
-                        <span id="pgPercent">0%</span>
-                    </div>
-                    <div class="pg-bar">
-                        <div class="pg-fill indeterminate" id="pgFill"></div>
-                    </div>
-                </div>
-            `;
-            
-            container.prepend(toast);
-            setTimeout(() => toast.classList.add('show'), 50);
-
+        function createPToast(label) {
+            const t = document.createElement('div'); t.className = 'toast info';
+            t.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+                <span id="t-ttl" style="font-weight:700">⏳ ${label}</span><button class="c-btn" onclick="ctrl?.abort()">BATAL</button>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:#aaa;margin-top:6px">
+                <span id="t-b">Bersiap...</span><span id="t-p">0%</span>
+            </div>
+            <div class="p-bar"><div class="p-fill indet" id="t-f"></div></div>`;
+            $('t-box').prepend(t);
             return {
-                updateTitle: (newTitle) => {
-                    const titleEl = toast.querySelector('#toastTitle');
-                    if(titleEl) titleEl.innerText = `⏳ ${newTitle}`;
+                upTitle: txt => $('t-ttl').innerText = '⏳ ' + txt,
+                up: (b, p) => {
+                    $('t-b').innerText = b;
+                    if(p >= 0) { $('t-p').innerText = p+'%'; $('t-f').classList.remove('indet'); $('t-f').style.width = p+'%'; }
+                    else { $('t-p').innerText = 'Proses...'; $('t-f').classList.add('indet'); }
                 },
-                update: (bytesText, percent) => {
-                    const txtBytes = toast.querySelector('#pgBytes');
-                    const txtPercent = toast.querySelector('#pgPercent');
-                    const fill = toast.querySelector('#pgFill');
-                    
-                    if(txtBytes) txtBytes.innerText = bytesText;
-                    
-                    if(percent >= 0) {
-                        if(txtPercent) txtPercent.innerText = percent + '%';
-                        if(fill) {
-                            fill.classList.remove('indeterminate');
-                            fill.style.width = percent + '%';
-                        }
-                    } else if (percent === -1) {
-                        if(txtPercent) txtPercent.innerText = 'Proses...';
-                        if(fill && !fill.classList.contains('indeterminate')) {
-                            fill.classList.add('indeterminate');
-                        }
-                    }
-                },
-                close: () => {
-                    toast.classList.remove('show');
-                    setTimeout(() => toast.remove(), 400);
-                }
+                close: () => t.remove()
             };
         }
 
         async function pasteLink() {
-            try {
-                const text = await navigator.clipboard.readText();
-                if (text) {
-                    document.getElementById('urlInput').value = text;
-                    showToast("Link berhasil ditempel!", "success");
-                } else {
-                    showToast("Klipbor kosong, salin link dulu!", "info");
-                }
-            } catch (err) {
-                showToast("Izin klipbor ditolak browser!", "error");
-            }
+            try { $('urlInput').value = await navigator.clipboard.readText(); toast("Ditempel!", "success"); } 
+            catch { toast("Gagal akses clipboard", "error"); }
         }
 
         function clearLink() {
-            document.getElementById('urlInput').value = '';
-            const resultDiv = document.getElementById('result');
-            resultDiv.style.display = "none";
-            resultDiv.innerHTML = '';
-            currentVideoUrl = ''; currentMusicUrl = ''; currentTitle = '';
-            if(downloadController) downloadController.abort();
-            showToast("Kembali ke awal!", "info");
+            $('urlInput').value = ''; $('res').style.display = 'none'; $('res').innerHTML = '';
+            vUrl = mUrl = title = ''; ctrl?.abort(); toast("Kembali ke awal!");
         }
 
         async function processTikTok() {
-            let url = document.getElementById('urlInput').value.trim();
-            const resultDiv = document.getElementById('result');
-            if (!url) return showToast("Link mana tolol? 💀", 'error');
-
-            resultDiv.style.display = "block";
-            resultDiv.innerHTML = `<p style="color:#00ff88;">Nyari... Sabar setan 🔥</p>`;
-
+            let url = $('urlInput').value.trim();
+            if (!url) return toast("Link mana tolol? 💀", 'error');
+            $('res').style.display = 'block'; $('res').innerHTML = `<p style="color:#00ff88;">Nyari... Sabar setan 🔥</p>`;
             try {
-                const res = await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(url)}`);
-                const data = await res.json();
-                if (data.data) {
-                    const v = data.data;
-                    currentVideoUrl = v.hdplay || v.play || '';
-                    currentMusicUrl = v.music || '';
-                    currentTitle = v.title || 'rezyyxy_tiktok';
-                    
-                    // Mengambil data pembuat video jika didukung API
-                    const username = v.author?.unique_id || "kreator_tiktok";
-                    const nickname = v.author?.nickname || "";
-
-                    let html = `
-                        <div class="video-profile">
-                            <p class="video-username">👤 @${username} ${nickname ? `(${nickname})` : ''}</p>
-                            <p class="video-caption">📝 ${currentTitle}</p>
+                const r = await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(url)}`);
+                const d = await r.json();
+                if (d.data) {
+                    const v = d.data;
+                    vUrl = v.hdplay || v.play || ''; mUrl = v.music || ''; title = v.title || 'rezyyxy_tiktok';
+                    $('res').innerHTML = `
+                        <div class="v-prof">
+                            <p class="v-user">👤 @${v.author?.unique_id || "kreator"} ${v.author?.nickname ? `(${v.author.nickname})` : ''}</p>
+                            <p style="margin:0;color:#eee">📝 ${title}</p>
                         </div>
-                        
-                        <video id="previewVideo" controls controlsList="nodownload nofullscreen noremoteplayback">
-                            <source src="${currentVideoUrl}" type="video/mp4">
-                        </video>
-                        
-                        <button id="btnVid" class="main-btn" onclick="downloadVideo()"><div class="spinner"></div><span class="text">⬇️ DOWNLOAD VIDEO</span></button>`;
-
-                    if (currentMusicUrl) {
-                        html += `<button id="btnMus" class="main-btn music-btn" onclick="downloadMusic()"><div class="spinner"></div><span class="text">🎵 DOWNLOAD MUSIK</span></button>`;
-                    }
-
-                    resultDiv.innerHTML = html;
-                    showToast("Video berhasil dimuat!", "success");
-                } else {
-                    resultDiv.innerHTML = `<p>Video kagak ketemu. Link-nya bener gakk?</p>`;
-                    showToast("Video tidak ditemukan!", "error");
-                }
-            } catch(e) {
-                resultDiv.innerHTML = `<p>API rewel. Coba lagi kontol.</p>`;
-                showToast("Gagal menyambung ke API!", "error");
-            }
+                        <video id="previewVideo" controls controlsList="nodownload nofullscreen noremoteplayback"><source src="${vUrl}" type="video/mp4"></video>
+                        <button id="btnVid" class="btn m-btn" onclick="downloadFile('vid')"><div class="spin"></div><span class="txt">⬇️ DOWNLOAD VIDEO</span></button>
+                        ${mUrl ? `<button id="btnMus" class="btn m-btn music" onclick="downloadFile('mus')"><div class="spin"></div><span class="txt">🎵 DOWNLOAD MUSIK</span></button>` : ''}
+                    `;
+                    toast("Video dimuat!", "success");
+                } else { $('res').innerHTML = `<p>Gak ketemu!</p>`; toast("Gak ketemu!", "error"); }
+            } catch { toast("API Error", "error"); }
         }
 
-        // Fungsi Inti dengan Sistem Manajemen Delay Interaktif 5 Detik
-        async function forceDownload(fileUrl, fileName, pToast, onProgress) {
-            downloadController = new AbortController();
-            const signal = downloadController.signal;
-
-            // --- TAHAP 1: SISTEM JEDA KONFIRMASI 5 DETIK ---
-            let countdown = 5;
-            pToast.update(`Bersiap... (${countdown}s)`, 0);
+        async function downloadFile(type) {
+            const isVid = type === 'vid', url = isVid ? vUrl : mUrl, btn = $(isVid ? 'btnVid' : 'btnMus'), txt = btn.querySelector('.txt'), orig = txt.innerText;
+            btn.disabled = true; txt.innerText = "Konfirmasi..."; ctrl = new AbortController();
             
-            let delayPassed = await new Promise((resolve) => {
-                let interval = setInterval(() => {
-                    countdown--;
-                    if (countdown > 0) {
-                        pToast.update(`Bersiap... (${countdown}s)`, 0);
-                    } else {
-                        clearInterval(interval);
-                        resolve(true);
-                    }
-                }, 1000);
-                
-                signal.addEventListener('abort', () => {
-                    clearInterval(interval);
-                    resolve(false);
-                });
-            });
+            const p = createPToast(isVid ? "Ngunduh Video" : "Mengekstrak Musik");
+            let cd = 5, ok = true;
+            
+            for (let i = 5; i > 0; i--) {
+                if (ctrl.signal.aborted) { ok = false; break; }
+                p.up(`Bersiap... (${i}s)`, 0);
+                await new Promise(r => setTimeout(r, 1000));
+            }
+            if (ctrl.signal.aborted) ok = false;
+            if (!ok) { toast("Dibatalkan!", "error"); p.close(); btn.disabled = false; txt.innerText = orig; return; }
 
-            if (!delayPassed) return 'dibatalkan';
-
-            // --- TAHAP 2: PROSES DOWNLOAD REAL-TIME DIMULAI ---
-            pToast.updateTitle("Mengunduh File...");
-            pToast.update("Menghubungkan...", -1); // Aktifkan garis jalan-jalan semula
-
+            p.upTitle("Mengunduh..."); p.up("Menghubungkan...", -1);
             try {
-                const response = await fetch(fileUrl, { signal });
-                if (!response.ok) throw new Error('Network error');
-
-                const contentLength = response.headers.get('content-length');
-                const totalBytes = parseInt(contentLength, 10) || 0;
-
-                const reader = response.body.getReader();
-                let receivedBytes = 0;
-                let chunks = [];
-
-                while (true) {
-                    const { done, value } = await reader.read();
-                    if (done) break;
-
-                    chunks.push(value);
-                    receivedBytes += value.length;
-
-                    if (onProgress) {
-                        onProgress(receivedBytes, totalBytes);
-                    }
+                const res = await fetch(url, { signal: ctrl.signal });
+                if (!res.ok) throw 1;
+                const len = parseInt(res.headers.get('content-length'), 10) || 0, r = res.body.getReader();
+                let rec = 0, chunks = [];
+                while(1) {
+                    const {done, value} = await r.read(); if(done) break;
+                    chunks.push(value); rec += value.length;
+                    const mb = (rec/1024/1024).toFixed(1) + " MB";
+                    len > 0 ? p.up(mb, Math.round((rec/len)*100)) : p.up(mb, -1);
                 }
-
-                let chunksAll = new Uint8Array(receivedBytes);
-                let position = 0;
-                for (let chunk of chunks) {
-                    chunksAll.set(chunk, position);
-                    position += chunk.length;
+                let all = new Uint8Array(rec), pos = 0;
+                for(let c of chunks) { all.set(c, pos); pos += c.length; }
+                const bUrl = window.URL.createObjectURL(new Blob([all]));
+                const a = document.createElement('a'); a.href = bUrl;
+                a.download = title.replace(/[^a-zA-Z0-9]/g, '_').substring(0,25) + (isVid?'.mp4':'.mp3');
+                a.click(); window.URL.revokeObjectURL(bUrl); toast("Selesai asu! 🖕", "success");
+            } catch {
+                if(ctrl.signal.aborted) toast("Dibatalkan!", "error");
+                else {
+                    $('download_iframe').src = url + (url.includes('tikwm.com') && !url.includes('hd=1') ? '&attachments=1' : '');
+                    toast("Selesai!", "success");
                 }
-
-                const blob = new Blob([chunksAll]);
-                const blobUrl = window.URL.createObjectURL(blob);
-                
-                const a = document.createElement('a');
-                a.href = blobUrl;
-                a.download = fileName;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(blobUrl);
-                return 'sukses';
-            } catch (error) {
-                if (error.name === 'AbortError') return 'dibatalkan';
-                
-                console.warn("Stream blocked by CORS, using fallback...");
-                const iframe = document.getElementById('download_iframe');
-                let downloadUrl = fileUrl;
-                if (!downloadUrl.includes('hd=1') && fileUrl.includes('tikwm.com')) {
-                    downloadUrl = fileUrl + '&attachments=1'; 
-                }
-                iframe.src = downloadUrl;
-                return 'sukses';
             }
+            p.close(); btn.disabled = false; txt.innerText = orig;
         }
-
-        function cancelDownload() {
-            if (downloadController) {
-                downloadController.abort();
-            }
-        }
-
-        async function downloadVideo() {
-            if (!currentVideoUrl) return showToast("Ga ada video 💀", "error");
-            const btn = document.getElementById('btnVid');
-            const btnText = btn.querySelector('.text');
-            
-            btn.disabled = true;
-            btnText.innerText = "Konfirmasi...";
-            
-            const pToast = createProgressToast("Menunggu Konfirmasi");
-            showToast("Proses dijeda 5 detik. Klik BATAL di atas jika ingin membatalkan!", "info");
-
-            const safeName = currentTitle.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 30) + '.mp4';
-            
-            const status = await forceDownload(currentVideoUrl, safeName, pToast, (received, total) => {
-                const MBDownloaded = (received / 1024 / 1024).toFixed(1);
-                if (total > 0) {
-                    const percent = Math.round((received / total) * 100);
-                    pToast.update(`${MBDownloaded} MB`, percent);
-                } else {
-                    pToast.update(`${MBDownloaded} MB..`, -1);
-                }
-            });
-            
-            pToast.close();
-            btn.disabled = false;
-            btnText.innerText = "⬇️ DOWNLOAD VIDEO";
-            
-            if (status === 'sukses') {
-                showToast("Video berhasil diunduh! Selesai asu! 🖕", "success");
-            } else if (status === 'dibatalkan') {
-                showToast("Unduhan video dibatalkan!", "error");
-            }
-        }
-
-        async function downloadMusic() {
-            if (!currentMusicUrl) return showToast("Ga ada musik 💀", "error");
-            const btn = document.getElementById('btnMus');
-            const btnText = btn.querySelector('.text');
-            
-            btn.disabled = true;
-            btnText.innerText = "Konfirmasi...";
-            
-            const pToast = createProgressToast("Menunggu Konfirmasi"
+    </script>
+</body>
+</html>
