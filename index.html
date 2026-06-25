@@ -26,7 +26,7 @@
         }
         h1 {color: #00ff88; margin-bottom: 8px; font-size: 28px;}
         
-        /* Input & Mini Buttons Layout */
+        /* Input & Utilities Layout */
         .input-group {
             position: relative;
             margin: 15px 0;
@@ -62,19 +62,12 @@
         .music-btn {background: #ff3366 !important; color: white !important;}
         .music-btn:hover:not(:disabled) {background: #dd2255 !important;}
         
-        /* Cancel Button Style */
-        .cancel-btn {
-            background: #ff3333 !important; color: white !important;
-            margin-top: 5px; font-size: 15px; padding: 12px; display: none;
-        }
-        .cancel-btn:hover { background: #cc2222 !important; }
-        
         .result {margin-top: 25px; padding: 25px; background: #0f1c2e; border-radius: 18px; display: none; border: 2px solid #00ff88;}
         video {width: 100%; max-width: 400px; border-radius: 16px; margin: 15px 0; background: #000;}
         .note {font-size: 14px; color: #ffcc00; margin: 15px 0;}
         .copyright {font-size: 13px; color: #666; margin-top: 20px;}
 
-        /* Loading Spinner */
+        /* Loading Spinner Tombol */
         .spinner {
             width: 20px; height: 20px;
             border: 3px solid rgba(255,255,255,0.3);
@@ -84,15 +77,15 @@
         button:disabled .spinner {display: inline-block;}
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Toast Notifikasi */
+        /* Toast Notifikasi Layout */
         #toast-container {
             position: fixed; top: 20px; right: 20px;
-            z-index: 9999; max-width: 350px; width: calc(100% - 40px);
+            z-index: 9999; max-width: 360px; width: calc(100% - 40px);
         }
         .toast {
             background: #1f4068; color: #fff; padding: 16px 20px;
             border-radius: 14px; margin-bottom: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            display: flex; align-items: center; gap: 12px; text-align: left;
+            display: flex; gap: 12px; text-align: left;
             transform: translateX(120%); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border-left: 5px solid #00ff88; font-size: 15px;
         }
@@ -100,7 +93,34 @@
         .toast.info {border-left-color: #00bfff;}
         .toast.success {border-left-color: #00ff88;}
         .toast.error {border-left-color: #ff3366;}
-        .toast .icon {font-size: 20px;}
+        
+        /* Progress Bar di dalam Toast */
+        .toast-progress-container {
+            width: 100%; margin-top: 10px;
+        }
+        .pg-bar {
+            width: 100%; background: #0f1c2e; height: 8px; 
+            border-radius: 4px; overflow: hidden; position: relative; margin-top: 5px;
+        }
+        .pg-fill {
+            background: #00ff88; height: 100%; width: 0%; 
+            transition: width 0.1s linear;
+        }
+        /* Mode garis jalan otomatis (jika size file disembunyikan server) */
+        .pg-fill.indeterminate {
+            width: 40%; position: absolute; background: linear-gradient(90deg, #00ff88, #00bfff);
+            animation: progress-slide 1.2s infinite linear;
+        }
+        @keyframes progress-slide {
+            0% { left: -40%; }
+            100% { left: 100%; }
+        }
+        .toast-cancel-btn {
+            background: #ff3366; color: #fff; border: none; padding: 5px 10px;
+            font-size: 12px; font-weight: 700; border-radius: 6px; cursor: pointer;
+            transition: 0.2s;
+        }
+        .toast-cancel-btn:hover { background: #dd2255; }
     </style>
 </head>
 <body>
@@ -115,7 +135,6 @@
             <input type="text" id="urlInput" placeholder="Paste link TikTok di sini...">
         </div>
 
-        <!-- Tombol Utilitas Pasang & Hapus -->
         <div class="input-utilities">
             <button class="util-btn paste-btn" onclick="pasteLink()">📋 Tempel Link</button>
             <button class="util-btn clear-btn" onclick="clearLink()">❌ Clear Link</button>
@@ -134,8 +153,9 @@
         let currentVideoUrl = '';
         let currentMusicUrl = '';
         let currentTitle = '';
-        let downloadController = null; // Pengendali untuk batalkan download
+        let downloadController = null;
 
+        // Toast Standar (Sukses / Error)
         function showToast(message, type = 'info') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -145,7 +165,7 @@
             if(type === 'success') icon = '✅';
             if(type === 'error') icon = '❌';
 
-            toast.innerHTML = `<span class="icon">${icon}</span><div>${message}</div>`;
+            toast.innerHTML = `<span style="font-size:20px;">${icon}</span><div>${message}</div>`;
             container.appendChild(toast);
 
             setTimeout(() => toast.classList.add('show'), 50);
@@ -155,7 +175,58 @@
             }, 4000);
         }
 
-        // Fungsi Tempel Otomatis
+        // Pembuat Toast khusus Progress Download + Tombol Batal Terintegrasi
+        function createProgressToast(titleText) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast info`;
+            toast.style.flexDirection = 'column';
+            toast.style.alignItems = 'stretch';
+            
+            toast.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: 600;">⏳ ${titleText}</span>
+                    <button class="toast-cancel-btn" onclick="cancelDownload()">Batal</button>
+                </div>
+                <div class="toast-progress-container">
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; color: #aaa;">
+                        <span id="pgBytes">Menghubungkan...</span>
+                        <span id="pgPercent">0%</span>
+                    </div>
+                    <div class="pg-bar">
+                        <div class="pg-fill indeterminate" id="pgFill"></div>
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 50);
+
+            return {
+                update: (bytesText, percent) => {
+                    const txtBytes = toast.querySelector('#pgBytes');
+                    const txtPercent = toast.querySelector('#pgPercent');
+                    const fill = toast.querySelector('#pgFill');
+                    
+                    if(txtBytes) txtBytes.innerText = bytesText;
+                    
+                    if(percent >= 0) {
+                        if(txtPercent) txtPercent.innerText = percent + '%';
+                        if(fill) {
+                            fill.classList.remove('indeterminate');
+                            fill.style.width = percent + '%';
+                        }
+                    } else {
+                        if(txtPercent) txtPercent.innerText = 'Proses...';
+                    }
+                },
+                close: () => {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 400);
+                }
+            };
+        }
+
         async function pasteLink() {
             try {
                 const text = await navigator.clipboard.readText();
@@ -166,24 +237,18 @@
                     showToast("Klipbor kosong, salin link dulu!", "info");
                 }
             } catch (err) {
-                showToast("Izin akses klipbor ditolak browser!", "error");
+                showToast("Izin klipbor ditolak browser!", "error");
             }
         }
 
-        // Fungsi Clear Link & Reset ke Awal
         function clearLink() {
             document.getElementById('urlInput').value = '';
             const resultDiv = document.getElementById('result');
             resultDiv.style.display = "none";
             resultDiv.innerHTML = '';
-            
-            // Reset variabel data
-            currentVideoUrl = '';
-            currentMusicUrl = '';
-            currentTitle = '';
+            currentVideoUrl = ''; currentMusicUrl = ''; currentTitle = '';
             if(downloadController) downloadController.abort();
-
-            showToast("Kolom dibersihkan, kembali ke awal!", "info");
+            showToast("Kembali ke awal!", "info");
         }
 
         async function processTikTok() {
@@ -205,15 +270,10 @@
 
                     let html = `<p style="color:#00ff88;">✅ Video ketemu!</p>
                         <video id="previewVideo" controls><source src="${currentVideoUrl}" type="video/mp4"></video>
-                        
-                        <!-- Area Tombol Download Video + Batal -->
-                        <button id="btnVid" class="main-btn" onclick="downloadVideo()"><div class="spinner"></div><span class="text">⬇️ DOWNLOAD VIDEO</span></button>
-                        <button id="cancelVid" class="main-btn cancel-btn" onclick="cancelDownload('Vid')">❌ Batalkan Download Video</button>`;
+                        <button id="btnVid" class="main-btn" onclick="downloadVideo()"><div class="spinner"></div><span class="text">⬇️ DOWNLOAD VIDEO</span></button>`;
 
                     if (currentMusicUrl) {
-                        html += `<!-- Area Tombol Download Musik + Batal -->
-                        <button id="btnMus" class="main-btn music-btn" onclick="downloadMusic()"><div class="spinner"></div><span class="text">🎵 DOWNLOAD MUSIK</span></button>
-                        <button id="cancelMus" class="main-btn cancel-btn" onclick="cancelDownload('Mus')">❌ Batalkan Download Musik</button>`;
+                        html += `<button id="btnMus" class="main-btn music-btn" onclick="downloadMusic()"><div class="spinner"></div><span class="text">🎵 DOWNLOAD MUSIK</span></button>`;
                     }
 
                     html += `<p class="note">${currentTitle}</p>`;
@@ -229,15 +289,44 @@
             }
         }
 
-        // Fungsi Download Inti dengan Fitur Signal Pembatalan
-        async function forceDownload(fileUrl, fileName) {
-            downloadController = new AbortController(); // Buat controller baru setiap kali download
+        // Fungsi Inti Pengunduh dengan Stream Reader & Pembatalan instan
+        async function forceDownload(fileUrl, fileName, onProgress) {
+            downloadController = new AbortController();
             const signal = downloadController.signal;
 
             try {
                 const response = await fetch(fileUrl, { signal });
-                if (!response.ok) throw new Error('CORS or network error');
-                const blob = await response.blob();
+                if (!response.ok) throw new Error('Network error');
+
+                // Deteksi total file size (jika diizinkan oleh kebijakan CORS server)
+                const contentLength = response.headers.get('content-length');
+                const totalBytes = parseInt(contentLength, 10) || 0;
+
+                const reader = response.body.getReader();
+                let receivedBytes = 0;
+                let chunks = [];
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    chunks.push(value);
+                    receivedBytes += value.length;
+
+                    if (onProgress) {
+                        onProgress(receivedBytes, totalBytes);
+                    }
+                }
+
+                // Gabung kepingan data biner yang terkumpul
+                let chunksAll = new Uint8Array(receivedBytes);
+                let position = 0;
+                for (let chunk of chunks) {
+                    chunksAll.set(chunk, position);
+                    position += chunk.length;
+                }
+
+                const blob = new Blob([chunksAll]);
                 const blobUrl = window.URL.createObjectURL(blob);
                 
                 const a = document.createElement('a');
@@ -249,11 +338,10 @@
                 window.URL.revokeObjectURL(blobUrl);
                 return 'sukses';
             } catch (error) {
-                if (error.name === 'AbortError') {
-                    return 'dibatalkan';
-                }
-                // Jika gagal karena CORS, larikan ke strategi Iframe tersembunyi
-                console.warn("Blob blocked by CORS, pushing to iframe...");
+                if (error.name === 'AbortError') return 'dibatalkan';
+                
+                // Fallback otomatis ke Iframe jika CORS memblokir Stream JavaScript
+                console.warn("Stream blocked by CORS, using silent iframe strategy...");
                 const iframe = document.getElementById('download_iframe');
                 let downloadUrl = fileUrl;
                 if (!downloadUrl.includes('hd=1') && fileUrl.includes('tikwm.com')) {
@@ -264,59 +352,78 @@
             }
         }
 
-        // Fungsi Aksi Membatalkan
-        function cancelDownload(type) {
+        function cancelDownload() {
             if (downloadController) {
-                downloadController.abort(); // Putuskan fetch request instan!
-                showToast("Unduhan berhasil dibatalkan olehmu!", "error");
+                downloadController.abort();
             }
         }
 
         async function downloadVideo() {
             if (!currentVideoUrl) return showToast("Ga ada video 💀", "error");
             const btn = document.getElementById('btnVid');
-            const cancelBtn = document.getElementById('cancelVid');
             const btnText = btn.querySelector('.text');
             
             btn.disabled = true;
-            btnText.innerText = "Mengunduh Video...";
-            cancelBtn.style.display = "flex"; // Tampilkan tombol batalkan
-            showToast("Memulai unduhan, klik tombol merah jika ingin batal.", "info");
+            btnText.innerText = "Mengunduh...";
+            
+            const pToast = createProgressToast("Ngunduh Video");
 
             const safeName = currentTitle.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 30) + '.mp4';
-            const status = await forceDownload(currentVideoUrl, safeName);
             
+            const status = await forceDownload(currentVideoUrl, safeName, (received, total) => {
+                const MBDownloaded = (received / 1024 / 1024).toFixed(1);
+                if (total > 0) {
+                    const percent = Math.round((received / total) * 100);
+                    pToast.update(`${MBDownloaded} MB`, percent);
+                } else {
+                    pToast.update(`${MBDownloaded} MB..`, -1);
+                }
+            });
+            
+            pToast.close();
             btn.disabled = false;
             btnText.innerText = "⬇️ DOWNLOAD VIDEO";
-            cancelBtn.style.display = "none"; // Sembunyikan tombol batalkan lagi
             
             if (status === 'sukses') {
                 showToast("Video berhasil diunduh!", "success");
+            } else if (status === 'dibatalkan') {
+                showToast("Unduhan dibatalkan!", "error");
             }
         }
 
         async function downloadMusic() {
             if (!currentMusicUrl) return showToast("Ga ada musik 💀", "error");
             const btn = document.getElementById('btnMus');
-            const cancelBtn = document.getElementById('cancelMus');
             const btnText = btn.querySelector('.text');
             
             btn.disabled = true;
-            btnText.innerText = "Mengunduh Musik...";
-            cancelBtn.style.display = "flex"; // Tampilkan tombol batalkan
-            showToast("Mengekstrak musik, klik tombol merah jika ingin batal.", "info");
+            btnText.innerText = "Mengunduh...";
+            
+            const pToast = createProgressToast("Mengekstrak Musik");
 
             const safeName = currentTitle.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 30) + '.mp3';
-            const status = await forceDownload(currentMusicUrl, safeName);
             
+            const status = await forceDownload(currentMusicUrl, safeName, (received, total) => {
+                const MBDownloaded = (received / 1024 / 1024).toFixed(1);
+                if (total > 0) {
+                    const percent = Math.round((received / total) * 100);
+                    pToast.update(`${MBDownloaded} MB`, percent);
+                } else {
+                    pToast.update(`${MBDownloaded} MB..`, -1);
+                }
+            });
+            
+            pToast.close();
             btn.disabled = false;
             btnText.innerText = "🎵 DOWNLOAD MUSIK";
-            cancelBtn.style.display = "none"; // Sembunyikan tombol batalkan lagi
             
             if (status === 'sukses') {
                 showToast("Musik berhasil disimpan! 🔥", "success");
+            } else if (status === 'dibatalkan') {
+                showToast("Unduhan musik dibatalkan!", "error");
             }
         }
     </script>
 </body>
-</html>
+    </html>
+    
