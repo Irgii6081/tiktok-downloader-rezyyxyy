@@ -85,7 +85,7 @@
         function toast(msg, type='info') {
             const t = document.createElement('div'); t.className = `toast ${type}`;
             t.innerHTML = `<div>${type==='success'?'✅':type==='error'?'❌':'ℹ️'} ${msg}</div>`;
-            $('t-box').appendChild(t); setTimeout(() => t.remove(), 3500);
+            $('t-box').appendChild(t); setTimeout(() => t.remove(), 3000);
         }
 
         function createPToast(label) {
@@ -109,24 +109,14 @@
             };
         }
 
-        async function getMetaSizes(v) {
-            try {
-                if(mUrl) {
+        // Ukuran file hanya di-load untuk MP3 agar proses tampil super cepat!
+        async function getMetaSizes() {
+            if(mUrl) {
+                try {
                     const r = await fetch(mUrl, { method: 'HEAD' });
                     const l = r.headers.get('content-length');
                     if(l) $('mSz').innerText = fSz(parseInt(l));
-                }
-            } catch { $('mSz').innerText = '(±0.8 MB)'; }
-
-            if(imgs.length > 0) {
-                for(let i=0; i<imgs.length; i++) {
-                    try {
-                        const px = `https://api.allorigins.win/raw?url=${encodeURIComponent(imgs[i])}`;
-                        const r = await fetch(px, { method: 'HEAD' });
-                        const l = r.headers.get('content-length');
-                        if(l) $(`imgSz_${i}`).innerText = `(${(parseInt(l)/1024).toFixed(0)} KB)`;
-                    } catch { $(`imgSz_${i}`).innerText = '(±140 KB)'; }
-                }
+                } catch { $('mSz').innerText = '(±0.8 MB)'; }
             }
         }
 
@@ -162,21 +152,23 @@
                         </div>`;
 
                     if(imgs.length > 0) {
-                        html += `<p style="color:#ffcc00;margin:5px 0;text-align:left;font-size:14px;font-weight:600">📸 Daftar Foto Slideshow (${imgs.length} Gambar):</p>
+                        // Tampilan khusus Foto (Instan tanpa cari size biar ga ngelag)
+                        html += `<p style="color:#ffcc00;margin:5px 0;text-align:left;font-size:14px;font-weight:600">📸 Daftar Foto (${imgs.length} Gambar):</p>
                                  <div class="f-list">`;
                         for(let i=0; i<imgs.length; i++) {
                             html += `
                             <div class="f-row">
                                 <div style="display:flex;align-items:center;gap:10px;">
                                     <img src="${imgs[i]}" class="f-thumb">
-                                    <span style="font-size:13px;font-weight:600;">Foto ${i+1} <span id="imgSz_${i}" class="sz">...</span></span>
+                                    <span style="font-size:13px;font-weight:600;">Foto ${i+1}</span>
                                 </div>
-                                <button class="btn" style="background:#00bfff;color:#000;padding:6px 12px;font-size:12px;" onclick="downloadSingleImg(${i})">⬇️ Unduh Foto</button>
+                                <button id="btnImg_${i}" class="btn" style="background:#00bfff;color:#000;padding:6px 12px;font-size:12px;" onclick="downloadSingleImg(${i})">⬇️ Unduh Foto</button>
                             </div>`;
                         }
                         html += `</div>
-                                 <button id="btnVid" class="btn m-btn" onclick="downloadFile('vid')"><div class="spin"></div><span class="txt">🎬 DOWNLOAD GABUNGAN JADI VIDEO <span class="sz">${fSz(v.size)}</span></span></button>`;
+                                 <p style="font-size:12px; color:#aaa; margin:5px 0;">*TikTok tidak menyediakan file video untuk format slideshow. Unduh foto & musik secara terpisah.</p>`;
                     } else {
+                        // Tampilan Video Normal
                         html += `<video id="previewVideo" controls controlsList="nodownload nofullscreen noremoteplayback"><source src="${vUrl}" type="video/mp4"></video>
                                  <button id="btnVid" class="btn m-btn" onclick="downloadFile('vid')"><div class="spin"></div><span class="txt">⬇️ DOWNLOAD VIDEO (SD) <span class="sz">${fSz(v.size)}</span></span></button>
                                  ${vHd ? `<button id="btnHd" class="btn m-btn" style="background:#00bfff" onclick="downloadFile('hd')"><div class="spin"></div><span class="txt">🚀 DOWNLOAD VIDEO (HD) <span class="sz">${fSz(v.hd_size)}</span></span></button>` : ''}`;
@@ -187,38 +179,35 @@
                     }
                     html += `<button class="btn m-btn share" onclick="shareWeb()">🔗 SHARE WEB INI</button>`;
                     
-                    $('res').innerHTML = html; saveHist(title, user, url); getMetaSizes(v); toast("Berhasil dimuat!", "success");
+                    $('res').innerHTML = html; saveHist(title, user, url); getMetaSizes(); toast("Berhasil dimuat!", "success");
                 } else { $('res').innerHTML = `<p>Gak ketemu!</p>`; toast("Gak ketemu!", "error"); }
             } catch { toast("API Error", "error"); }
         }
 
+        // FUNGSI KHUSUS FOTO (TANPA JEDA 5 DETIK, LANGSUNG INSTAN TARIK!)
         async function downloadSingleImg(idx) {
-            const u = imgs[idx]; ctrl = new AbortController();
-            const p = createPToast(`Unduh Foto ${idx+1}`);
-            let ok = true;
-            for (let i = 5; i > 0; i--) {
-                if (ctrl.signal.aborted) { ok = false; break; }
-                p.up(`Bersiap... (${i}s)`, 0); await new Promise(r => setTimeout(r, 1000));
-            }
-            if (ctrl.signal.aborted || !ok) { toast("Dibatalkan!", "error"); p.close(); return; }
+            const u = imgs[idx], btn = $(`btnImg_${idx}`), orig = btn.innerText;
+            btn.innerText = "⏳..."; btn.disabled = true;
 
-            p.upTitle("Mengunduh..."); p.up("Menghubungkan...", -1);
             try {
-                const res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`, { signal: ctrl.signal });
-                if(!res.ok) throw 1;
-                const blob = await res.blob();
-                const safeBlob = new Blob([blob], { type: 'image/jpeg' });
-                await silentDl(window.URL.createObjectURL(safeBlob), `${title}_foto_${idx+1}.jpg`, true);
-                toast(`Foto ${idx+1} disimpan!`, "success");
-            } catch {
-                if(ctrl.signal.aborted) toast("Dibatalkan!", "error");
-                else {
-                    $('download_iframe').src = u; toast(`Unduhan dipicu.`, "success");
+                let res;
+                try { 
+                    res = await fetch(u); 
+                    if(!res.ok) throw 1; 
+                } catch { 
+                    res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`); 
+                    if(!res.ok) throw 1; 
                 }
+                const blob = await res.blob();
+                await silentDl(window.URL.createObjectURL(new Blob([blob], { type: 'image/jpeg' })), `${title}_foto_${idx+1}.jpg`, true);
+                toast(`Foto ${idx+1} sukses disimpan!`, "success");
+            } catch {
+                $('download_iframe').src = u; toast("Unduhan dipicu dari browser.", "info");
             }
-            p.close();
+            btn.innerText = orig; btn.disabled = false;
         }
 
+        // FUNGSI KHUSUS VIDEO & MUSIK (TETAP ADA JEDA 5 DETIK UNTUK BATAL)
         async function downloadFile(type) {
             let url = vUrl, btnId = 'btnVid', mime = 'video/mp4', ext = '.mp4';
             if(type === 'hd') { url = vHd; btnId = 'btnHd'; }
@@ -239,15 +228,8 @@
 
             try {
                 let res;
-                try {
-                    // Coba download direct dulu
-                    res = await fetch(url, { signal: ctrl.signal });
-                    if (!res.ok) throw 1;
-                } catch {
-                    // Jika gagal atau dicekal CORS, tembak lewat proxy tunnel agar stream mp4 tidak pecah
-                    res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`, { signal: ctrl.signal });
-                    if (!res.ok) throw 1;
-                }
+                try { res = await fetch(url, { signal: ctrl.signal }); if (!res.ok) throw 1; } 
+                catch { res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`, { signal: ctrl.signal }); if (!res.ok) throw 1; }
 
                 const len = parseInt(res.headers.get('content-length'), 10) || 0, r = res.body.getReader();
                 let rec = 0, chunks = [];
@@ -260,18 +242,14 @@
                 let all = new Uint8Array(rec), pos = 0;
                 for(let c of chunks) { all.set(c, pos); pos += c.length; }
                 
-                // MENGUNCI FORMAT BINARY BLOB KE MIME TYPE ASLI AGAR TIDAK JADI AUDIO
                 await silentDl(window.URL.createObjectURL(new Blob([all], { type: mime })), title.replace(/[^a-zA-Z0-9]/g, '_').substring(0,25) + ext, true);
                 toast("Selesai!", "success");
             } catch {
                 if(ctrl.signal.aborted) toast("Dibatalkan!", "error");
                 else {
                     let dlLink = url;
-                    if(dlLink.includes('tikwm.com') && !dlLink.includes('attachments=1')) {
-                        dlLink += dlLink.includes('?') ? '&attachments=1' : '?attachments=1';
-                    }
-                    $('download_iframe').src = dlLink;
-                    toast("Selesai!", "success");
+                    if(dlLink.includes('tikwm.com') && !dlLink.includes('attachments=1')) dlLink += dlLink.includes('?') ? '&attachments=1' : '?attachments=1';
+                    $('download_iframe').src = dlLink; toast("Selesai!", "success");
                 }
             }
             p.close(); btn.disabled = false; txt.innerHTML = orig;
