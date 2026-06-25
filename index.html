@@ -13,7 +13,6 @@ input{width:100%;padding:14px;background:#0f1c2e;border:2px solid #00ff88;border
 .flex{display:flex;gap:10px;margin:10px 0}
 .btn{padding:12px;font-weight:700;border-radius:10px;border:0;cursor:pointer;width:100%;margin:5px 0;transition:.2s}
 .btn:active{transform:scale(.95)}
-.btn:disabled{background:#555!important;color:#aaa!important;cursor:wait}
 .b-pst{background:#00bfff;flex:1}.b-clr{background:#333;color:#fff;flex:1}
 .b-main{background:#00ff88;color:#000}.b-mus{background:#ff3366;color:#fff}.b-hd{background:#00bfff;color:#000}
 .res{margin-top:20px;padding:15px;background:#0f1c2e;border-radius:18px;display:none;border:1px solid #00ff88}
@@ -21,24 +20,17 @@ video{width:100%;border-radius:12px;margin:10px 0;background:#000}
 #tBox{position:fixed;top:15px;right:15px;z-index:9999;width:300px;display:flex;flex-direction:column;gap:8px}
 .tst{background:#1f4068;color:#fff;padding:15px;border-radius:12px;text-align:left;border-left:5px solid #00ff88;font-size:14px;box-shadow:0 8px 20px rgba(0,0,0,.4)}
 .err{border-color:#ff3366}
+.sz{font-size:12px;color:#ffcc00;font-weight:700;margin-left:5px}
+.f-lst{text-align:left;background:#16213e;padding:15px;border-radius:14px;margin:15px 0;display:grid;grid-template-columns:1fr;gap:15px}
+.f-row{display:flex;flex-direction:column;padding:10px;background:#0f1c2e;border-radius:12px;border:1px solid #252525}
 .hst{margin-top:15px;text-align:left;background:#0f1c2e;padding:10px;border-radius:10px;font-size:12px}
 .h-it{padding:6px 0;border-bottom:1px solid #222;cursor:pointer}
-.mdl{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);z-index:99999;display:none;justify-content:center;align-items:center}
-.mdl-c{background:#16213e;padding:20px;border-radius:15px;width:90%;max-width:400px;text-align:left;position:relative;border:2px solid #00ff88}
-.mdl-x{position:absolute;top:12px;right:12px;background:#ff3366;color:#fff;border:0;width:30px;height:30px;border-radius:8px;font-weight:700;cursor:pointer}
 </style>
 </head>
 <body>
 <div id="tBox"></div>
-<div id="uMdl" class="mdl"><div class="mdl-c"><button class="mdl-x" onclick="$('uMdl').style.display='none'">X</button>
-<h3 style="color:#00ff88;margin:0 0 15px">🔔 Riwayat Pembaruan</h3>
-<div style="font-size:14px;color:#eee;max-height:60vh;overflow-y:auto;line-height:1.5">
-<p><b>v1.2.1</b><br> - Desain Klasik & Profesional.<br> - Fitur Hapus Riwayat Lengkap.<br> - FAQ Lengkap & Mendetail.</p>
-</div></div></div>
-
 <div class="box">
 <h1>🔥 Rezyyxy Downloader</h1><p style="color:#00ff88;margin:0 0 10px;font-size:13px;text-align:center">Video + Musik • Tanpa Watermark</p>
-<button class="btn" style="background:#222;color:#00bfff;font-size:12px;padding:8px" onclick="$('uMdl').style.display='flex'">🔔 Info Update</button>
 <input type="text" id="url" placeholder="Tempel tautan TikTok di sini...">
 <div class="flex"><button class="btn b-pst" onclick="pst()">📋 Tempel</button><button class="btn b-clr" onclick="clr()">❌ Bersihkan</button></div>
 <button class="btn b-main" onclick="cek()">🔍 CEK VIDEO & MUSIK</button>
@@ -49,46 +41,26 @@ video{width:100%;border-radius:12px;margin:10px 0;background:#000}
 <div class="info-box">
     <h2>⚡ Fitur Utama</h2>
     <ul>
-        <li><b>Video Tanpa Watermark:</b> Unduh video TikTok dalam kualitas asli tanpa logo yang mengganggu.</li>
-        <li><b>Dukungan Slideshow:</b> Unduh rangkaian foto secara individu atau sekaligus dalam satu arsip.</li>
-        <li><b>Ekstrak Audio:</b> Konversi cepat video ke format audio MP3 berkualitas tinggi.</li>
-        <li><b>Performa Optimal:</b> Antarmuka ringan, cepat, dan hemat data tanpa iklan.</li>
+        <li><b>Video Tanpa Watermark:</b> Unduh video TikTok dalam kualitas asli.</li>
+        <li><b>Dukungan Slideshow:</b> Unduh foto (slideshow) sekaligus atau satuan.</li>
+        <li><b>Ekstrak Audio:</b> Konversi cepat ke format MP3.</li>
     </ul>
-
-    <h2>🛠️ Panduan Penggunaan</h2>
-    <p>1. <b>Salin Tautan:</b> Buka aplikasi TikTok, pilih video, ketuk tombol 'Bagikan' dan pilih 'Salin Tautan'.<br>
-       2. <b>Tempel Tautan:</b> Buka Rezyyxy Downloader, tempel tautan ke kolom yang tersedia.<br>
-       3. <b>Unduh:</b> Klik tombol "CEK VIDEO & MUSIK" dan pilih format file yang ingin Anda simpan.</p>
-
-    <h2>❓ Pertanyaan Umum (FAQ)</h2>
-    <p><b>Q: Apakah Rezyyxy Downloader aman digunakan?</b><br>A: Sangat aman. Kami tidak menyimpan file, video, atau data pribadi apa pun di server kami.</p>
-    <p><b>Q: Mengapa video yang diunduh tidak memiliki watermark?</b><br>A: Sistem kami secara otomatis membersihkan metadata watermark dari video asli TikTok.</p>
-    <p><b>Q: Apakah saya bisa mengunduh audio saja (MP3)?</b><br>A: Tentu, kami menyediakan opsi khusus untuk mengunduh audio dengan format MP3 berkualitas tinggi.</p>
-    <p><b>Q: Apa yang harus dilakukan jika proses unduhan gagal?</b><br>A: Pastikan koneksi stabil, segarkan halaman, atau coba tempel kembali tautan tersebut.</p>
-    <p><b>Q: Apakah web ini dapat diakses di iPhone/iOS?</b><br>A: Ya, layanan kami berjalan sempurna di iOS, Android, serta perangkat komputer.</p>
-
-    <h2>⚠️ Penafian</h2>
-    <p>Rezyyxy Downloader tidak berafiliasi dengan TikTok. Kami hanyalah alat bantu pihak ketiga. Seluruh hak cipta konten adalah milik pencipta asli.</p>
-
-    <h2>👋 Tentang Kami</h2>
-    <p>Kami berkomitmen menyediakan pengalaman mengunduh yang lancar, cepat, dan aman.</p>
-    
-    <h2>📜 Syarat Ketentuan</h2>
-    <p>Layanan ini ditujukan untuk penggunaan pribadi dan non-komersial.</p>
-    <p style="text-align:center; font-size:12px; color:#666; margin-top:20px;">© 2026 Rezyyxy Downloader. Hak Cipta Dilindungi.</p>
+    <h2>❓ FAQ</h2>
+    <p><b>Q: Aman digunakan?</b> A: Ya, tidak ada data yang disimpan di server kami.</p>
 </div>
 
 <script>
-let vU='',vH='',mU='',ttl='',img=[],totImgSz=0,c=null,$=i=>document.getElementById(i),PX='https://corsproxy.io/?';
+let vU='',vH='',mU='',ttl='',img=[],totImgSz=0,$=i=>document.getElementById(i),PX='https://corsproxy.io/?';
+let fMB=b=>b?`(${(b/1e6).toFixed(1)} MB)`:'',fKB=b=>b?`(${(b/1024).toFixed(0)} KB)`:'';
 window.onload=()=>rHst();
 let tst=(m,e=0)=>{let t=document.createElement('div');t.className=`tst ${e?'err':''}`;t.innerHTML=m;$('tBox').appendChild(t);setTimeout(()=>t.remove(),3000)}
 let pst=async()=>{try{let t=await navigator.clipboard.readText();if(/tiktok\.com/i.test(t)){$('url').value=t;tst("Ditempel!")}else tst("Bukan tautan TikTok!",1)}catch{tst("Gagal mengakses",1)}}
 let clr=()=>{vU=vH=mU=ttl='';img=[];$('url').value='';$('res').style.display='none';$('res').innerHTML='';tst("Dibersihkan!")}
-let cek=async()=>{let u=$('url').value.trim();if(!/tiktok\.com/i.test(u))return tst("Tautan tidak valid!",1);$('res').style.display='block';$('res').innerHTML='Mencari...';try{let r=await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(u)}`),d=await r.json(),v=d.data;if(!v)throw 1;vU=v.play;vH=v.hdplay;mU=v.music;ttl=v.title;img=v.images||[];let h=`<div style="background:#0f1c2e;padding:10px;border-radius:8px"><b>@${v.author?.unique_id}</b></div>`;if(img.length){img.forEach((x,i)=>{h+=`<div class="f-row"><img src="${x}" style="width:100%"><button class="btn b-main" onclick="sDl('${x}','foto_${i}.jpg')">Unduh Foto</button></div>`})}else{h+=`<video controls src="${vU}"></video><button class="btn b-main" onclick="sDl('${vU}','video.mp4')">Unduh Video</button>`}h+=`<button class="btn" style="background:#6c5ce7;color:#fff" onclick="shW()">Bagikan</button>`;$('res').innerHTML=h;sHst(ttl,v.author?.unique_id,u)}catch{tst("Gagal!",1)}}
+let gSz=async(u,id,k)=>{try{let r=await fetch(PX+encodeURIComponent(u),{method:'HEAD'});let l=r.headers.get('content-length');if(l){let b=parseInt(l);if(k){totImgSz+=b;if($('totSz'))$('totSz').innerText=fMB(totImgSz);}if($(id))$(id).innerText=k?fKB(b):fMB(b);}}catch{}}
+let cek=async()=>{let u=$('url').value.trim();if(!/tiktok\.com/i.test(u))return tst("Tautan tidak valid!",1);$('res').style.display='block';$('res').innerHTML='Mencari...';try{let r=await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(u)}`),d=await r.json(),v=d.data;if(!v)throw 1;vU=v.play;vH=v.hdplay;mU=v.music;ttl=v.title;img=v.images||[];totImgSz=0;let h=`<div style="background:#0f1c2e;padding:10px;border-radius:8px"><b>@${v.author?.unique_id}</b></div>`;if(img.length){h+=`<div class="f-lst">`;img.forEach((x,i)=>{h+=`<div class="f-row"><img src="${x}" style="width:100%"><button class="btn b-main" onclick="sDl('${x}','foto_${i}.jpg')">Unduh Foto <span id="iSz_${i}" class="sz"></span></button></div>`});h+=`</div><button class="btn b-main" onclick="dlA()">⬇️ UNDUH SEMUA <span id="totSz" class="sz"></span></button>`}else{h+=`<video controls src="${vU}"></video><button class="btn b-main" onclick="sDl('${vU}','video.mp4')">Unduh Video ${fMB(v.size)}</button>`;if(vH)h+=`<button class="btn b-hd" onclick="sDl('${vH}','video_hd.mp4')" style="background:#00bfff;color:#000">🚀 Unduh HD ${fMB(v.hd_size)}</button>`}if(mU)h+=`<button class="btn b-mus" onclick="sDl('${mU}','audio.mp3')">🎵 Unduh Audio <span id="mSz" class="sz"></span></button>`;$('res').innerHTML=h;sHst(ttl,v.author?.unique_id,u);if(mU)gSz(mU,'mSz',0);if(img.length)img.forEach((x,i)=>gSz(x,'iSz_'+i,1))}catch{tst("Gagal!",1)}}
 let sDl=(u,n)=>{let a=document.createElement('a');a.href=PX+encodeURIComponent(u);a.download=n;a.click()}
-let shW=()=>{if(navigator.share)navigator.share({title:'Rezyyxy Downloader',url:window.location.href});else tst("Tidak mendukung!",1)}
+let dlA=()=>{img.forEach((x,i)=>sDl(x,`foto_${i}.jpg`))}
 let sHst=(t,u,l)=>{let h=JSON.parse(localStorage.getItem('h')||'[]');if(!h.some(x=>x.l==l)){h.unshift({t,u,l});localStorage.setItem('h',JSON.stringify(h.slice(0,3)));rHst()}}
 let dHst=()=>{localStorage.removeItem('h');rHst();tst("Riwayat dihapus!")}
 let rHst=()=>{let h=JSON.parse(localStorage.getItem('h')||'[]');$('hst').innerHTML=h.length?`<div class="hst"><div style="display:flex;justify-content:space-between;align-items:center;"><b style="color:#00ff88">📜 Riwayat:</b><button onclick="dHst()" style="background:#ff3366;color:#fff;border:none;padding:2px 8px;border-radius:4px;font-size:10px;cursor:pointer;">Hapus</button></div>`+h.map(x=>`<div class="h-it" onclick="$('url').value='${x.l}';cek()"><b style="color:#00bfff">@${x.u}</b> ${x.t.slice(0,18)}...</div>`).join('')+`</div>`:''}
 </script></body></html>
-                                
