@@ -4,92 +4,75 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>🔥 Rezyyxy Downloader</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
-body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#eee;margin:0;padding:0;min-height:100vh}
-
-/* Hero Section (Area Download) - Full Width Feel */
-.hero{width:100%;background:#16213e;padding:60px 20px;text-align:center;box-shadow:0 10px 20px rgba(0,0,0,0.5);box-sizing:border-box}
-.hero-content{max-width:700px;margin:0 auto}
-
-/* Container untuk konten bawah (FAQ/Info) */
-.container{max-width:800px;margin:0 auto;padding:20px;box-sizing:border-box}
-
-h1{color:#00ff88;font-size:32px;margin:0 0 10px}
-input{width:100%;max-width:600px;padding:16px;background:#0f1c2e;border:2px solid #00ff88;border-radius:12px;color:#fff;box-sizing:border-box;outline:0;font-size:16px}
-.flex{display:flex;gap:10px;margin:15px 0;justify-content:center}
-.btn{padding:14px;font-weight:700;border-radius:10px;border:0;cursor:pointer;width:100%;max-width:200px;transition:.2s}
+body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#eee;padding:15px;margin:0;display:flex;flex-direction:column;align-items:center;min-height:100vh}
+.box, .info-box {width:100%;max-width:500px;background:#16213e;border-radius:24px;padding:25px;box-shadow:0 15px 35px rgba(0,255,100,.1);box-sizing:border-box;margin-top:20px}
+.info-box {text-align:left;box-shadow:0 15px 35px rgba(0,0,0,.3)}
+h1{color:#00ff88;font-size:24px;margin:0 0 5px;text-align:center}
+input{width:100%;padding:14px;background:#0f1c2e;border:2px solid #00ff88;border-radius:12px;color:#fff;box-sizing:border-box;outline:0;font-size:14px}
+.flex{display:flex;gap:10px;margin:10px 0}
+.btn{padding:12px;font-weight:700;border-radius:10px;border:0;cursor:pointer;width:100%;margin:5px 0;transition:.2s}
 .btn:active{transform:scale(.95)}
-.b-main{background:#00ff88;color:#000;max-width:400px!important}
-.b-pst{background:#00bfff;color:#fff}.b-clr{background:#333;color:#fff}
-.res{margin-top:20px;padding:20px;background:#16213e;border-radius:18px;display:none;border:1px solid #00ff88;text-align:center}
-video{width:100%;max-width:500px;border-radius:12px;margin:10px 0;background:#000}
-
-/* Info Box */
-.info-box{background:#16213e;border-radius:20px;padding:25px;margin-top:20px;box-shadow:0 10px 20px rgba(0,0,0,0.3)}
-.info-box h2{color:#00ff88;font-size:20px;margin-top:25px}
-.info-box p, .info-box li{font-size:15px;color:#ccc;line-height:1.6}
-
-#tBox{position:fixed;top:15px;right:15px;z-index:9999;width:300px}
-.tst{background:#1f4068;color:#fff;padding:15px;border-radius:12px;margin-bottom:10px;border-left:5px solid #00ff88}
-.hst{margin-top:20px;text-align:left;background:#0f1c2e;padding:15px;border-radius:10px;font-size:13px;max-width:700px;margin:20px auto}
-.h-it{padding:8px 0;border-bottom:1px solid #222;cursor:pointer}
+.btn:disabled{background:#555!important;color:#aaa!important;cursor:wait}
+.b-pst{background:#00bfff;flex:1}.b-clr{background:#333;color:#fff;flex:1}
+.b-main{background:#00ff88;color:#000}.b-mus{background:#ff3366;color:#fff}.b-hd{background:#00bfff;color:#000}
+.res{margin-top:20px;padding:15px;background:#0f1c2e;border-radius:18px;display:none;border:1px solid #00ff88}
+video{width:100%;border-radius:12px;margin:10px 0;background:#000}
+#tBox{position:fixed;top:15px;right:15px;z-index:9999;width:300px;display:flex;flex-direction:column;gap:8px}
+.tst{background:#1f4068;color:#fff;padding:15px;border-radius:12px;text-align:left;border-left:5px solid #00ff88;font-size:14px;box-shadow:0 8px 20px rgba(0,0,0,.4)}
+.err{border-color:#ff3366}
+.hst{margin-top:15px;text-align:left;background:#0f1c2e;padding:10px;border-radius:10px;font-size:12px}
+.h-it{padding:6px 0;border-bottom:1px solid #222;cursor:pointer}
+.mdl{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);z-index:99999;display:none;justify-content:center;align-items:center}
+.mdl-c{background:#16213e;padding:20px;border-radius:15px;width:90%;max-width:400px;text-align:left;position:relative;border:2px solid #00ff88}
+.mdl-x{position:absolute;top:12px;right:12px;background:#ff3366;color:#fff;border:0;width:30px;height:30px;border-radius:8px;font-weight:700;cursor:pointer}
 </style>
 </head>
 <body>
 <div id="tBox"></div>
+<div id="uMdl" class="mdl"><div class="mdl-c"><button class="mdl-x" onclick="$('uMdl').style.display='none'">X</button>
+<h3 style="color:#00ff88;margin:0 0 15px">🔔 Riwayat Pembaruan</h3>
+<div style="font-size:14px;color:#eee;max-height:60vh;overflow-y:auto;line-height:1.5">
+<p><b>v1.2.0</b><br> - Penambahan tombol "Hapus Riwayat".</p>
+<p><b>v1.1.9</b><br> - Desain klasik yang lebih nyaman.</p>
+</div></div></div>
 
-<div class="hero">
-    <div class="hero-content">
-        <h1>🔥 Rezyyxy Downloader</h1>
-        <p style="color:#aaa;margin-bottom:20px">Unduh Video TikTok Tanpa Watermark & Kualitas HD</p>
-        <input type="text" id="url" placeholder="Tempel tautan TikTok di sini...">
-        <div class="flex">
-            <button class="btn b-pst" onclick="pst()">📋 Tempel</button>
-            <button class="btn b-clr" onclick="clr()">❌ Bersihkan</button>
-        </div>
-        <button class="btn b-main" onclick="cek()">🔍 CEK VIDEO & MUSIK</button>
-        <div id="res" class="res"></div>
-        <div id="hst"></div>
-    </div>
+<div class="box">
+<h1>🔥 Rezyyxy Downloader</h1><p style="color:#00ff88;margin:0 0 10px;font-size:13px;text-align:center">Video + Musik • Tanpa Watermark</p>
+<button class="btn" style="background:#222;color:#00bfff;font-size:12px;padding:8px" onclick="$('uMdl').style.display='flex'">🔔 Info Update</button>
+<input type="text" id="url" placeholder="Tempel tautan TikTok di sini...">
+<div class="flex"><button class="btn b-pst" onclick="pst()">📋 Tempel</button><button class="btn b-clr" onclick="clr()">❌ Bersihkan</button></div>
+<button class="btn b-main" onclick="cek()">🔍 CEK VIDEO & MUSIK</button>
+<div id="res" class="res"></div>
+<div id="hst"></div>
 </div>
 
-<div class="container">
-    <div class="info-box">
-        <h2>⚡ Fitur Utama</h2>
-        <ul>
-            <li><b>Video Tanpa Watermark:</b> Unduh video TikTok dalam kualitas asli.</li>
-            <li><b>Dukungan Slideshow:</b> Unduh rangkaian foto secara individu atau sekaligus.</li>
-            <li><b>Ekstrak Audio:</b> Konversi cepat video ke format audio MP3 berkualitas tinggi.</li>
-            <li><b>Performa Optimal:</b> Antarmuka ringan, cepat, dan hemat data.</li>
-        </ul>
-
-        <h2>🛠️ Panduan Penggunaan</h2>
-        <p>1. <b>Salin Tautan:</b> Buka TikTok, ketuk 'Bagikan' dan pilih 'Salin Tautan'.<br>
-           2. <b>Tempel Tautan:</b> Tempel tautan ke kolom input di atas.<br>
-           3. <b>Unduh:</b> Klik "CEK VIDEO & MUSIK" dan pilih format yang Anda inginkan.</p>
-
-        <h2>❓ Pertanyaan Umum (FAQ)</h2>
-        <p><b>Q: Apakah Rezyyxy Downloader aman?</b><br>A: Ya, kami tidak menyimpan file atau data pribadi Anda.</p>
-        <p><b>Q: Mengapa video tidak ada watermark?</b><br>A: Sistem kami secara otomatis menghapus watermark dari video TikTok.</p>
-        <p><b>Q: Apakah bisa unduh audio MP3?</b><br>A: Tentu, tersedia opsi unduh audio MP3 berkualitas tinggi.</p>
-
-        <h2>⚠️ Penafian</h2>
-        <p>Rezyyxy Downloader tidak berafiliasi dengan TikTok. Seluruh hak cipta adalah milik pencipta asli.</p>
-    </div>
+<div class="info-box">
+    <h2>⚡ Fitur Utama</h2>
+    <ul>
+        <li><b>Video Tanpa Watermark:</b> Unduh video kualitas asli.</li>
+        <li><b>Dukungan Slideshow:</b> Unduh foto sekaligus.</li>
+        <li><b>Ekstrak Audio:</b> Konversi ke MP3 kualitas tinggi.</li>
+        <li><b>Performa Optimal:</b> Ringan dan hemat data.</li>
+    </ul>
+    <h2>🛠️ Panduan Penggunaan</h2>
+    <p>1. Salin tautan TikTok.<br>2. Tempel di input.<br>3. Klik "CEK" & unduh.</p>
+    <h2>❓ FAQ</h2>
+    <p><b>Q: Aman digunakan?</b> A: Ya, data tidak disimpan di server.</p>
+    <h2>⚠️ Penafian</h2>
+    <p>Kami tidak berafiliasi dengan TikTok. Hak cipta milik pencipta asli.</p>
+    <p style="text-align:center; font-size:12px; color:#666; margin-top:20px;">© 2026 Rezyyxy Downloader.</p>
 </div>
 
 <script>
 let vU='',vH='',mU='',ttl='',img=[],totImgSz=0,c=null,$=i=>document.getElementById(i),PX='https://corsproxy.io/?';
-let fMB=b=>b?`(${(b/1e6).toFixed(1)} MB)`:'',fKB=b=>b?`(${(b/1024).toFixed(0)} KB)`:'';
 window.onload=()=>rHst();
 let tst=(m,e=0)=>{let t=document.createElement('div');t.className=`tst ${e?'err':''}`;t.innerHTML=m;$('tBox').appendChild(t);setTimeout(()=>t.remove(),3000)}
-let shW=()=>{if(navigator.share)navigator.share({title:'Rezyyxy Downloader',url:window.location.href});else tst("Browser tidak mendukung!",1)}
-let pTst=(l)=>{let t=document.createElement('div');t.className='tst';t.innerHTML=`<b>⏳ ${l}</b>`;$('tBox').prepend(t);return{uT:x=>t.querySelector('b').innerText='⏳ '+x,u:(b,p)=>{},x:()=>t.remove()}}
-let d5s=async(p)=>{for(let i=5;i>0;i--){await new Promise(r=>setTimeout(r,1e3))}return 1}
-let gSz=async(u,id,k)=>{try{let r=await fetch(PX+encodeURIComponent(u),{method:'HEAD'});let l=r.headers.get('content-length');if(l){let b=parseInt(l);if($(id))$(id).innerText=k?fKB(b):fMB(b);}}catch{}}
-let pst=async()=>{try{let t=await navigator.clipboard.readText();if(/tiktok\.com/i.test(t)){$('url').value=t;tst("Ditempel!")}else tst("Bukan tautan TikTok!",1)}catch{tst("Gagal mengakses clipboard",1)}}
+let pst=async()=>{try{let t=await navigator.clipboard.readText();if(/tiktok\.com/i.test(t)){$('url').value=t;tst("Ditempel!")}else tst("Bukan tautan TikTok!",1)}catch{tst("Gagal mengakses",1)}}
 let clr=()=>{vU=vH=mU=ttl='';img=[];$('url').value='';$('res').style.display='none';$('res').innerHTML='';tst("Dibersihkan!")}
-let cek=async()=>{let u=$('url').value.trim();if(!/tiktok\.com/i.test(u))return tst("Tautan tidak valid!",1);$('res').style.display='block';$('res').innerHTML='Mencari... 🔥';try{let r=await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(u)}`),d=await r.json(),v=d.data;if(!v)throw 1;vU=v.play;vH=v.hdplay;mU=v.music;ttl=v.title;img=v.images||[];let h=`<div style="background:#0f1c2e;padding:10px;border-radius:8px"><b>@${v.author?.unique_id}</b></div>`;if(img.length){img.forEach((x,i)=>{h+=`<div class="f-row"><img src="${x}" style="width:100%"><button class="btn b-main" onclick="sDl('${x}','foto_${i}.jpg')">Unduh Foto</button></div>`})}else{h+=`<video controls src="${vU}"></video><br><button class="btn b-main" onclick="sDl('${vU}','video.mp4')">Unduh Video</button>`}h+=`<button class="btn" style="background:#6c5ce7;color:#fff" onclick="shW()">Bagikan</button>`;$('res').innerHTML=h;sHst(ttl,v.author?.unique_id,u)}catch{tst("Gagal!",1)}}
+let cek=async()=>{let u=$('url').value.trim();if(!/tiktok\.com/i.test(u))return tst("Tautan tidak valid!",1);$('res').style.display='block';$('res').innerHTML='Mencari...';try{let r=await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(u)}`),d=await r.json(),v=d.data;if(!v)throw 1;vU=v.play;vH=v.hdplay;mU=v.music;ttl=v.title;img=v.images||[];let h=`<div style="background:#0f1c2e;padding:10px;border-radius:8px"><b>@${v.author?.unique_id}</b></div>`;if(img.length){img.forEach((x,i)=>{h+=`<div class="f-row"><img src="${x}" style="width:100%"><button class="btn b-main" onclick="sDl('${x}','foto_${i}.jpg')">Unduh Foto</button></div>`})}else{h+=`<video controls src="${vU}"></video><button class="btn b-main" onclick="sDl('${vU}','video.mp4')">Unduh Video</button>`}h+=`<button class="btn" style="background:#6c5ce7;color:#fff" onclick="shW()">Bagikan</button>`;$('res').innerHTML=h;sHst(ttl,v.author?.unique_id,u)}catch{tst("Gagal!",1)}}
 let sDl=(u,n)=>{let a=document.createElement('a');a.href=PX+encodeURIComponent(u);a.download=n;a.click()}
+let shW=()=>{if(navigator.share)navigator.share({title:'Rezyyxy Downloader',url:window.location.href});else tst("Tidak mendukung!",1)}
 let sHst=(t,u,l)=>{let h=JSON.parse(localStorage.getItem('h')||'[]');if(!h.some(x=>x.l==l)){h.unshift({t,u,l});localStorage.setItem('h',JSON.stringify(h.slice(0,3)));rHst()}}
-let rHst=()=>{let h=JSON.parse(localStorage.getItem('h')||'[]');$('hst').innerHTML=h.length?`<div class="hst"><b style="color:#00ff88">📜 Riwayat:</b>`+h.map(x=>`<div class="h-it" onclick="$('url').value='${x.l}';cek()"><b style="color:#00bfff">@${x.u}</b> ${x.t.slice(0,18)}...</div>`).join('')+`</div>`:''}
+let dHst=()=>{localStorage.removeItem('h');rHst();tst("Riwayat dihapus!")}
+let rHst=()=>{let h=JSON.parse(localStorage.getItem('h')||'[]');$('hst').innerHTML=h.length?`<div class="hst"><div style="display:flex;justify-content:space-between;align-items:center;"><b style="color:#00ff88">📜 Riwayat:</b><button onclick="dHst()" style="background:#ff3366;color:#fff;border:none;padding:2px 8px;border-radius:4px;font-size:10px;cursor:pointer;">Hapus</button></div>`+h.map(x=>`<div class="h-it" onclick="$('url').value='${x.l}';cek()"><b style="color:#00bfff">@${x.u}</b> ${x.t.slice(0,18)}...</div>`).join('')+`</div>`:''}
 </script></body></html>
