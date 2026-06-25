@@ -7,7 +7,7 @@
 body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#eee;text-align:center;padding:15px;margin:0}
 .box{max-width:450px;margin:0 auto;background:#16213e;border-radius:20px;padding:20px;box-shadow:0 10px 30px rgba(0,255,100,.1)}
 h1{color:#00ff88;font-size:22px;margin:0 0 5px}
-input{width:100%;padding:14px;background:#0f1c2e;border:2px solid #00ff88;border-radius:12px;color:#fff;box-sizing:border-box;outline:0}
+input{width:100%;padding:14px;background:#0f1c2e;border:2px solid #00ff88;border-radius:12px;color:#fff;box-sizing:border-box;outline:0;font-size:14px}
 .flex{display:flex;gap:10px;margin:10px 0}
 .btn{padding:12px;font-weight:700;border-radius:10px;border:0;cursor:pointer;width:100%;margin:5px 0;transition:.2s}
 .btn:active{transform:scale(.95)}
@@ -17,23 +17,50 @@ input{width:100%;padding:14px;background:#0f1c2e;border:2px solid #00ff88;border
 .res{margin-top:15px;padding:15px;background:#0f1c2e;border-radius:15px;display:none;border:1px solid #00ff88}
 video{width:100%;border-radius:10px;margin:10px 0}
 video::-webkit-media-controls-volume-control-container,video::-webkit-media-controls-fullscreen-button,video::-internal-media-controls-download-button{display:none!important}
-#tBox{position:fixed;top:15px;right:15px;z-index:999;width:300px;display:flex;flex-direction:column;gap:8px}
-.tst{background:#1f4068;color:#fff;padding:12px;border-radius:10px;text-align:left;border-left:4px solid #00ff88;font-size:13px;box-shadow:0 5px 15px rgba(0,0,0,.3)}
+#tBox{position:fixed;top:15px;right:15px;z-index:9999;width:300px;display:flex;flex-direction:column;gap:8px}
+.tst{background:#1f4068;color:#fff;padding:15px;border-radius:12px;text-align:left;border-left:5px solid #00ff88;font-size:14px;box-shadow:0 8px 20px rgba(0,0,0,.4)}
 .err{border-color:#ff3366}
-.p-bar{background:#0f1c2e;height:5px;border-radius:3px;margin-top:5px;overflow:hidden}
-.p-f{background:#00ff88;height:100%;width:0}
+.p-bar{background:#0f1c2e;height:6px;border-radius:3px;margin-top:8px;overflow:hidden}
+.p-f{background:#00ff88;height:100%;width:0;transition:width .2s}
 .f-lst{text-align:left;background:#16213e;padding:10px;border-radius:10px;max-height:240px;overflow-y:auto;margin:10px 0}
 .f-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #252525}
 .f-img{width:40px;height:40px;border-radius:6px;object-fit:cover;border:1px solid #00ff88}
 .hst{margin-top:15px;text-align:left;background:#0f1c2e;padding:10px;border-radius:10px;font-size:12px}
 .h-it{padding:6px 0;border-bottom:1px solid #222;cursor:pointer}
 .sz{font-size:11px;color:#ffcc00;font-weight:400}
+/* CSS Modal (Popup) Baru */
+.mdl{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);z-index:99999;display:none;justify-content:center;align-items:center}
+.mdl-c{background:#16213e;padding:20px;border-radius:15px;width:90%;max-width:400px;text-align:left;position:relative;border:2px solid #00ff88}
+.mdl-x{position:absolute;top:12px;right:12px;background:#ff3366;color:#fff;border:0;width:30px;height:30px;border-radius:8px;font-weight:700;cursor:pointer}
 </style>
 </head>
 <body>
 <div id="tBox"></div>
+
+<div id="uMdl" class="mdl"><div class="mdl-c"><button class="mdl-x" onclick="$('uMdl').style.display='none'">X</button>
+<h3 style="color:#00ff88;margin:0 0 15px">🔔 Info Update</h3>
+<div style="font-size:13px;color:#eee;max-height:60vh;overflow-y:auto">
+<p><b style="color:#00bfff">v1.3 (Baru)</b><br>- Tombol batal "X" dibuat Raksasa anti salah pencet.<br>- Tambah Info Update & AI Asisten Web.</p>
+<p><b style="color:#00ff88">v1.2</b><br>- Info otomatis akurat untuk ukuran file KB/MB.<br>- Otomatis jeda konfirmasi 5 detik sebelum sedot kuota.</p>
+<p><b style="color:#ffcc00">v1.1</b><br>- Fitur unduh banyak foto (Slideshow).<br>- Deteksi otomatis copy-paste TikTok.</p>
+</div></div></div>
+
+<div id="aMdl" class="mdl"><div class="mdl-c"><button class="mdl-x" onclick="$('aMdl').style.display='none'">X</button>
+<h3 style="color:#00bfff;margin:0 0 10px">🤖 RezyBot AI</h3>
+<div id="cBox" style="height:250px;background:#0a0a0a;border-radius:10px;padding:10px;overflow-y:auto;border:1px solid #333;font-size:13px"></div>
+<div class="flex" style="margin-top:10px">
+<input type="text" id="cIn" placeholder="Ketik pertanyaanmu..." style="padding:10px" onkeypress="if(event.key=='Enter')sChat()">
+<button class="btn b-main" style="width:70px;margin:0" onclick="sChat()">Kirim</button>
+</div></div></div>
+
 <div class="box">
 <h1>🔥 Rezyyxy Downloader</h1><p style="color:#00ff88;margin:0 0 10px;font-size:13px">Video + Musik • No Watermark</p>
+
+<div class="flex" style="margin:-5px 0 15px 0">
+<button class="btn" style="background:#222;color:#00bfff;font-size:12px;padding:8px" onclick="$('uMdl').style.display='flex'">🔔 Info Update</button>
+<button class="btn" style="background:#222;color:#00ff88;font-size:12px;padding:8px" onclick="$('aMdl').style.display='flex'">🤖 Tanya AI</button>
+</div>
+
 <input type="text" id="url" placeholder="Paste link TikTok di sini...">
 <div class="flex"><button class="btn b-pst" onclick="pst()">📋 Tempel</button><button class="btn b-clr" onclick="clr()">❌ Clear</button></div>
 <button class="btn b-main" onclick="cek()">🔍 CEK VIDEO & MUSIK</button>
@@ -44,10 +71,18 @@ video::-webkit-media-controls-volume-control-container,video::-webkit-media-cont
 <script>
 let vU='',vH='',mU='',ttl='',img=[],c=null,$=i=>document.getElementById(i),PX='https://api.allorigins.win/raw?url=';
 let fMB=b=>b?`${(b/1e6).toFixed(1)} MB`:'',fKB=b=>b?`${(b/1024).toFixed(0)} KB`:'';
+
+// Sistem RezyBot AI
+let cLog=[{b:1,t:'Halo! Aku RezyBot. Kamu bingung? Tanya aja soal "foto", "batal/jeda", "lagu/suara", atau "error".'}];
+let rChat=()=>{let b=$('cBox');b.innerHTML=cLog.map(x=>`<div style="text-align:${x.b?'left':'right'};margin:5px 0"><span style="background:${x.b?'#1f4068':'#00ff88'};color:${x.b?'#eee':'#000'};padding:8px 12px;border-radius:10px;display:inline-block;max-width:85%">${x.t}</span></div>`).join('');b.scrollTop=b.scrollHeight}
+let sChat=()=>{let q=$('cIn').value.trim();if(!q)return;$('cIn').value='';cLog.push({b:0,t:q});rChat();setTimeout(()=>{let a="Maaf, aku belum ngerti. Coba tanya soal 'foto', 'lagu', 'jeda', atau 'error'.";if(/foto|gambar|slide/i.test(q))a="Untuk slideshow, TikTok gak bikin file videonya. Jadi, web ini otomatis misahin foto dan lagunya biar gampang di-download!";else if(/batal|x|cancel|jeda|detik/i.test(q))a="Tiap pencet download ada jeda 5 detik. Tinggal pencet huruf X warna merah yang gede di atas layar buat ngebatalin biar kuotamu aman!";else if(/lama|error|gagal/i.test(q))a="Kalau error/loading lama, biasanya karena server luar negeri atau sinyal lemot. Tinggal direfresh halamannya aja!";else if(/suara|lagu|audio|mp3/i.test(q))a="Gampang! Kamu klik aja tombol 'DOWNLOAD AUDIO' warna merah pink di bawah hasil pencarian.";else if(/video/i.test(q))a="Masukin link video, lalu klik tombol download warna hijau. Nanti nunggu jeda 5 detik baru file bakal ditarik ke HP kamu.";cLog.push({b:1,t:a});rChat()},500)}
+window.onload=()=>{rHst();rChat()};
+
 window.onfocus=async()=>{try{let t=await navigator.clipboard.readText();if(/tiktok\.com/i.test(t)&&!$('url').value){$('url').value=t;tst("Link terdeteksi!")}}catch{}}
-window.onload=()=>rHst();
 let tst=(m,e=0)=>{let t=document.createElement('div');t.className=`tst ${e?'err':''}`;t.innerHTML=m;$('tBox').appendChild(t);setTimeout(()=>t.remove(),3000)}
-let pTst=(l)=>{let t=document.createElement('div');t.className='tst';t.innerHTML=`<div style="display:flex;justify-content:space-between"><b>⏳ ${l}</b><button style="background:#ff3366;color:#fff;border:0;border-radius:4px;padding:2px 6px;font-weight:700" onclick="c?.abort()">X</button></div><div style="display:flex;justify-content:space-between;font-size:10px;color:#aaa;margin-top:6px"><span id="tb">Siap...</span><span id="tp">0%</span></div><div class="p-bar"><div class="p-f" id="tf"></div></div>`;$('tBox').prepend(t);return{uT:x=>t.querySelector('b').innerText='⏳ '+x,u:(b,p)=>{$('tb').innerText=b;if(p>=0){$('tp').innerText=p+'%';$('tf').style.width=p+'%'}else $('tp').innerText='...'},x:()=>t.remove()}}
+
+// Tombol Batal X Raksasa di sini
+let pTst=(l)=>{let t=document.createElement('div');t.className='tst';t.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center"><b>⏳ ${l}</b><button style="background:#ff3366;color:#fff;border:0;border-radius:8px;padding:8px 18px;font-size:22px;font-weight:900;box-shadow:0 4px 10px rgba(255,51,102,.4);cursor:pointer" onclick="c?.abort()">X</button></div><div style="display:flex;justify-content:space-between;font-size:11px;color:#aaa;margin-top:8px"><span id="tb">Siap...</span><span id="tp">0%</span></div><div class="p-bar"><div class="p-f" id="tf"></div></div>`;$('tBox').prepend(t);return{uT:x=>t.querySelector('b').innerText='⏳ '+x,u:(b,p)=>{$('tb').innerText=b;if(p>=0){$('tp').innerText=p+'%';$('tf').style.width=p+'%'}else $('tp').innerText='...'},x:()=>t.remove()}}
 let d5s=async(p)=>{for(let i=5;i>0;i--){if(c.signal.aborted)return 0;p.u(`Jeda... (${i}s)`,0);await new Promise(r=>setTimeout(r,1e3))}return!c.signal.aborted}
 let gSz=async(u,id,k)=>{try{let r=await fetch(u,{method:'HEAD'});let l=r.headers.get('content-length');if(l)$(id).innerText=k?fKB(l):fMB(l);else $(id).innerText=''}catch{$(id).innerText=''}}
 let pst=async()=>{try{let t=await navigator.clipboard.readText();if(/tiktok\.com/i.test(t)){$('url').value=t;tst("Ditempel!")}else tst("Bukan link TikTok!",1)}catch{tst("Gagal akses clipboard",1)}}
