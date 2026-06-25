@@ -24,16 +24,202 @@
             padding: 30px;
             box-shadow: 0 15px 40px rgba(0, 255, 100, 0.15);
         }
-        h1 {color: #00ff88;margin-bottom: 8px;font-size: 28px;}
+        h1 {color: #00ff88; margin-bottom: 8px; font-size: 28px;}
         input {
-            width: 100%;padding: 18px;margin: 15px 0;font-size: 17px;
-            background: #0f1c2e;border: 3px solid #00ff88;border-radius: 16px;
-            color: #eee;box-sizing: border-box;outline: none;
+            width: 100%; padding: 18px; margin: 15px 0; font-size: 17px;
+            background: #0f1c2e; border: 3px solid #00ff88; border-radius: 16px;
+            color: #eee; box-sizing: border-box; outline: none;
         }
         button {
-            width: 100%;padding: 18px;font-size: 18px;font-weight: 700;
-            background: #00ff88;color: #000;border: none;border-radius: 16px;
-            cursor: pointer;margin: 10px 0;transition: 0.3s;
+            width: 100%; padding: 18px; font-size: 18px; font-weight: 700;
+            background: #00ff88; color: #000; border: none; border-radius: 16px;
+            cursor: pointer; margin: 10px 0; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        button:hover:not(:disabled) {background: #00cc6a; transform: scale(1.04);}
+        button:disabled {background: #555 !important; color: #aaa !important; cursor: not-allowed;}
+        .music-btn {background: #ff3366 !important; color: white !important;}
+        .music-btn:hover:not(:disabled) {background: #dd2255 !important;}
+        
+        .result {margin-top: 25px; padding: 25px; background: #0f1c2e; border-radius: 18px; display: none; border: 2px solid #00ff88;}
+        video {width: 100%; max-width: 400px; border-radius: 16px; margin: 15px 0; background: #000;}
+        .note {font-size: 14px; color: #ffcc00; margin: 15px 0;}
+        .copyright {font-size: 13px; color: #666; margin-top: 20px;}
+
+        /* Animasi Loading Spinner */
+        .spinner {
+            width: 20px; height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s linear infinite;
+            display: none;
+        }
+        button:disabled .spinner {display: inline-block;}
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Desain Toast Notifikasi Modern */
+        #toast-container {
+            position: fixed; top: 20px; right: 20px;
+            z-index: 9999; max-width: 350px; width: calc(100% - 40px);
+        }
+        .toast {
+            background: #1f4068; color: #fff; padding: 16px 20px;
+            border-radius: 14px; margin-bottom: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            display: flex; align-items: center; gap: 12px; text-align: left;
+            transform: translateX(120%); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-left: 5px solid #00ff88; font-size: 15px;
+        }
+        .toast.show {transform: translateX(0);}
+        .toast.info {border-left-color: #00bfff;}
+        .toast.success {border-left-color: #00ff88;}
+        .toast.error {border-left-color: #ff3366;}
+        .toast .icon {font-size: 20px;}
+    </style>
+</head>
+<body>
+
+    <div id="toast-container"></div>
+
+    <div class="container">
+        <h1>🔥 Rezyyxy TikTok Downloader</h1>
+        <p style="color:#00ff88;">Video + Musik • No Watermark</p>
+        
+        <input type="text" id="urlInput" placeholder="Paste link TikTok di sini...">
+        <button onclick="processTikTok()">🔍 CEK VIDEO & MUSIK</button>
+
+        <div id="result" class="result"></div>
+        
+        <div class="copyright">© Rezyyxy • All Rights Reserved 🗿</div>
+    </div>
+
+    <iframe id="download_iframe" style="display:none;"></iframe>
+
+    <script>
+        let currentVideoUrl = '';
+        let currentMusicUrl = '';
+        let currentTitle = '';
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            let icon = 'ℹ️';
+            if(type === 'success') icon = '✅';
+            if(type === 'error') icon = '❌';
+
+            toast.innerHTML = `<span class="icon">${icon}</span><div>${message}</div>`;
+            container.appendChild(toast);
+
+            setTimeout(() => toast.classList.add('show'), 50);
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, 4000);
+        }
+
+        async function processTikTok() {
+            let url = document.getElementById('urlInput').value.trim();
+            const resultDiv = document.getElementById('result');
+            if (!url) return showToast("Link mana tolol? 💀", 'error');
+
+            resultDiv.style.display = "block";
+            resultDiv.innerHTML = `<p style="color:#00ff88;">Nyari... Sabar setan 🔥</p>`;
+
+            try {
+                const res = await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(url)}`);
+                const data = await res.json();
+                if (data.data) {
+                    const v = data.data;
+                    currentVideoUrl = v.hdplay || v.play || '';
+                    currentMusicUrl = v.music || '';
+                    currentTitle = v.title || 'rezyyxy_tiktok';
+
+                    let html = `<p style="color:#00ff88;">✅ Video ketemu!</p>
+                        <video id="previewVideo" controls><source src="${currentVideoUrl}" type="video/mp4"></video>
+                        <button id="btnVid" onclick="downloadVideo()"><div class="spinner"></div><span class="text">⬇️ DOWNLOAD VIDEO</span></button>`;
+
+                    if (currentMusicUrl) {
+                        html += `<button id="btnMus" class="music-btn" onclick="downloadMusic()"><div class="spinner"></div><span class="text">🎵 DOWNLOAD MUSIK</span></button>`;
+                    }
+
+                    html += `<p class="note">${currentTitle}</p>`;
+                    resultDiv.innerHTML = html;
+                    showToast("Video berhasil dimuat!", "success");
+                } else {
+                    resultDiv.innerHTML = `<p>Video kagak ketemu. Link-nya bener gakk?</p>`;
+                    showToast("Video tidak ditemukan!", "error");
+                }
+            } catch(e) {
+                resultDiv.innerHTML = `<p>API rewel. Coba lagi kontol.</p>`;
+                showToast("Gagal menyambung ke API!", "error");
+            }
+        }
+
+        async function forceDownload(fileUrl, fileName) {
+            try {
+                const response = await fetch(fileUrl);
+                if (!response.ok) throw new Error('CORS error');
+                const blob = await response.blob();
+                const blobUrl = window.URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(blobUrl);
+                return true;
+            } catch (error) {
+                const iframe = document.getElementById('download_iframe');
+                let downloadUrl = fileUrl;
+                if (!downloadUrl.includes('hd=1') && fileUrl.includes('tikwm.com')) {
+                    downloadUrl = fileUrl + '&attachments=1'; 
+                }
+                iframe.src = downloadUrl;
+                return true;
+            }
+        }
+
+        async function downloadVideo() {
+            if (!currentVideoUrl) return showToast("Ga ada video 💀", "error");
+            const btn = document.getElementById('btnVid');
+            const btnText = btn.querySelector('.text');
+            
+            btn.disabled = true;
+            btnText.innerText = "Mengunduh Video...";
+            showToast("Memulai unduhan video, tunggu bentar...", "info");
+
+            const safeName = currentTitle.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 30) + '.mp4';
+            await forceDownload(currentVideoUrl, safeName);
+            
+            btn.disabled = false;
+            btnText.innerText = "⬇️ DOWNLOAD VIDEO";
+            showToast("Video berhasil diunduh!", "success");
+        }
+
+        async function downloadMusic() {
+            if (!currentMusicUrl) return showToast("Ga ada musik 💀", "error");
+            const btn = document.getElementById('btnMus');
+            const btnText = btn.querySelector('.text');
+            
+            btn.disabled = true;
+            btnText.innerText = "Mengunduh Musik...";
+            showToast("Sedang mengekstrak musik...", "info");
+
+            const safeName = currentTitle.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 30) + '.mp3';
+            await forceDownload(currentMusicUrl, safeName);
+            
+            btn.disabled = false;
+            btnText.innerText = "🎵 DOWNLOAD MUSIK";
+            showToast("Musik berhasil disimpan! 🔥", "success");
+        }
+    </script>
+</body>
+</html>
             display: flex;align-items: center;justify-content: center;gap: 10px;
         }
         button:hover:not(:disabled) {background: #00cc6a;transform: scale(1.04);}
