@@ -204,20 +204,16 @@
 
             p.upTitle("Mengunduh..."); p.up("Menghubungkan...", -1);
             try {
-                // Menggunakan allorigins proxy tunnel yang jauh lebih stabil menembus CDN tiktok
                 const res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`, { signal: ctrl.signal });
                 if(!res.ok) throw 1;
                 const blob = await res.blob();
-                // PAKSA TYPE KE IMAGE/JPEG BIAR GAK JADI HALAMAN BARU
                 const safeBlob = new Blob([blob], { type: 'image/jpeg' });
                 await silentDl(window.URL.createObjectURL(safeBlob), `${title}_foto_${idx+1}.jpg`, true);
                 toast(`Foto ${idx+1} disimpan!`, "success");
             } catch {
                 if(ctrl.signal.aborted) toast("Dibatalkan!", "error");
                 else {
-                    // Jika gagal total, lempar ke iframe tersembunyi agar tidak membuka tab baru
-                    $('download_iframe').src = u;
-                    toast(`Unduhan dipicu lewat antrean.`, "success");
+                    $('download_iframe').src = u; toast(`Unduhan dipicu.`, "success");
                 }
             }
             p.close();
@@ -242,8 +238,17 @@
             p.upTitle("Mengunduh..."); p.up("Menghubungkan...", -1);
 
             try {
-                const res = await fetch(url, { signal: ctrl.signal });
-                if (!res.ok) throw 1;
+                let res;
+                try {
+                    // Coba download direct dulu
+                    res = await fetch(url, { signal: ctrl.signal });
+                    if (!res.ok) throw 1;
+                } catch {
+                    // Jika gagal atau dicekal CORS, tembak lewat proxy tunnel agar stream mp4 tidak pecah
+                    res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`, { signal: ctrl.signal });
+                    if (!res.ok) throw 1;
+                }
+
                 const len = parseInt(res.headers.get('content-length'), 10) || 0, r = res.body.getReader();
                 let rec = 0, chunks = [];
                 while(1) {
@@ -254,13 +259,18 @@
                 }
                 let all = new Uint8Array(rec), pos = 0;
                 for(let c of chunks) { all.set(c, pos); pos += c.length; }
-                // KUNCI SIFAT MIME SECARA MANUAL DISINI AGAR BROWSER TIDAK SALAH TEBAK JADI AUDIO
+                
+                // MENGUNCI FORMAT BINARY BLOB KE MIME TYPE ASLI AGAR TIDAK JADI AUDIO
                 await silentDl(window.URL.createObjectURL(new Blob([all], { type: mime })), title.replace(/[^a-zA-Z0-9]/g, '_').substring(0,25) + ext, true);
                 toast("Selesai!", "success");
             } catch {
                 if(ctrl.signal.aborted) toast("Dibatalkan!", "error");
                 else {
-                    $('download_iframe').src = url + (url.includes('tikwm.com') && !url.includes('hd=1') ? '&attachments=1' : '');
+                    let dlLink = url;
+                    if(dlLink.includes('tikwm.com') && !dlLink.includes('attachments=1')) {
+                        dlLink += dlLink.includes('?') ? '&attachments=1' : '?attachments=1';
+                    }
+                    $('download_iframe').src = dlLink;
                     toast("Selesai!", "success");
                 }
             }
