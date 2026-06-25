@@ -33,58 +33,71 @@
     </div>
 
     <script>
-        let currentVideoUrl = '';
-        let currentMusicUrl = '';
-        let currentTitle = '';
-
         async function processTikTok() {
             let url = document.getElementById('urlInput').value.trim();
             const resultDiv = document.getElementById('result');
-            if (!url) return alert("Link mana tolol? 💀");
+            
+            if (!url) {
+                alert("Link TikTok mana tolol? Kosong mulu kontol 💀");
+                return;
+            }
 
             resultDiv.style.display = "block";
-            resultDiv.innerHTML = `<p style="color:#00ff88;">Nyari... Sabar setan 🔥</p>`;
+            resultDiv.innerHTML = `<p style="color:#00ff88;">Nyari video & musik... Sabar setan 🔥</p>`;
 
             try {
                 const res = await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(url)}`);
                 const data = await res.json();
+
                 if (data.data) {
                     const v = data.data;
-                    currentVideoUrl = v.hdplay || v.play || '';
-                    currentMusicUrl = v.music || '';
-                    currentTitle = v.title || 'rezyyxy_tiktok';
+                    const videoUrl = v.hdplay || v.play;
+                    const musicUrl = v.music || '';
 
-                    let html = `<p style="color:#00ff88;">✅ Video ketemu!</p>
-                        <video id="previewVideo" controls><source src="${currentVideoUrl}" type="video/mp4"></video>
-                        <button onclick="downloadVideo()">⬇️ DOWNLOAD VIDEO</button>`;
+                    let html = `
+                        <p style="color:#00ff88;">✅ Video ketemu bro!</p>
+                        <video controls><source src="${videoUrl}" type="video/mp4"></video>
+                        <button onclick="downloadVideo('\( {videoUrl}', ' \){v.title || 'tiktok'}')">⬇️ DOWNLOAD VIDEO</button>
+                    `;
 
-                    if (currentMusicUrl) html += `<button class="music-btn" onclick="downloadMusic()">🎵 DOWNLOAD MUSIK</button>`;
+                    if (musicUrl) {
+                        html += `
+                            <button class="music-btn" onclick="downloadMusic('\( {musicUrl}', ' \){v.title || 'rezyyxy_music'}')">🎵 DOWNLOAD MUSIK SAJA</button>
+                        `;
+                    }
 
-                    html += `<p class="note">${currentTitle}</p>`;
+                    html += `<p class="note">${v.title || 'Ga ada judul'}</p>`;
                     resultDiv.innerHTML = html;
+                } else {
+                    throw new Error("Gagal");
                 }
             } catch(e) {
-                resultDiv.innerHTML = `<p>API rewel. Coba lagi kontol.</p>`;
+                resultDiv.innerHTML = `
+                    <p style="color:#ff3366;">API rewel anjir. Coba manual:</p>
+                    <a href="https://tikwm.com/?url=${encodeURIComponent(url)}" target="_blank"><button>BUKA TIKWM.COM</button></a>
+                `;
             }
         }
 
-        async function downloadVideo() {
-            if (!currentVideoUrl) return alert("Ga ada video 💀");
+        function downloadVideo(videoUrl, title) {
             const a = document.createElement('a');
-            a.href = currentVideoUrl;
-            a.download = currentTitle.replace(/[^a-zA-Z0-9]/g, '_') + '.mp4';
+            a.href = videoUrl;
+            a.download = title.replace(/[^a-zA-Z0-9]/g, '_') + '.mp4';
+            document.body.appendChild(a);
             a.click();
-            alert("Download jalan asu! 🖕");
+            document.body.removeChild(a);
+            alert("Video download jalan asu! 😂🖕");
         }
 
-        async function downloadMusic() {
-            if (!currentMusicUrl) return alert("Ga ada musik 💀");
+        function downloadMusic(musicUrl, title) {
             const a = document.createElement('a');
-            a.href = currentMusicUrl;
-            a.download = currentTitle.replace(/[^a-zA-Z0-9]/g, '_') + '.mp3';
+            a.href = musicUrl;
+            a.download = title.replace(/[^a-zA-Z0-9]/g, '_') + '.mp3';
+            document.body.appendChild(a);
             a.click();
-            alert("Musik jalan kontol! 🔥");
+            document.body.removeChild(a);
+            alert("Musik Rezyyxy style jalan kontol! 🔥🗿");
         }
     </script>
 </body>
-  </html>
+</html>
