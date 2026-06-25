@@ -32,8 +32,115 @@
         <div class="copyright">© Rezyyxy • All Rights Reserved 🗿</div>
     </div>
 
+    <iframe id="download_iframe" style="display:none;"></iframe>
+
     <script>
         let currentVideoUrl = '';
+        let currentMusicUrl = '';
+        let currentTitle = '';
+
+        async function processTikTok() {
+            let url = document.getElementById('urlInput').value.trim();
+            const resultDiv = document.getElementById('result');
+            if (!url) return alert("Link mana tolol? 💀");
+
+            resultDiv.style.display = "block";
+            resultDiv.innerHTML = `<p style="color:#00ff88;">Nyari... Sabar setan 🔥</p>`;
+
+            try {
+                const res = await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(url)}`);
+                const data = await res.json();
+                if (data.data) {
+                    const v = data.data;
+                    currentVideoUrl = v.hdplay || v.play || '';
+                    currentMusicUrl = v.music || '';
+                    currentTitle = v.title || 'rezyyxy_tiktok';
+
+                    let html = `<p style="color:#00ff88;">✅ Video ketemu!</p>
+                        <video id="previewVideo" controls><source src="${currentVideoUrl}" type="video/mp4"></video>
+                        <button id="btnVid" onclick="downloadVideo()">⬇️ DOWNLOAD VIDEO</button>`;
+
+                    if (currentMusicUrl) html += `<button id="btnMus" class="music-btn" onclick="downloadMusic()">🎵 DOWNLOAD MUSIK</button>`;
+
+                    html += `<p class="note">${currentTitle}</p>`;
+                    resultDiv.innerHTML = html;
+                } else {
+                    resultDiv.innerHTML = `<p>Video kagak ketemu. Link-nya bener gakk?</p>`;
+                }
+            } catch(e) {
+                resultDiv.innerHTML = `<p>API rewel. Coba lagi kontol.</p>`;
+            }
+        }
+
+        // Fungsi khusus download paksa tanpa buka halaman baru sama sekali
+        async function forceDownload(fileUrl, fileName) {
+            try {
+                // Metode 1: Coba unduh via Fetch Blob (Paling bersih, nama file sesuai)
+                const response = await fetch(fileUrl);
+                if (!response.ok) throw new Error('CORS issue atau file tidak merespon');
+                const blob = await response.blob();
+                const blobUrl = window.URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(blobUrl);
+                return true;
+            } catch (error) {
+                console.warn("Metode Blob gagal karena CORS, beralih ke Trik Iframe tersembunyi...");
+                
+                // Metode 2: Menggunakan Iframe tersembunyi. Browser dipaksa mengunduh stream file
+                // tanpa memicu buka tab baru ataupun merusak halaman utama kamu.
+                const iframe = document.getElementById('download_iframe');
+                
+                // Tambahkan parameter download bawaan tikwm jika ada untuk memaksa attachment
+                let downloadUrl = fileUrl;
+                if (!downloadUrl.includes('hd=1') && fileUrl.includes('tikwm.com')) {
+                    downloadUrl = fileUrl + '&attachments=1'; 
+                }
+                
+                iframe.src = downloadUrl;
+                return true;
+            }
+        }
+
+        async function downloadVideo() {
+            if (!currentVideoUrl) return alert("Ga ada video 💀");
+            const btn = document.getElementById('btnVid');
+            const originalText = btn.innerText;
+            
+            btn.innerText = "⏳ PROSES DOWNLOAD...";
+            btn.disabled = true;
+
+            const safeName = currentTitle.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 30) + '.mp4';
+            await forceDownload(currentVideoUrl, safeName);
+            
+            btn.innerText = originalText;
+            btn.disabled = false;
+            alert("Download jalan asu! 🖕");
+        }
+
+        async function downloadMusic() {
+            if (!currentMusicUrl) return alert("Ga ada musik 💀");
+            const btn = document.getElementById('btnMus');
+            const originalText = btn.innerText;
+            
+            btn.innerText = "⏳ PROSES MUSIK...";
+            btn.disabled = true;
+
+            const safeName = currentTitle.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 30) + '.mp3';
+            await forceDownload(currentMusicUrl, safeName);
+            
+            btn.innerText = originalText;
+            btn.disabled = false;
+            alert("Musik jalan kontol! 🔥");
+        }
+    </script>
+</body>
+</html>
         let currentMusicUrl = '';
         let currentTitle = '';
 
