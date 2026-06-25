@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>🔥 Rezyyxy Downloader</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>🔥 Rezyyxy Downloader - Profesional</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#eee;padding:15px;margin:0;display:flex;flex-direction:column;align-items:center;min-height:100vh}
@@ -28,10 +28,11 @@ video{width:100%;border-radius:12px;margin:10px 0;background:#000}
 .info-box{width:100%;max-width:480px;background:#16213e;border-radius:24px;padding:25px;margin-top:20px;text-align:left;box-shadow:0 15px 35px rgba(0,0,0,.3)}
 .info-box h2{color:#00ff88;font-size:18px;margin-top:20px}
 .info-box p, .info-box li{font-size:14px;color:#ccc;line-height:1.6}
+.hst{margin-top:15px;text-align:left;background:#0f1c2e;padding:10px;border-radius:10px;font-size:12px}
+.h-it{padding:6px 0;border-bottom:1px solid #222;cursor:pointer}
 .mdl{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);z-index:99999;display:none;justify-content:center;align-items:center}
 .mdl-c{background:#16213e;padding:20px;border-radius:15px;width:90%;max-width:400px;text-align:left;position:relative;border:2px solid #00ff88}
 .mdl-x{position:absolute;top:12px;right:12px;background:#ff3366;color:#fff;border:0;width:30px;height:30px;border-radius:8px;font-weight:700;cursor:pointer}
-@media (min-width: 768px) { .f-lst { grid-template-columns: repeat(2, 1fr); } }
 </style>
 </head>
 <body>
@@ -40,12 +41,8 @@ video{width:100%;border-radius:12px;margin:10px 0;background:#000}
 <div id="uMdl" class="mdl"><div class="mdl-c"><button class="mdl-x" onclick="$('uMdl').style.display='none'">X</button>
 <h3 style="color:#00ff88;margin:0 0 15px">🔔 Riwayat Update</h3>
 <div style="font-size:14px;color:#eee;max-height:60vh;overflow-y:auto;line-height:1.5">
-<p><b>v1.1.5 (Saat ini)</b><br> - Penambahan Disclaimer, Tentang Kami, & Syarat Penggunaan.</p>
-<p><b>v1.1.4</b><br> - Halaman FAQ & Cara Penggunaan lengkap.<br> - Penghapusan Chatbot AI.</p>
-<p><b>v1.1.3</b><br> - Tombol Share Web, Layout Responsif, Deteksi ukuran file.</p>
-<p><b>v1.1.2</b><br> - Optimasi Desktop & Tablet.</p>
-<p><b>v1.1.1</b><br> - Preview gambar resolusi tinggi.</p>
-<p><b>v1.1</b><br> - Versi awal stabil, Clipboard Monitor.</p>
+<p><b>v1.1.6</b><br> - Penambahbaikan teks profesional & pemulihan fungsi riwayat.</p>
+<p><b>v1.1.5</b><br> - Penambahan Disclaimer, Tentang Kami, & Syarat Penggunaan secara lengkap.</p>
 </div></div></div>
 
 <div class="box">
@@ -57,22 +54,37 @@ video{width:100%;border-radius:12px;margin:10px 0;background:#000}
 <div class="flex"><button class="btn b-pst" onclick="pst()">📋 Tempel</button><button class="btn b-clr" onclick="clr()">❌ Clear</button></div>
 <button class="btn b-main" onclick="cek()">🔍 CEK VIDEO & MUSIK</button>
 <div id="res" class="res"></div>
+<div id="hst"></div>
 </div>
 
 <div class="info-box">
-    <h2>⚡ Fitur Unggulan</h2>
-    <ul><li><b>No Watermark:</b> Video bersih tanpa logo TikTok.</li><li><b>Slideshow:</b> Support download banyak foto.</li><li><b>Audio MP3:</b> Ambil musik saja.</li><li><b>Cepat:</b> Tanpa iklan & sangat ringan.</li></ul>
-    <h2>🛠️ Cara Penggunaan</h2>
-    <p>1. Copy link video TikTok.<br>2. Tempel (Paste) di kolom atas.<br>3. Klik "CEK" & unduh file pilihanmu.</p>
-    <h2>❓ FAQ</h2>
-    <p><b>Q: Bayar?</b> A: Gratis selamanya.<br><b>Q: Data disimpan?</b> A: Tidak, privasi aman.</p>
-    <h2>⚠️ Disclaimer</h2>
-    <p>Rezyyxy Downloader tidak berafiliasi dengan TikTok. Konten hak cipta adalah milik pemilik asli. Gunakan dengan bijak.</p>
+    <h2>⚡ Fitur Utama</h2>
+    <ul>
+        <li><b>Video Tanpa Watermark:</b> Muat turun video TikTok dalam kualiti asal tanpa logo yang mengganggu.</li>
+        <li><b>Sokongan Slideshow:</b> Muat turun siri foto (slideshow) secara individu atau sekaligus dalam satu arkib.</li>
+        <li><b>Ekstrak Audio:</b> Penukaran pantas video kepada format audio MP3 berdefinisi tinggi.</li>
+        <li><b>Prestasi Optimum:</b> Antara muka yang ringan, pantas, dan mesra data tanpa iklan yang tidak diingini.</li>
+    </ul>
+
+    <h2>🛠️ Panduan Penggunaan</h2>
+    <p>1. <b>Salin Pautan:</b> Buka aplikasi TikTok, pilih video yang diingini, tekan butang 'Kongsi' dan pilih 'Salin Pautan'.<br>
+       2. <b>Tampal Pautan:</b> Buka Rezyyxy Downloader, tampal pautan tersebut ke dalam kotak input yang disediakan.<br>
+       3. <b>Muat Turun:</b> Klik butang "CEK VIDEO & MUSIK" dan pilih format fail yang ingin anda simpan ke peranti anda.</p>
+
+    <h2>❓ Soalan Lazim (FAQ)</h2>
+    <p><b>S: Adakah perkhidmatan ini percuma?</b><br>J: Ya, Rezyyxy Downloader adalah perkhidmatan percuma tanpa sebarang caj tersembunyi.</p>
+    <p><b>S: Adakah data saya disimpan?</b><br>J: Tidak. Privasi anda adalah keutamaan kami. Kami tidak menyimpan sebarang salinan video atau data peribadi di pelayan kami.</p>
+    <p><b>S: Adakah ia menyokong video peribadi (private)?</b><br>J: Tidak, kami hanya memproses kandungan yang bersifat awam (public) di TikTok.</p>
+
+    <h2>⚠️ Penafian (Disclaimer)</h2>
+    <p>Rezyyxy Downloader tidak berafiliasi, disokong, atau mempunyai hubungan rasmi dengan TikTok atau ByteDance. Kami hanyalah alat bantu pihak ketiga untuk tujuan penggunaan peribadi. Semua hak cipta kandungan adalah milik pencipta asal. Sila gunakan alat ini dengan penuh tanggungjawab dan menghormati hak harta intelek.</p>
+
     <h2>👋 Tentang Kami</h2>
-    <p>Rezyyxy Downloader hadir untuk memudahkan penyimpanan momen inspiratif secara offline dengan kualitas terbaik.</p>
-    <h2>📜 Syarat Penggunaan</h2>
-    <p>Hanya untuk penggunaan pribadi dan non-komersial. Kami tidak menyimpan file di server.</p>
-    <p style="text-align:center; font-size:12px; color:#666; margin-top:20px;">© 2026 Rezyyxy Downloader.</p>
+    <p>Kami adalah pasukan pembangun yang komited untuk menyediakan pengalaman muat turun kandungan digital yang lancar, pantas, dan selamat. Rezyyxy Downloader dibina dengan visi untuk memberi akses mudah kepada pengguna bagi menyimpan momen dan inspirasi kegemaran mereka.</p>
+    
+    <h2>📜 Syarat Perkhidmatan</h2>
+    <p>Dengan menggunakan laman web ini, anda bersetuju untuk menggunakan perkhidmatan kami hanya untuk tujuan peribadi, bukan komersial. Kami tidak bertanggungjawab ke atas sebarang salah guna kandungan yang dimuat turun.</p>
+    <p style="text-align:center; font-size:12px; color:#666; margin-top:20px;">© 2026 Rezyyxy Downloader. Hak Cipta Terpelihara.</p>
 </div>
 
 <iframe id="ifr" style="display:none"></iframe>
@@ -80,6 +92,8 @@ video{width:100%;border-radius:12px;margin:10px 0;background:#000}
 <script>
 let vU='',vH='',mU='',ttl='',img=[],totImgSz=0,c=null,$=i=>document.getElementById(i),PX='https://corsproxy.io/?';
 let fMB=b=>b?`(${(b/1e6).toFixed(1)} MB)`:'',fKB=b=>b?`(${(b/1024).toFixed(0)} KB)`:'';
+window.onload=()=>rHst();
+window.onfocus=async()=>{try{let t=await navigator.clipboard.readText();if(/tiktok\.com/i.test(t)&&!$('url').value){$('url').value=t;tst("Link terdeteksi!")}}catch{}}
 let tst=(m,e=0)=>{let t=document.createElement('div');t.className=`tst ${e?'err':''}`;t.innerHTML=m;$('tBox').appendChild(t);setTimeout(()=>t.remove(),3000)}
 let shW=()=>{if(navigator.share)navigator.share({title:'Rezyyxy Downloader',text:'Download TikTok No Watermark!',url:window.location.href});else tst("Browser tidak support!",1)}
 let pTst=(l)=>{let t=document.createElement('div');t.className='tst';t.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center"><b>⏳ ${l}</b><button style="background:#ff3366;color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer" onclick="c?.abort()">X Batal</button></div><div style="display:flex;justify-content:space-between;font-size:11px;color:#aaa;margin-top:8px"><span id="tb">Siap...</span><span id="tp">0%</span></div><div class="p-bar"><div class="p-f" id="tf"></div></div>`;$('tBox').prepend(t);return{uT:x=>t.querySelector('b').innerText='⏳ '+x,u:(b,p)=>{$('tb').innerText=b;if(p>=0){$('tp').innerText=p+'%';$('tf').style.width=p+'%'}else $('tp').innerText='...'},x:()=>t.remove()}}
@@ -87,9 +101,11 @@ let d5s=async(p)=>{for(let i=5;i>0;i--){if(c.signal.aborted)return 0;p.u(`Jeda..
 let gSz=async(u,id,k)=>{try{let r=await fetch(PX+encodeURIComponent(u),{method:'HEAD'});let l=r.headers.get('content-length');if(l){let b=parseInt(l);if(k){totImgSz+=b;if($('totSz'))$('totSz').innerText=fMB(totImgSz);}if($(id))$(id).innerText=k?fKB(b):fMB(b);}else{if($(id))$(id).innerText='(±1 MB)';}}catch{if($(id))$(id).innerText='(±1 MB)';}}
 let pst=async()=>{try{let t=await navigator.clipboard.readText();if(/tiktok\.com/i.test(t)){$('url').value=t;tst("Ditempel!")}else tst("Bukan link TikTok!",1)}catch{tst("Gagal akses clipboard",1)}}
 let clr=()=>{vU=vH=mU=ttl='';img=[];c?.abort();$('url').value='';$('res').style.display='none';$('res').innerHTML='';tst("Bersih!")}
-let cek=async()=>{let u=$('url').value.trim();if(!/tiktok\.com/i.test(u))return tst("Link error!",1);$('res').style.display='block';$('res').innerHTML='Mencari... 🔥';try{let ac=new AbortController();setTimeout(()=>ac.abort(),15000);let r=await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(u)}`,{signal:ac.signal}),d=await r.json(),v=d.data;if(!v)throw 1;vU=v.play||'';vH=v.hdplay||'';mU=v.music||'';ttl=v.title||'tiktok';img=v.images||[];let usr=v.author?.unique_id||"kreator";let h=`<div style="text-align:left;background:#16213e;padding:10px;border-radius:8px">👤 <b style="color:#00bfff">@${usr}</b><br><small>${ttl}</small></div>`;if(img.length){h+=`<div class="f-lst">`;img.forEach((x,i)=>{h+=`<div class="f-row"><img src="${x}" class="f-img"><div style="display:flex;flex-direction:column;justify-content:space-between;align-items:center;margin-top:12px;width:100%;gap:5px"><span style="font-size:14px;font-weight:700">Foto ${i+1} <span id="iSz_${i}" class="sz">...</span></span><button id="bI_${i}" class="btn b-pst" style="padding:8px 20px;width:100%;margin:0" onclick="dlI(${i})">Unduh</button></div></div>`});h+=`</div><button id="bIa" class="btn b-main" onclick="dlA()">⬇️ DOWNLOAD SEMUA FOTO <span id="totSz" class="sz">...</span></button>`}else{h+=`<video controls controlsList="nodownload nofullscreen noremoteplayback"><source src="${vU}"></video><button id="bV" class="btn b-main" onclick="dl('v')">⬇️ DOWNLOAD VIDEO <span class="sz">${fMB(v.size)}</span></button>`;if(vH)h+=`<button id="bH" class="btn b-hd" onclick="dl('h')">🚀 DOWNLOAD (HD) <span class="sz">${fMB(v.hd_size)}</span></button>`}if(mU)h+=`<button id="bM" class="btn b-mus" onclick="dl('m')">🎵 DOWNLOAD AUDIO <span id="mSz" class="sz">...</span></button>`;h+=`<button class="btn" style="background:#6c5ce7;color:#fff;margin-top:15px" onclick="shW()">🔗 SHARE WEB INI</button>`;$('res').innerHTML=h;totImgSz=0;if(mU)gSz(mU,'mSz',0);if(img.length)img.forEach((x,i)=>gSz(x,'iSz_'+i,1));tst("Berhasil!")}catch{tst("Time Out / Error!",1);$('res').innerHTML='<b style="color:#ff3366">Pencarian Timeout.</b>'}}
+let cek=async()=>{let u=$('url').value.trim();if(!/tiktok\.com/i.test(u))return tst("Link error!",1);$('res').style.display='block';$('res').innerHTML='Mencari... 🔥';try{let ac=new AbortController();setTimeout(()=>ac.abort(),15000);let r=await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(u)}`,{signal:ac.signal}),d=await r.json(),v=d.data;if(!v)throw 1;vU=v.play||'';vH=v.hdplay||'';mU=v.music||'';ttl=v.title||'tiktok';img=v.images||[];let usr=v.author?.unique_id||"kreator";let h=`<div style="text-align:left;background:#16213e;padding:10px;border-radius:8px">👤 <b style="color:#00bfff">@${usr}</b><br><small>${ttl}</small></div>`;if(img.length){h+=`<div class="f-lst">`;img.forEach((x,i)=>{h+=`<div class="f-row"><img src="${x}" class="f-img"><div style="display:flex;flex-direction:column;justify-content:space-between;align-items:center;margin-top:12px;width:100%;gap:5px"><span style="font-size:14px;font-weight:700">Foto ${i+1} <span id="iSz_${i}" class="sz">...</span></span><button id="bI_${i}" class="btn b-pst" style="padding:8px 20px;width:100%;margin:0" onclick="dlI(${i})">Unduh</button></div></div>`});h+=`</div><button id="bIa" class="btn b-main" onclick="dlA()">⬇️ DOWNLOAD SEMUA FOTO <span id="totSz" class="sz">...</span></button>`}else{h+=`<video controls controlsList="nodownload nofullscreen noremoteplayback"><source src="${vU}"></video><button id="bV" class="btn b-main" onclick="dl('v')">⬇️ DOWNLOAD VIDEO <span class="sz">${fMB(v.size)}</span></button>`;if(vH)h+=`<button id="bH" class="btn b-hd" onclick="dl('h')">🚀 DOWNLOAD (HD) <span class="sz">${fMB(v.hd_size)}</span></button>`}if(mU)h+=`<button id="bM" class="btn b-mus" onclick="dl('m')">🎵 DOWNLOAD AUDIO <span id="mSz" class="sz">...</span></button>`;h+=`<button class="btn" style="background:#6c5ce7;color:#fff;margin-top:15px" onclick="shW()">🔗 SHARE WEB INI</button>`;$('res').innerHTML=h;sHst(ttl,usr,u);totImgSz=0;if(mU)gSz(mU,'mSz',0);if(img.length)img.forEach((x,i)=>gSz(x,'iSz_'+i,1));tst("Berhasil!")}catch{tst("Time Out / Error!",1);$('res').innerHTML='<b style="color:#ff3366">Pencarian Timeout.</b>'}}
 let sDl=async(u,n,b=0)=>{let a=document.createElement('a');a.href=u;a.download=n;document.body.appendChild(a);a.click();a.remove();if(b)URL.revokeObjectURL(u)}
 let dlI=async(i)=>{let u=img[i],b=$('bI_'+i),o=b.innerText;b.innerText="⏳...";b.disabled=1;c=new AbortController();let p=pTst(`Foto ${i+1}`);if(!(await d5s(p))){tst("Batal",1);p.x();b.innerText=o;b.disabled=0;return}p.uT("Mengunduh...");p.u("Proses...",-1);try{let r;try{r=await fetch(u,{signal:c.signal})}catch{r=await fetch(PX+encodeURIComponent(u),{signal:c.signal})}await sDl(URL.createObjectURL(new Blob([await r.blob()],{type:'image/jpeg'})),`${ttl}_${i}.jpg`,1);tst("Sukses!")}catch{c.signal.aborted?tst("Batal",1):($('ifr').src=u,tst("Terunduh",1))}p.x();b.innerText=o;b.disabled=0}
 let dlA=async()=>{let b=$('bIa'),o=b.innerText;b.innerText="⏳...";b.disabled=1;c=new AbortController();let p=pTst("Semua Foto");if(!(await d5s(p))){tst("Batal",1);p.x();b.innerText=o;b.disabled=0;return}for(let i=0;i<img.length;i++){if(c.signal.aborted)break;p.uT(`Mengunduh ${i+1}/${img.length}`);p.u("Proses...",-1);try{let r;try{r=await fetch(img[i],{signal:c.signal})}catch{r=await fetch(PX+encodeURIComponent(img[i]),{signal:c.signal})}await sDl(URL.createObjectURL(new Blob([await r.blob()],{type:'image/jpeg'})),`${ttl}_${i+1}.jpg`,1)}catch{}}if(!c.signal.aborted)tst("Semua Sukses!");p.x();b.innerText=o;b.disabled=0}
 let dl=async(t)=>{let u=vU,b='bV',m='video/mp4',e='.mp4';if(t=='h'){u=vH;b='bH'}if(t=='m'){u=mU;b='bM';m='audio/mp3';e='.mp3'}let ob=$(b).innerText;$(b).innerText="⏳...";$(b).disabled=1;c=new AbortController();let p=pTst(t=='m'?"Audio":"Video");if(!(await d5s(p))){tst("Batal",1);p.x();$(b).innerText=ob;$(b).disabled=0;return}p.uT("Mengunduh...");p.u("Proses...",-1);try{let r;try{r=await fetch(u,{signal:c.signal})}catch{r=await fetch(PX+encodeURIComponent(u),{signal:c.signal})}let l=r.headers.get('content-length')||0,rd=r.body.getReader(),rc=0,ch=[];while(1){let{done,value}=await rd.read();if(done)break;ch.push(value);rc+=value.length;p.u((rc/1e6).toFixed(1)+" MB",l>0?Math.round(rc/l*100):-1)}let a=new Uint8Array(rc),ps=0;for(let x of ch){a.set(x,ps);ps+=x.length}await sDl(URL.createObjectURL(new Blob([a],{type:m})),`${ttl}${e}`,1);tst("Sukses!")}catch{c.signal.aborted?tst("Batal",1):($('ifr').src=u+(u.includes('?')?'&':'?')+'attachments=1',tst("Selesai!"))}p.x();$(b).innerText=ob;$(b).disabled=0}
+let sHst=(t,u,l)=>{let h=JSON.parse(localStorage.getItem('h')||'[]');if(!h.some(x=>x.l==l)){h.unshift({t,u,l});localStorage.setItem('h',JSON.stringify(h.slice(0,3)));rHst()}}
+let rHst=()=>{let h=JSON.parse(localStorage.getItem('h')||'[]');$('hst').innerHTML=h.length?`<div class="hst"><b style="color:#00ff88">📜 Riwayat:</b>`+h.map(x=>`<div class="h-it" onclick="$('url').value='${x.l}';cek()"><b style="color:#00bfff">@${x.u}</b> ${x.t.slice(0,18)}...</div>`).join('')+`</div>`:''}
 </script></body></html>
