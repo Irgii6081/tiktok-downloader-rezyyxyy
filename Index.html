@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 Rezyyxy TikTok Downloader</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+        body {font-family: 'Inter', Arial, sans-serif;background: linear-gradient(135deg, #0a0a0a, #1a1a2e);color: #eee;text-align: center;padding: 20px;margin: 0;min-height: 100vh;}
+        .container {max-width: 480px;margin: 0 auto;background: #16213e;border-radius: 24px;padding: 30px;box-shadow: 0 15px 40px rgba(0, 255, 100, 0.15);}
+        h1 {color: #00ff88;margin-bottom: 8px;font-size: 28px;}
+        input {width: 100%;padding: 18px;margin: 15px 0;font-size: 17px;background: #0f1c2e;border: 3px solid #00ff88;border-radius: 16px;color: #eee;box-sizing: border-box;}
+        button {width: 100%;padding: 18px;font-size: 18px;font-weight: 700;background: #00ff88;color: #000;border: none;border-radius: 16px;cursor: pointer;margin: 10px 0;transition: 0.3s;}
+        button:hover {background: #00cc6a;transform: scale(1.04);}
+        .music-btn {background: #ff3366 !important;color: white !important;}
+        .result {margin-top: 25px;padding: 25px;background: #0f1c2e;border-radius: 18px;display: none;border: 2px solid #00ff88;}
+        video {width: 100%;max-width: 400px;border-radius: 16px;margin: 15px 0;background: #000;}
+        .note {font-size: 14px;color: #ffcc00;margin: 15px 0;}
+        .copyright {font-size: 13px;color: #666;margin-top: 20px;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 Rezyyxy TikTok Downloader</h1>
+        <p style="color:#00ff88;">Video + Musik • No Watermark</p>
+        
+        <input type="text" id="urlInput" placeholder="Paste link TikTok di sini...">
+        <button onclick="processTikTok()">🔍 CEK VIDEO & MUSIK</button>
+
+        <div id="result" class="result"></div>
+        
+        <div class="copyright">© Rezyyxy • All Rights Reserved 🗿</div>
+    </div>
+
+    <script>
+        let currentVideoUrl = '';
+        let currentMusicUrl = '';
+        let currentTitle = '';
+
+        async function processTikTok() {
+            let url = document.getElementById('urlInput').value.trim();
+            const resultDiv = document.getElementById('result');
+            if (!url) return alert("Link mana tolol? 💀");
+
+            resultDiv.style.display = "block";
+            resultDiv.innerHTML = `<p style="color:#00ff88;">Nyari... Sabar setan 🔥</p>`;
+
+            try {
+                const res = await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(url)}`);
+                const data = await res.json();
+                if (data.data) {
+                    const v = data.data;
+                    currentVideoUrl = v.hdplay || v.play || '';
+                    currentMusicUrl = v.music || '';
+                    currentTitle = v.title || 'rezyyxy_tiktok';
+
+                    let html = `<p style="color:#00ff88;">✅ Video ketemu!</p>
+                        <video id="previewVideo" controls><source src="${currentVideoUrl}" type="video/mp4"></video>
+                        <button onclick="downloadVideo()">⬇️ DOWNLOAD VIDEO</button>`;
+
+                    if (currentMusicUrl) html += `<button class="music-btn" onclick="downloadMusic()">🎵 DOWNLOAD MUSIK</button>`;
+
+                    html += `<p class="note">${currentTitle}</p>`;
+                    resultDiv.innerHTML = html;
+                }
+            } catch(e) {
+                resultDiv.innerHTML = `<p>API rewel. Coba lagi kontol.</p>`;
+            }
+        }
+
+        async function downloadVideo() {
+            if (!currentVideoUrl) return alert("Ga ada video 💀");
+            const a = document.createElement('a');
+            a.href = currentVideoUrl;
+            a.download = currentTitle.replace(/[^a-zA-Z0-9]/g, '_') + '.mp4';
+            a.click();
+            alert("Download jalan asu! 🖕");
+        }
+
+        async function downloadMusic() {
+            if (!currentMusicUrl) return alert("Ga ada musik 💀");
+            const a = document.createElement('a');
+            a.href = currentMusicUrl;
+            a.download = currentTitle.replace(/[^a-zA-Z0-9]/g, '_') + '.mp3';
+            a.click();
+            alert("Musik jalan kontol! 🔥");
+        }
+    </script>
+</body>
+  </html>
