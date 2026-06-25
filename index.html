@@ -1,285 +1,58 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔥 Rezyyxy TikTok Downloader</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #0a0a0a, #1a1a2e); color: #eee; text-align: center; padding: 20px; margin: 0; }
-        .container { max-width: 480px; margin: 0 auto; background: #16213e; border-radius: 24px; padding: 25px; box-shadow: 0 15px 40px rgba(0,255,100,0.15); }
-        h1 { color: #00ff88; font-size: 26px; margin-bottom: 5px; }
-        input { width: 100%; padding: 16px; background: #0f1c2e; border: 3px solid #00ff88; border-radius: 16px; color: #eee; box-sizing: border-box; outline: none; font-size: 16px; }
-        .u-box { display: flex; gap: 10px; margin: 15px 0; }
-        .btn { padding: 12px; font-weight: 700; border-radius: 12px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; transition: 0.2s; }
-        .btn:hover:not(:disabled) { transform: scale(1.03); }
-        .btn:disabled { background: #555!important; color: #aaa!important; cursor: not-allowed; }
-        .m-btn { width: 100%; background: #00ff88; color: #000; margin: 6px 0; padding: 15px; font-size: 16px; }
-        .paste { background: #00bfff; color: #000; flex: 1; }
-        .clear { background: #333; color: #fff; flex: 1; }
-        .music { background: #ff3366!important; color: #fff!important; }
-        .share { background: #6c5ce7!important; color: #fff!important; }
-        .res { margin-top: 20px; padding: 20px; background: #0f1c2e; border-radius: 18px; display: none; border: 2px solid #00ff88; }
-        video { width: 100%; border-radius: 16px; margin: 10px 0; background: #000; }
-        video::-webkit-media-controls-volume-control-container, video::-webkit-media-controls-mute-button, video::-webkit-media-controls-volume-slider, video::-webkit-media-controls-fullscreen-button, video::-internal-media-controls-download-button { display: none !important; }
-        .v-prof { background: #16213e; padding: 12px; border-radius: 12px; text-align: left; border-left: 4px solid #00bfff; font-size: 14px; margin-bottom: 10px; }
-        .v-user { color: #00bfff; font-weight: 700; margin-bottom: 4px; }
-        .spin { width: 18px; height: 18px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 0.8s linear infinite; display: none; }
-        button:disabled .spin { display: inline-block; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        #t-box { position: fixed; top: 20px; right: 20px; z-index: 9999; max-width: 350px; width: calc(100% - 40px); display: flex; flex-direction: column; gap: 10px; }
-        .toast { background: #1f4068; color: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.3); text-align: left; border-left: 5px solid #00ff88; font-size: 14px; display: flex; flex-direction: column; }
-        .toast.info { border-left-color: #00bfff; }
-        .toast.error { border-left-color: #ff3366; }
-        .p-bar { width: 100%; background: #0f1c2e; height: 6px; border-radius: 3px; overflow: hidden; position: relative; margin-top: 8px; }
-        .p-fill { background: #00ff88; height: 100%; width: 0%; }
-        .p-fill.indet { width: 40%; position: absolute; background: linear-gradient(90deg, #00ff88, #00bfff); animation: slide 1.2s infinite linear; }
-        @keyframes slide { 0% { left: -40%; } 100% { left: 100%; } }
-        .c-btn { background: #ff3366; color: #fff; border: none; padding: 5px 10px; font-size: 12px; font-weight: 700; border-radius: 6px; cursor: pointer; }
-        .hist-box { margin-top: 15px; text-align: left; background: #0f1c2e; padding: 10px; border-radius: 12px; font-size: 13px; }
-        .h-item { padding: 8px; border-bottom: 1px solid #222; cursor: pointer; display: flex; justify-content: space-between; }
-        .f-list { text-align: left; background: #16213e; padding: 12px; border-radius: 14px; max-height: 240px; overflow-y: auto; margin: 10px 0; border: 1px solid #333; }
-        .f-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #252525; }
-        .f-row:last-child { border: none; }
-        .f-thumb { width: 45px; height: 45px; object-fit: cover; border-radius: 8px; border: 1px solid #00ff88; }
-        .sz { font-size: 12px; color: #ffcc00; font-weight: 400; }
-    </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>🔥 Rezyyxy Downloader</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#eee;text-align:center;padding:15px;margin:0}
+.box{max-width:450px;margin:0 auto;background:#16213e;border-radius:20px;padding:20px;box-shadow:0 10px 30px rgba(0,255,100,.1)}
+h1{color:#00ff88;font-size:22px;margin:0 0 5px}
+input{width:100%;padding:14px;background:#0f1c2e;border:2px solid #00ff88;border-radius:12px;color:#fff;box-sizing:border-box;outline:0}
+.flex{display:flex;gap:10px;margin:10px 0}
+.btn{padding:12px;font-weight:700;border-radius:10px;border:0;cursor:pointer;width:100%;margin:5px 0;transition:.2s}
+.btn:active{transform:scale(.95)}
+.btn:disabled{background:#555!important;color:#aaa!important;cursor:wait}
+.b-pst{background:#00bfff;flex:1}.b-clr{background:#333;color:#fff;flex:1}
+.b-main{background:#00ff88}.b-mus{background:#ff3366;color:#fff}.b-hd{background:#00bfff}.b-rnd{background:#ffcc00}
+.res{margin-top:15px;padding:15px;background:#0f1c2e;border-radius:15px;display:none;border:1px solid #00ff88}
+video{width:100%;border-radius:10px;margin:10px 0}
+video::-webkit-media-controls-volume-control-container,video::-webkit-media-controls-fullscreen-button,video::-internal-media-controls-download-button{display:none!important}
+#tBox{position:fixed;top:15px;right:15px;z-index:999;width:300px;display:flex;flex-direction:column;gap:8px}
+.tst{background:#1f4068;color:#fff;padding:12px;border-radius:10px;text-align:left;border-left:4px solid #00ff88;font-size:13px;box-shadow:0 5px 15px rgba(0,0,0,.3)}
+.err{border-color:#ff3366}
+.p-bar{background:#0f1c2e;height:5px;border-radius:3px;margin-top:5px;overflow:hidden}
+.p-f{background:#00ff88;height:100%;width:0}
+.f-lst{text-align:left;background:#16213e;padding:10px;border-radius:10px;max-height:200px;overflow-y:auto;margin:10px 0}
+.f-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #252525}
+.f-img{width:40px;height:40px;border-radius:6px;object-fit:cover;border:1px solid #00ff88}
+.hst{margin-top:15px;text-align:left;background:#0f1c2e;padding:10px;border-radius:10px;font-size:12px}
+.h-it{padding:6px 0;border-bottom:1px solid #222;cursor:pointer}
+</style>
 </head>
 <body>
+<div id="tBox"></div>
+<div class="box">
+<h1>🔥 Rezyyxy Downloader</h1><p style="color:#00ff88;margin:0 0 10px;font-size:13px">Video + Musik • No Watermark</p>
+<input type="text" id="url" placeholder="Paste link TikTok di sini...">
+<div class="flex"><button class="btn b-pst" onclick="pst()">📋 Tempel</button><button class="btn b-clr" onclick="clr()">❌ Clear</button></div>
+<button class="btn b-main" onclick="cek()">🔍 CEK VIDEO & MUSIK</button>
+<div id="res" class="res"></div><div id="hst"></div>
+</div>
+<iframe id="ifr" style="display:none"></iframe>
 
-    <div id="t-box"></div>
-
-    <div class="container">
-        <h1>🔥 Rezyyxy TikTok Downloader</h1>
-        <p style="color:#00ff88;margin-top:0;">Video + Musik • No Watermark</p>
-        <input type="text" id="urlInput" placeholder="Paste link TikTok di sini...">
-        <div class="u-box">
-            <button class="btn paste" onclick="pasteLink()">📋 Tempel</button>
-            <button class="btn clear" onclick="clearLink()">❌ Clear</button>
-        </div>
-        <button class="btn m-btn" onclick="processTikTok()">🔍 CEK VIDEO & MUSIK</button>
-        <div id="res" class="res"></div>
-        <div id="hist"></div>
-        <div class="copyright">© Rezyyxy • All Rights Reserved 🗿</div>
-    </div>
-
-    <iframe id="download_iframe" style="display:none;"></iframe>
-
-    <script>
-        let vUrl='', vHd='', mUrl='', title='', imgs=[], ctrl=null;
-        const $ = id => document.getElementById(id);
-        const isTT = url => /tiktok\.com/i.test(url);
-        const fSz = b => b ? `(${(b/1024/1024).toFixed(1)} MB)` : '';
-
-        window.addEventListener('focus', async () => {
-            try {
-                const txt = await navigator.clipboard.readText();
-                if (isTT(txt) && !$('urlInput').value) {
-                    $('urlInput').value = txt; toast("Otomatis mendeteksi link TikTok!", "success");
-                }
-            } catch {}
-        });
-
-        window.onload = () => renderHist();
-
-        function toast(msg, type='info') {
-            const t = document.createElement('div'); t.className = `toast ${type}`;
-            t.innerHTML = `<div>${type==='success'?'✅':type==='error'?'❌':'ℹ️'} ${msg}</div>`;
-            $('t-box').appendChild(t); setTimeout(() => t.remove(), 3000);
-        }
-
-        function createPToast(label) {
-            const t = document.createElement('div'); t.className = 'toast info';
-            t.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
-                <span id="t-ttl" style="font-weight:700">⏳ ${label}</span><button class="c-btn" onclick="ctrl?.abort()">BATAL</button>
-            </div>
-            <div style="display:flex;justify-content:space-between;font-size:11px;color:#aaa;margin-top:6px">
-                <span id="t-b">Bersiap...</span><span id="t-p">0%</span>
-            </div>
-            <div class="p-bar"><div class="p-fill indet" id="t-f"></div></div>`;
-            $('t-box').prepend(t);
-            return {
-                upTitle: txt => $('t-ttl').innerText = '⏳ ' + txt,
-                up: (b, p) => {
-                    $('t-b').innerText = b;
-                    if(p >= 0) { $('t-p').innerText = p+'%'; $('t-f').classList.remove('indet'); $('t-f').style.width = p+'%'; }
-                    else { $('t-p').innerText = 'Proses...'; $('t-f').classList.add('indet'); }
-                },
-                close: () => t.remove()
-            };
-        }
-
-        // Ukuran file hanya di-load untuk MP3 agar proses tampil super cepat!
-        async function getMetaSizes() {
-            if(mUrl) {
-                try {
-                    const r = await fetch(mUrl, { method: 'HEAD' });
-                    const l = r.headers.get('content-length');
-                    if(l) $('mSz').innerText = fSz(parseInt(l));
-                } catch { $('mSz').innerText = '(±0.8 MB)'; }
-            }
-        }
-
-        async function pasteLink() {
-            try {
-                const txt = await navigator.clipboard.readText();
-                if(isTT(txt)) { $('urlInput').value = txt; toast("Ditempel!", "success"); }
-                else { toast("Hanya bisa menempel link TikTok!", "error"); }
-            } catch { toast("Gagal akses clipboard", "error"); }
-        }
-
-        function clearLink() {
-            $('urlInput').value = ''; $('res').style.display = 'none'; $('res').innerHTML = '';
-            vUrl = vHd = mUrl = title = ''; imgs = []; ctrl?.abort(); toast("Kembali ke awal!");
-        }
-
-        async function processTikTok() {
-            let url = $('urlInput').value.trim();
-            if (!isTT(url)) return toast("Link TikTok tidak valid! 💀", 'error');
-            $('res').style.display = 'block'; $('res').innerHTML = `<p style="color:#00ff88;">Nyari... Sabar setan 🔥</p>`;
-            try {
-                const r = await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(url)}`);
-                const d = await r.json();
-                if (d.data) {
-                    const v = d.data;
-                    vUrl = v.play || ''; vHd = v.hdplay || ''; mUrl = v.music || ''; title = v.title || 'rezyyxy_tiktok';
-                    imgs = v.images || []; const user = v.author?.unique_id || "kreator";
-                    
-                    let html = `
-                        <div class="v-prof">
-                            <p class="v-user">👤 @${user} ${v.author?.nickname ? `(${v.author.nickname})` : ''}</p>
-                            <p style="margin:0;color:#eee">📝 ${title}</p>
-                        </div>`;
-
-                    if(imgs.length > 0) {
-                        // Tampilan khusus Foto (Instan tanpa cari size biar ga ngelag)
-                        html += `<p style="color:#ffcc00;margin:5px 0;text-align:left;font-size:14px;font-weight:600">📸 Daftar Foto (${imgs.length} Gambar):</p>
-                                 <div class="f-list">`;
-                        for(let i=0; i<imgs.length; i++) {
-                            html += `
-                            <div class="f-row">
-                                <div style="display:flex;align-items:center;gap:10px;">
-                                    <img src="${imgs[i]}" class="f-thumb">
-                                    <span style="font-size:13px;font-weight:600;">Foto ${i+1}</span>
-                                </div>
-                                <button id="btnImg_${i}" class="btn" style="background:#00bfff;color:#000;padding:6px 12px;font-size:12px;" onclick="downloadSingleImg(${i})">⬇️ Unduh Foto</button>
-                            </div>`;
-                        }
-                        html += `</div>
-                                 <p style="font-size:12px; color:#aaa; margin:5px 0;">*TikTok tidak menyediakan file video untuk format slideshow. Unduh foto & musik secara terpisah.</p>`;
-                    } else {
-                        // Tampilan Video Normal
-                        html += `<video id="previewVideo" controls controlsList="nodownload nofullscreen noremoteplayback"><source src="${vUrl}" type="video/mp4"></video>
-                                 <button id="btnVid" class="btn m-btn" onclick="downloadFile('vid')"><div class="spin"></div><span class="txt">⬇️ DOWNLOAD VIDEO (SD) <span class="sz">${fSz(v.size)}</span></span></button>
-                                 ${vHd ? `<button id="btnHd" class="btn m-btn" style="background:#00bfff" onclick="downloadFile('hd')"><div class="spin"></div><span class="txt">🚀 DOWNLOAD VIDEO (HD) <span class="sz">${fSz(v.hd_size)}</span></span></button>` : ''}`;
-                    }
-                    
-                    if (mUrl) {
-                        html += `<button id="btnMus" class="btn m-btn music" onclick="downloadFile('mus')"><div class="spin"></div><span class="txt">🎵 DOWNLOAD MUSIK/AUDIO <span id="mSz" class="sz">...</span></span></button>`;
-                    }
-                    html += `<button class="btn m-btn share" onclick="shareWeb()">🔗 SHARE WEB INI</button>`;
-                    
-                    $('res').innerHTML = html; saveHist(title, user, url); getMetaSizes(); toast("Berhasil dimuat!", "success");
-                } else { $('res').innerHTML = `<p>Gak ketemu!</p>`; toast("Gak ketemu!", "error"); }
-            } catch { toast("API Error", "error"); }
-        }
-
-        // FUNGSI KHUSUS FOTO (TANPA JEDA 5 DETIK, LANGSUNG INSTAN TARIK!)
-        async function downloadSingleImg(idx) {
-            const u = imgs[idx], btn = $(`btnImg_${idx}`), orig = btn.innerText;
-            btn.innerText = "⏳..."; btn.disabled = true;
-
-            try {
-                let res;
-                try { 
-                    res = await fetch(u); 
-                    if(!res.ok) throw 1; 
-                } catch { 
-                    res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`); 
-                    if(!res.ok) throw 1; 
-                }
-                const blob = await res.blob();
-                await silentDl(window.URL.createObjectURL(new Blob([blob], { type: 'image/jpeg' })), `${title}_foto_${idx+1}.jpg`, true);
-                toast(`Foto ${idx+1} sukses disimpan!`, "success");
-            } catch {
-                $('download_iframe').src = u; toast("Unduhan dipicu dari browser.", "info");
-            }
-            btn.innerText = orig; btn.disabled = false;
-        }
-
-        // FUNGSI KHUSUS VIDEO & MUSIK (TETAP ADA JEDA 5 DETIK UNTUK BATAL)
-        async function downloadFile(type) {
-            let url = vUrl, btnId = 'btnVid', mime = 'video/mp4', ext = '.mp4';
-            if(type === 'hd') { url = vHd; btnId = 'btnHd'; }
-            if(type === 'mus') { url = mUrl; btnId = 'btnMus'; mime = 'audio/mp3'; ext = '.mp3'; }
-            
-            const btn = $(btnId), txt = btn.querySelector('.txt'), orig = txt.innerHTML;
-            btn.disabled = true; btn.querySelector('.txt').innerText = "Konfirmasi..."; ctrl = new AbortController();
-            
-            const p = createPToast(type==='mus'?"Ekstrak Musik":"Unduh Video");
-            let ok = true;
-            for (let i = 5; i > 0; i--) {
-                if (ctrl.signal.aborted) { ok = false; break; }
-                p.up(`Bersiap... (${i}s)`, 0); await new Promise(r => setTimeout(r, 1000));
-            }
-            if (ctrl.signal.aborted || !ok) { toast("Dibatalkan!", "error"); p.close(); btn.disabled = false; txt.innerHTML = orig; return; }
-
-            p.upTitle("Mengunduh..."); p.up("Menghubungkan...", -1);
-
-            try {
-                let res;
-                try { res = await fetch(url, { signal: ctrl.signal }); if (!res.ok) throw 1; } 
-                catch { res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`, { signal: ctrl.signal }); if (!res.ok) throw 1; }
-
-                const len = parseInt(res.headers.get('content-length'), 10) || 0, r = res.body.getReader();
-                let rec = 0, chunks = [];
-                while(1) {
-                    const {done, value} = await r.read(); if(done) break;
-                    chunks.push(value); rec += value.length;
-                    const mb = (rec/1024/1024).toFixed(1) + " MB";
-                    len > 0 ? p.up(mb, Math.round((rec/len)*100)) : p.up(mb, -1);
-                }
-                let all = new Uint8Array(rec), pos = 0;
-                for(let c of chunks) { all.set(c, pos); pos += c.length; }
-                
-                await silentDl(window.URL.createObjectURL(new Blob([all], { type: mime })), title.replace(/[^a-zA-Z0-9]/g, '_').substring(0,25) + ext, true);
-                toast("Selesai!", "success");
-            } catch {
-                if(ctrl.signal.aborted) toast("Dibatalkan!", "error");
-                else {
-                    let dlLink = url;
-                    if(dlLink.includes('tikwm.com') && !dlLink.includes('attachments=1')) dlLink += dlLink.includes('?') ? '&attachments=1' : '?attachments=1';
-                    $('download_iframe').src = dlLink; toast("Selesai!", "success");
-                }
-            }
-            p.close(); btn.disabled = false; txt.innerHTML = orig;
-        }
-
-        async function silentDl(url, name, isBlob=false) {
-            const a = document.createElement('a'); a.href = url; a.download = name;
-            document.body.appendChild(a); a.click(); a.remove();
-            if(isBlob) window.URL.revokeObjectURL(url);
-        }
-
-        function shareWeb() {
-            if (navigator.share) {
-                navigator.share({ title: 'Rezyyxy Downloader', text: 'Download Video TikTok No Watermark Cepat & Mudah!', url: window.location.href });
-            } else { toast("Browser tidak mendukung auto-share. Salin link manual!", "info"); }
-        }
-
-        function saveHist(t, u, url) {
-            let h = JSON.parse(localStorage.getItem('rx_h') || '[]');
-            if(!h.some(i => i.url === url)) {
-                h.unshift({t, u, url}); h = h.slice(0, 3);
-                localStorage.setItem('rx_h', JSON.stringify(h)); renderHist();
-            }
-        }
-
-        function renderHist() {
-            let h = JSON.parse(localStorage.getItem('rx_h') || '[]');
-            $('hist').innerHTML = h.length ? `<div class="hist-box"><p style="color:#00ff88;margin:0 0 8px 0;font-weight:700">📜 Riwayat Terakhir (Klik untuk cek):</p>` + 
-                h.map(i => `<div class="h-item" onclick="$('urlInput').value='${i.url}';processTikTok()"><span style="color:#00bfff">@${i.u}</span> <span>${i.t.substring(0,20)}...</span></div>`).join('') + `</div>` : '';
-        }
-    </script>
-</body>
-</html>
+<script>
+let vU='',vH='',mU='',ttl='',img=[],c=null,$=i=>document.getElementById(i),PX='https://api.allorigins.win/raw?url=';
+window.onfocus=async()=>{try{let t=await navigator.clipboard.readText();if(/tiktok\.com/i.test(t)&&!$('url').value){$('url').value=t;tst("Link terdeteksi!")}}catch{}}
+window.onload=()=>rHst();
+let tst=(m,e=0)=>{let t=document.createElement('div');t.className=`tst ${e?'err':''}`;t.innerHTML=m;$('tBox').appendChild(t);setTimeout(()=>t.remove(),3000)}
+let pTst=(l)=>{let t=document.createElement('div');t.className='tst';t.innerHTML=`<div style="display:flex;justify-content:space-between"><b>⏳ ${l}</b><button style="background:#ff3366;color:#fff;border:0;border-radius:4px;padding:2px 6px;font-weight:700" onclick="c?.abort()">X</button></div><div style="display:flex;justify-content:space-between;font-size:10px;color:#aaa;margin-top:6px"><span id="tb">Siap...</span><span id="tp">0%</span></div><div class="p-bar"><div class="p-f" id="tf"></div></div>`;$('tBox').prepend(t);return{uT:x=>t.querySelector('b').innerText='⏳ '+x,u:(b,p)=>{$('tb').innerText=b;if(p>=0){$('tp').innerText=p+'%';$('tf').style.width=p+'%'}else $('tp').innerText='...'},x:()=>t.remove()}}
+let pst=async()=>{try{let t=await navigator.clipboard.readText();if(/tiktok\.com/i.test(t)){$('url').value=t;tst("Ditempel!")}else tst("Bukan link TikTok!",1)}catch{tst("Gagal akses clipboard",1)}}
+let clr=()=>{vU=vH=mU=ttl='';img=[];c?.abort();$('url').value='';$('res').style.display='none';$('res').innerHTML='';tst("Bersih!")}
+let cek=async()=>{let u=$('url').value.trim();if(!/tiktok\.com/i.test(u))return tst("Link error!",1);$('res').style.display='block';$('res').innerHTML='Mencari... 🔥';try{let r=await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(u)}`),d=await r.json(),v=d.data;if(!v)throw 1;vU=v.play||'';vH=v.hdplay||'';mU=v.music||'';ttl=v.title||'tiktok';img=v.images||[];let usr=v.author?.unique_id||"kreator";let h=`<div style="text-align:left;background:#16213e;padding:10px;border-radius:8px">👤 <b style="color:#00bfff">@${usr}</b><br><small>${ttl}</small></div>`;if(img.length){h+=`<div class="f-lst">`;img.forEach((x,i)=>h+=`<div class="f-row"><div style="display:flex;align-items:center;gap:10px"><img src="${x}" class="f-img"><span style="font-size:12px;font-weight:700">Foto ${i+1}</span></div><button class="btn b-pst" style="padding:6px;width:auto;margin:0" onclick="dlI(${i})">Unduh</button></div>`);h+=`</div><button id="bR" class="btn b-rnd" onclick="rnd()">🎬 RENDER VIDEO (FOTO+LAGU)</button><div style="font-size:11px;color:#aaa">*Tunggu lagu habis jika merender.</div>`}else{h+=`<video controls controlsList="nodownload nofullscreen noremoteplayback"><source src="${vU}"></video><button id="bV" class="btn b-main" onclick="dl('v')">⬇️ DOWNLOAD VIDEO</button>`;if(vH)h+=`<button id="bH" class="btn b-hd" onclick="dl('h')">🚀 DOWNLOAD (HD)</button>`}if(mU)h+=`<button id="bM" class="btn b-mus" onclick="dl('m')">🎵 DOWNLOAD AUDIO</button>`;$('res').innerHTML=h;sHst(ttl,usr,u);tst("Berhasil!")}catch{tst("Gagal menemukan",1)}}
+let sDl=async(u,n,b=0)=>{let a=document.createElement('a');a.href=u;a.download=n;document.body.appendChild(a);a.click();a.remove();if(b)URL.revokeObjectURL(u)}
+let dlI=async(i)=>{let u=img[i];c=new AbortController();let p=pTst(`Foto ${i+1}`);try{let r;try{r=await fetch(u)}catch{r=await fetch(PX+encodeURIComponent(u))}await sDl(URL.createObjectURL(new Blob([await r.blob()],{type:'image/jpeg'})),`${ttl}_${i}.jpg`,1);tst("Sukses!")}catch{$('ifr').src=u;tst("Terunduh",1)}p.x()}
+let dl=async(t)=>{let u=vU,b='bV',m='video/mp4',e='.mp4';if(t=='h'){u=vH;b='bH'}if(t=='m'){u=mU;b='bM';m='audio/mp3';e='.mp3'}$(b).disabled=1;c=new AbortController();let p=pTst(t=='m'?"Audio":"Video");try{let r;try{r=await fetch(u,{signal:c.signal})}catch{r=await fetch(PX+encodeURIComponent(u),{signal:c.signal})}let l=r.headers.get('content-length')||0,rd=r.body.getReader(),rc=0,ch=[];while(1){let{done,value}=await rd.read();if(done)break;ch.push(value);rc+=value.length;p.u((rc/1e6).toFixed(1)+" MB",l>0?Math.round(rc/l*100):-1)}let a=new Uint8Array(rc),ps=0;for(let x of ch){a.set(x,ps);ps+=x.length}await sDl(URL.createObjectURL(new Blob([a],{type:m})),`${ttl}${e}`,1);tst("Sukses!")}catch{c.signal.aborted?tst("Batal",1):($('ifr').src=u,tst("Selesai!"))}p.x();$(b).disabled=0}
+let rnd=async()=>{if(!mU||!img.length)return;$('bR').disabled=1;c=new AbortController();let p=pTst("Render Video");p.u("Siap...",5);try{let mR=await fetch(PX+encodeURIComponent(mU),{signal:c.signal}),au=new Audio(URL.createObjectURL(await mR.blob()));await new Promise((r,j)=>{au.oncanplaythrough=r;au.onerror=j});let im=[];for(let i=0;i<img.length;i++){p.u(`Foto ${i+1}`,5+i/img.length*20);let iR=await fetch(PX+encodeURIComponent(img[i]),{signal:c.signal}),g=new Image();g.src=URL.createObjectURL(await iR.blob());await new Promise(r=>g.onload=r);im.push(g)}p.uT("Merekam...");let ax=new(window.AudioContext||window.webkitAudioContext)(),cv=document.createElement('canvas'),cx=cv.getContext('2d');cv.width=720;cv.height=1280;let ds=ax.createMediaStreamDestination(),sr=ax.createMediaElementSource(au);sr.connect(ds);let rc=new MediaRecorder(new MediaStream([...cv.captureStream(30).getVideoTracks(),...ds.stream.getAudioTracks()]),{mimeType:MediaRecorder.isTypeSupported('video/mp4')?'video/mp4':'video/webm'}),ch=[];rc.ondataavailable=e=>{if(e.data.size>0)ch.push(e.data)};let d=au.duration,tp=d/im.length;rc.onstop=async()=>{clearInterval(iv);await sDl(URL.createObjectURL(new Blob(ch,{type:rc.mimeType})),`${ttl}_vid.mp4`,1);tst("Sukses Render!");p.x();$('bR').disabled=0};await ax.resume();rc.start();au.play();let iv=setInterval(()=>{if(c.signal.aborted){au.pause();rc.stop();clearInterval(iv);return}if(au.ended)return rc.stop();let ct=au.currentTime;p.u(`Rekam ${Math.floor(ct)}s/${Math.floor(d)}s`,25+(ct/d)*75);let idx=Math.floor(ct/tp);if(idx>=im.length)idx=im.length-1;let g=im[idx];cx.fillStyle="#000";cx.fillRect(0,0,720,1280);if(g){let s=Math.max(720/g.width,1280/g.height),w=g.width*s,h=g.height*s;cx.drawImage(g,(720-w)/2,(1280-h)/2,w,h)}},33)}catch{tst("Gagal / Batal",1);p.x();$('bR').disabled=0}}
+let sHst=(t,u,l)=>{let h=JSON.parse(localStorage.getItem('h')||'[]');if(!h.some(x=>x.l==l)){h.unshift({t,u,l});localStorage.setItem('h',JSON.stringify(h.slice(0,3)));rHst()}}
+let rHst=()=>{let h=JSON.parse(localStorage.getItem('h')||'[]');$('hst').innerHTML=h.length?`<div class="hst"><b style="color:#00ff88">📜 Riwayat:</b>`+h.map(x=>`<div class="h-it" onclick="$('url').value='${x.l}';cek()"><b style="color:#00bfff">@${x.u}</b> ${x.t.slice(0,18)}...</div>`).join('')+`</div>`:''}
+</script></body></html>
