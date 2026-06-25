@@ -22,24 +22,19 @@ video::-webkit-media-controls-volume-control-container,video::-webkit-media-cont
 .err{border-color:#ff3366}
 .p-bar{background:#0f1c2e;height:6px;border-radius:3px;margin-top:8px;overflow:hidden}
 .p-f{background:#00ff88;height:100%;width:0;transition:width .2s}
-
-/* Penyesuaian Desain List Foto Agar Responsif */
 .f-lst{text-align:left;background:#16213e;padding:15px;border-radius:14px;max-height:500px;overflow-y:auto;margin:15px 0;display:grid;grid-template-columns:1fr;gap:15px}
 .f-row{display:flex;flex-direction:column;padding:10px;background:#0f1c2e;border-radius:12px;border:1px solid #252525;box-sizing:border-box}
 .f-img{width:100%;height:220px;border-radius:8px;object-fit:contain;background:#000;border:1px solid #00ff88}
-
 .hst{margin-top:15px;text-align:left;background:#0f1c2e;padding:10px;border-radius:10px;font-size:12px}
 .h-it{padding:6px 0;border-bottom:1px solid #222;cursor:pointer}
 .sz{font-size:12px;color:#ffcc00;font-weight:700;margin-left:5px}
 .mdl{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);z-index:99999;display:none;justify-content:center;align-items:center}
 .mdl-c{background:#16213e;padding:20px;border-radius:15px;width:90%;max-width:400px;text-align:left;position:relative;border:2px solid #00ff88}
 .mdl-x{position:absolute;top:12px;right:12px;background:#ff3366;color:#fff;border:0;width:30px;height:30px;border-radius:8px;font-weight:700;cursor:pointer}
-
-/* CSS KHUSUS MEDIA QUERIES (DESKTOP & LAYAR LEBAR) */
 @media (min-width: 768px) {
     body { padding: 30px; }
     .f-lst { grid-template-columns: repeat(2, 1fr); max-height: 550px; gap: 12px; }
-    .f-img { height: 18px; } /* Menyeimbangkan proporsi gambar di layar lebar */
+    .f-img { height: 180px; }
 }
 </style>
 </head>
@@ -49,7 +44,8 @@ video::-webkit-media-controls-volume-control-container,video::-webkit-media-cont
 <div id="uMdl" class="mdl"><div class="mdl-c"><button class="mdl-x" onclick="$('uMdl').style.display='none'">X</button>
 <h3 style="color:#00ff88;margin:0 0 15px">🔔 Info Update</h3>
 <div style="font-size:14px;color:#eee;max-height:60vh;overflow-y:auto;line-height:1.5">
-<p><b style="color:#00bfff;font-size:16px">v1.1.2 (Terbaru)</b><br>
+<p><b style="color:#00bfff;font-size:16px">v1.1.3 (Terbaru)</b><br>
+- Tombol <b>Share Web</b> dimunculkan kembali!<br>
 - Desain Responsif (Otomatis bagus di HP, Tablet, dan Desktop PC).<br>
 - Layout grid foto otomatis mendatar di layar besar.<br>
 - Gambar foto diperbesar jadi sangat jelas.<br>
@@ -78,12 +74,14 @@ window.onload=()=>rHst();
 window.onfocus=async()=>{try{let t=await navigator.clipboard.readText();if(/tiktok\.com/i.test(t)&&!$('url').value){$('url').value=t;tst("Link terdeteksi!")}}catch{}}
 let tst=(m,e=0)=>{let t=document.createElement('div');t.className=`tst ${e?'err':''}`;t.innerHTML=m;$('tBox').appendChild(t);setTimeout(()=>t.remove(),3000)}
 
+let shW=()=>{if(navigator.share)navigator.share({title:'Rezyyxy Downloader',text:'Download Video TikTok No Watermark Cepat & Mudah!',url:window.location.href});else tst("Browser tidak support, salin link manual!",1)}
+
 let pTst=(l)=>{let t=document.createElement('div');t.className='tst';t.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center"><b>⏳ ${l}</b><button style="background:#ff3366;color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;font-weight:700;box-shadow:0 3px 8px rgba(255,51,102,.4);cursor:pointer" onclick="c?.abort()">X Batal</button></div><div style="display:flex;justify-content:space-between;font-size:11px;color:#aaa;margin-top:8px"><span id="tb">Siap...</span><span id="tp">0%</span></div><div class="p-bar"><div class="p-f" id="tf"></div></div>`;$('tBox').prepend(t);return{uT:x=>t.querySelector('b').innerText='⏳ '+x,u:(b,p)=>{$('tb').innerText=b;if(p>=0){$('tp').innerText=p+'%';$('tf').style.width=p+'%'}else $('tp').innerText='...'},x:()=>t.remove()}}
 let d5s=async(p)=>{for(let i=5;i>0;i--){if(c.signal.aborted)return 0;p.u(`Jeda... (${i}s)`,0);await new Promise(r=>setTimeout(r,1e3))}return!c.signal.aborted}
 let gSz=async(u,id,k)=>{try{let r=await fetch(PX+encodeURIComponent(u),{method:'HEAD'});let l=r.headers.get('content-length');if(l){let b=parseInt(l);if(k){totImgSz+=b;if($('totSz'))$('totSz').innerText=fMB(totImgSz);}if($(id))$(id).innerText=k?fKB(b):fMB(b);}else{if($(id))$(id).innerText='(±1 MB)';}}catch{if($(id))$(id).innerText='(±1 MB)';}}
 let pst=async()=>{try{let t=await navigator.clipboard.readText();if(/tiktok\.com/i.test(t)){$('url').value=t;tst("Ditempel!")}else tst("Bukan link TikTok!",1)}catch{tst("Gagal akses clipboard",1)}}
 let clr=()=>{vU=vH=mU=ttl='';img=[];c?.abort();$('url').value='';$('res').style.display='none';$('res').innerHTML='';tst("Bersih!")}
-let cek=async()=>{let u=$('url').value.trim();if(!/tiktok\.com/i.test(u))return tst("Link error!",1);$('res').style.display='block';$('res').innerHTML='Mencari... 🔥';try{let ac=new AbortController();setTimeout(()=>ac.abort(),15000);let r=await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(u)}`,{signal:ac.signal}),d=await r.json(),v=d.data;if(!v)throw 1;vU=v.play||'';vH=v.hdplay||'';mU=v.music||'';ttl=v.title||'tiktok';img=v.images||[];let usr=v.author?.unique_id||"kreator";let h=`<div style="text-align:left;background:#16213e;padding:10px;border-radius:8px">👤 <b style="color:#00bfff">@${usr}</b><br><small>${ttl}</small></div>`;if(img.length){h+=`<div class="f-lst">`;img.forEach((x,i)=>{h+=`<div class="f-row"><img src="${x}" class="f-img"><div style="display:flex;flex-direction:column;justify-content:space-between;align-items:center;margin-top:12px;width:100%;gap:5px"><span style="font-size:14px;font-weight:700">Foto ${i+1} <span id="iSz_${i}" class="sz">...</span></span><button id="bI_${i}" class="btn b-pst" style="padding:8px 20px;width:100%;margin:0" onclick="dlI(${i})">Unduh</button></div></div>`});h+=`</div><button id="bIa" class="btn b-main" onclick="dlA()">⬇️ DOWNLOAD SEMUA FOTO <span id="totSz" class="sz">...</span></button>`}else{h+=`<video controls controlsList="nodownload nofullscreen noremoteplayback"><source src="${vU}"></video><button id="bV" class="btn b-main" onclick="dl('v')">⬇️ DOWNLOAD VIDEO <span class="sz">${fMB(v.size)}</span></button>`;if(vH)h+=`<button id="bH" class="btn b-hd" onclick="dl('h')">🚀 DOWNLOAD (HD) <span class="sz">${fMB(v.hd_size)}</span></button>`}if(mU)h+=`<button id="bM" class="btn b-mus" onclick="dl('m')">🎵 DOWNLOAD AUDIO <span id="mSz" class="sz">...</span></button>`;$('res').innerHTML=h;sHst(ttl,usr,u);totImgSz=0;if(mU)gSz(mU,'mSz',0);if(img.length)img.forEach((x,i)=>gSz(x,'iSz_'+i,1));tst("Berhasil!")}catch{tst("Time Out / Error! Coba lagi.",1);$('res').innerHTML='<b style="color:#ff3366">Pencarian Timeout. Silakan klik cek lagi.</b>'}}
+let cek=async()=>{let u=$('url').value.trim();if(!/tiktok\.com/i.test(u))return tst("Link error!",1);$('res').style.display='block';$('res').innerHTML='Mencari... 🔥';try{let ac=new AbortController();setTimeout(()=>ac.abort(),15000);let r=await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(u)}`,{signal:ac.signal}),d=await r.json(),v=d.data;if(!v)throw 1;vU=v.play||'';vH=v.hdplay||'';mU=v.music||'';ttl=v.title||'tiktok';img=v.images||[];let usr=v.author?.unique_id||"kreator";let h=`<div style="text-align:left;background:#16213e;padding:10px;border-radius:8px">👤 <b style="color:#00bfff">@${usr}</b><br><small>${ttl}</small></div>`;if(img.length){h+=`<div class="f-lst">`;img.forEach((x,i)=>{h+=`<div class="f-row"><img src="${x}" class="f-img"><div style="display:flex;flex-direction:column;justify-content:space-between;align-items:center;margin-top:12px;width:100%;gap:5px"><span style="font-size:14px;font-weight:700">Foto ${i+1} <span id="iSz_${i}" class="sz">...</span></span><button id="bI_${i}" class="btn b-pst" style="padding:8px 20px;width:100%;margin:0" onclick="dlI(${i})">Unduh</button></div></div>`});h+=`</div><button id="bIa" class="btn b-main" onclick="dlA()">⬇️ DOWNLOAD SEMUA FOTO <span id="totSz" class="sz">...</span></button>`}else{h+=`<video controls controlsList="nodownload nofullscreen noremoteplayback"><source src="${vU}"></video><button id="bV" class="btn b-main" onclick="dl('v')">⬇️ DOWNLOAD VIDEO <span class="sz">${fMB(v.size)}</span></button>`;if(vH)h+=`<button id="bH" class="btn b-hd" onclick="dl('h')">🚀 DOWNLOAD (HD) <span class="sz">${fMB(v.hd_size)}</span></button>`}if(mU)h+=`<button id="bM" class="btn b-mus" onclick="dl('m')">🎵 DOWNLOAD AUDIO <span id="mSz" class="sz">...</span></button>`;h+=`<button class="btn" style="background:#6c5ce7;color:#fff;margin-top:15px" onclick="shW()">🔗 SHARE WEB INI</button>`;$('res').innerHTML=h;sHst(ttl,usr,u);totImgSz=0;if(mU)gSz(mU,'mSz',0);if(img.length)img.forEach((x,i)=>gSz(x,'iSz_'+i,1));tst("Berhasil!")}catch{tst("Time Out / Error! Coba lagi.",1);$('res').innerHTML='<b style="color:#ff3366">Pencarian Timeout. Silakan klik cek lagi.</b>'}}
 let sDl=async(u,n,b=0)=>{let a=document.createElement('a');a.href=u;a.download=n;document.body.appendChild(a);a.click();a.remove();if(b)URL.revokeObjectURL(u)}
 let dlI=async(i)=>{let u=img[i],b=$('bI_'+i),o=b.innerText;b.innerText="⏳...";b.disabled=1;c=new AbortController();let p=pTst(`Foto ${i+1}`);if(!(await d5s(p))){tst("Batal",1);p.x();b.innerText=o;b.disabled=0;return}p.uT("Mengunduh...");p.u("Proses...",-1);try{let r;try{r=await fetch(u,{signal:c.signal})}catch{r=await fetch(PX+encodeURIComponent(u),{signal:c.signal})}await sDl(URL.createObjectURL(new Blob([await r.blob()],{type:'image/jpeg'})),`${ttl}_${i}.jpg`,1);tst("Sukses!")}catch{c.signal.aborted?tst("Batal",1):($('ifr').src=u,tst("Terunduh",1))}p.x();b.innerText=o;b.disabled=0}
 let dlA=async()=>{let b=$('bIa'),o=b.innerText;b.innerText="⏳...";b.disabled=1;c=new AbortController();let p=pTst("Semua Foto");if(!(await d5s(p))){tst("Batal",1);p.x();b.innerText=o;b.disabled=0;return}for(let i=0;i<img.length;i++){if(c.signal.aborted)break;p.uT(`Mengunduh ${i+1}/${img.length}`);p.u("Proses...",-1);try{let r;try{r=await fetch(img[i],{signal:c.signal})}catch{r=await fetch(PX+encodeURIComponent(img[i]),{signal:c.signal})}await sDl(URL.createObjectURL(new Blob([await r.blob()],{type:'image/jpeg'})),`${ttl}_${i+1}.jpg`,1)}catch{}}if(!c.signal.aborted)tst("Semua Sukses!");p.x();b.innerText=o;b.disabled=0}
