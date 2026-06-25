@@ -116,16 +116,16 @@
                     const l = r.headers.get('content-length');
                     if(l) $('mSz').innerText = fSz(parseInt(l));
                 }
-            } catch { $('mSz').innerText = '(±0.9 MB)'; }
+            } catch { $('mSz').innerText = '(±0.8 MB)'; }
 
             if(imgs.length > 0) {
                 for(let i=0; i<imgs.length; i++) {
                     try {
-                        const px = `https://corsproxy.io/?${encodeURIComponent(imgs[i])}`;
+                        const px = `https://api.allorigins.win/raw?url=${encodeURIComponent(imgs[i])}`;
                         const r = await fetch(px, { method: 'HEAD' });
                         const l = r.headers.get('content-length');
                         if(l) $(`imgSz_${i}`).innerText = `(${(parseInt(l)/1024).toFixed(0)} KB)`;
-                    } catch { $(`imgSz_${i}`).innerText = '(±120 KB)'; }
+                    } catch { $(`imgSz_${i}`).innerText = '(±140 KB)'; }
                 }
             }
         }
@@ -195,8 +195,7 @@
         async function downloadSingleImg(idx) {
             const u = imgs[idx]; ctrl = new AbortController();
             const p = createPToast(`Unduh Foto ${idx+1}`);
-            
-            let cd = 5, ok = true;
+            let ok = true;
             for (let i = 5; i > 0; i--) {
                 if (ctrl.signal.aborted) { ok = false; break; }
                 p.up(`Bersiap... (${i}s)`, 0); await new Promise(r => setTimeout(r, 1000));
@@ -205,31 +204,35 @@
 
             p.upTitle("Mengunduh..."); p.up("Menghubungkan...", -1);
             try {
-                // Menggunakan corsproxy untuk merubah gambar luar menjadi blob lokal agar terdownload otomatis
-                const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(u)}`, { signal: ctrl.signal });
+                // Menggunakan allorigins proxy tunnel yang jauh lebih stabil menembus CDN tiktok
+                const res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`, { signal: ctrl.signal });
                 if(!res.ok) throw 1;
                 const blob = await res.blob();
-                const bUrl = window.URL.createObjectURL(blob);
-                await silentDl(bUrl, `${title}_foto_${idx+1}.jpg`, true);
-                toast(`Foto ${idx+1} sukses disimpan!`, "success");
+                // PAKSA TYPE KE IMAGE/JPEG BIAR GAK JADI HALAMAN BARU
+                const safeBlob = new Blob([blob], { type: 'image/jpeg' });
+                await silentDl(window.URL.createObjectURL(safeBlob), `${title}_foto_${idx+1}.jpg`, true);
+                toast(`Foto ${idx+1} disimpan!`, "success");
             } catch {
                 if(ctrl.signal.aborted) toast("Dibatalkan!", "error");
-                else window.open(u, '_blank');
+                else {
+                    // Jika gagal total, lempar ke iframe tersembunyi agar tidak membuka tab baru
+                    $('download_iframe').src = u;
+                    toast(`Unduhan dipicu lewat antrean.`, "success");
+                }
             }
             p.close();
         }
 
         async function downloadFile(type) {
-            let url = vUrl, btnId = 'btnVid';
+            let url = vUrl, btnId = 'btnVid', mime = 'video/mp4', ext = '.mp4';
             if(type === 'hd') { url = vHd; btnId = 'btnHd'; }
-            if(type === 'mus') { url = mUrl; btnId = 'btnMus'; }
+            if(type === 'mus') { url = mUrl; btnId = 'btnMus'; mime = 'audio/mp3'; ext = '.mp3'; }
             
             const btn = $(btnId), txt = btn.querySelector('.txt'), orig = txt.innerHTML;
             btn.disabled = true; btn.querySelector('.txt').innerText = "Konfirmasi..."; ctrl = new AbortController();
             
             const p = createPToast(type==='mus'?"Ekstrak Musik":"Unduh Video");
             let ok = true;
-            
             for (let i = 5; i > 0; i--) {
                 if (ctrl.signal.aborted) { ok = false; break; }
                 p.up(`Bersiap... (${i}s)`, 0); await new Promise(r => setTimeout(r, 1000));
@@ -251,8 +254,9 @@
                 }
                 let all = new Uint8Array(rec), pos = 0;
                 for(let c of chunks) { all.set(c, pos); pos += c.length; }
-                await silentDl(window.URL.createObjectURL(new Blob([all])), title.replace(/[^a-zA-Z0-9]/g, '_').substring(0,25) + (type==='mus'?'.mp3':'.mp4'), true);
-                toast("Selesai asu! 🖕", "success");
+                // KUNCI SIFAT MIME SECARA MANUAL DISINI AGAR BROWSER TIDAK SALAH TEBAK JADI AUDIO
+                await silentDl(window.URL.createObjectURL(new Blob([all], { type: mime })), title.replace(/[^a-zA-Z0-9]/g, '_').substring(0,25) + ext, true);
+                toast("Selesai!", "success");
             } catch {
                 if(ctrl.signal.aborted) toast("Dibatalkan!", "error");
                 else {
