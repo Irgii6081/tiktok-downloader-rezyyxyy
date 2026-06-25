@@ -38,8 +38,10 @@
         .c-btn { background: #ff3366; color: #fff; border: none; padding: 5px 10px; font-size: 12px; font-weight: 700; border-radius: 6px; cursor: pointer; }
         .hist-box { margin-top: 15px; text-align: left; background: #0f1c2e; padding: 10px; border-radius: 12px; font-size: 13px; }
         .h-item { padding: 8px; border-bottom: 1px solid #222; cursor: pointer; display: flex; justify-content: space-between; }
-        .img-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0; max-height: 150px; overflow-y: auto; }
-        .img-item { width: 100%; height: 70px; object-fit: cover; border-radius: 8px; }
+        .f-list { text-align: left; background: #16213e; padding: 12px; border-radius: 14px; max-height: 240px; overflow-y: auto; margin: 10px 0; border: 1px solid #333; }
+        .f-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #252525; }
+        .f-row:last-child { border: none; }
+        .f-thumb { width: 45px; height: 45px; object-fit: cover; border-radius: 8px; border: 1px solid #00ff88; }
         .sz { font-size: 12px; color: #ffcc00; font-weight: 400; }
     </style>
 </head>
@@ -107,12 +109,25 @@
             };
         }
 
-        async function getMusSize(url, id) {
+        async function getMetaSizes(v) {
             try {
-                const r = await fetch(url, { method: 'HEAD' });
-                const l = r.headers.get('content-length');
-                if(l) $(id).innerText = fSz(parseInt(l));
-            } catch { $(id).innerText = '(±0.8 MB)'; }
+                if(mUrl) {
+                    const r = await fetch(mUrl, { method: 'HEAD' });
+                    const l = r.headers.get('content-length');
+                    if(l) $('mSz').innerText = fSz(parseInt(l));
+                }
+            } catch { $('mSz').innerText = '(±0.9 MB)'; }
+
+            if(imgs.length > 0) {
+                for(let i=0; i<imgs.length; i++) {
+                    try {
+                        const px = `https://corsproxy.io/?${encodeURIComponent(imgs[i])}`;
+                        const r = await fetch(px, { method: 'HEAD' });
+                        const l = r.headers.get('content-length');
+                        if(l) $(`imgSz_${i}`).innerText = `(${(parseInt(l)/1024).toFixed(0)} KB)`;
+                    } catch { $(`imgSz_${i}`).innerText = '(±120 KB)'; }
+                }
+            }
         }
 
         async function pasteLink() {
@@ -147,10 +162,20 @@
                         </div>`;
 
                     if(imgs.length > 0) {
-                        html += `<p style="color:#ffcc00;margin:5px 0;">📸 Postingan Foto (Slideshow): ${imgs.length} Gambar</p>
-                                 <div class="img-grid">${imgs.map(i => `<img src="${i}" class="img-item">`).join('')}</div>
-                                 <button id="btnVid" class="btn m-btn" onclick="downloadFile('vid')"><div class="spin"></div><span class="txt">🎬 DOWNLOAD MENJADI VIDEO <span class="sz">${fSz(v.size)}</span></span></button>
-                                 <button id="btnImg" class="btn m-btn" style="background:#00bfff;color:#000" onclick="downloadFile('img')"><div class="spin"></div><span class="txt">📸 DOWNLOAD SEMUA FOTO TERPISAH</span></button>`;
+                        html += `<p style="color:#ffcc00;margin:5px 0;text-align:left;font-size:14px;font-weight:600">📸 Daftar Foto Slideshow (${imgs.length} Gambar):</p>
+                                 <div class="f-list">`;
+                        for(let i=0; i<imgs.length; i++) {
+                            html += `
+                            <div class="f-row">
+                                <div style="display:flex;align-items:center;gap:10px;">
+                                    <img src="${imgs[i]}" class="f-thumb">
+                                    <span style="font-size:13px;font-weight:600;">Foto ${i+1} <span id="imgSz_${i}" class="sz">...</span></span>
+                                </div>
+                                <button class="btn" style="background:#00bfff;color:#000;padding:6px 12px;font-size:12px;" onclick="downloadSingleImg(${i})">⬇️ Unduh Foto</button>
+                            </div>`;
+                        }
+                        html += `</div>
+                                 <button id="btnVid" class="btn m-btn" onclick="downloadFile('vid')"><div class="spin"></div><span class="txt">🎬 DOWNLOAD GABUNGAN JADI VIDEO <span class="sz">${fSz(v.size)}</span></span></button>`;
                     } else {
                         html += `<video id="previewVideo" controls controlsList="nodownload nofullscreen noremoteplayback"><source src="${vUrl}" type="video/mp4"></video>
                                  <button id="btnVid" class="btn m-btn" onclick="downloadFile('vid')"><div class="spin"></div><span class="txt">⬇️ DOWNLOAD VIDEO (SD) <span class="sz">${fSz(v.size)}</span></span></button>
@@ -159,25 +184,50 @@
                     
                     if (mUrl) {
                         html += `<button id="btnMus" class="btn m-btn music" onclick="downloadFile('mus')"><div class="spin"></div><span class="txt">🎵 DOWNLOAD MUSIK/AUDIO <span id="mSz" class="sz">...</span></span></button>`;
-                        getMusSize(mUrl, 'mSz');
                     }
                     html += `<button class="btn m-btn share" onclick="shareWeb()">🔗 SHARE WEB INI</button>`;
                     
-                    $('res').innerHTML = html; saveHist(title, user, url); toast("Berhasil dimuat!", "success");
+                    $('res').innerHTML = html; saveHist(title, user, url); getMetaSizes(v); toast("Berhasil dimuat!", "success");
                 } else { $('res').innerHTML = `<p>Gak ketemu!</p>`; toast("Gak ketemu!", "error"); }
             } catch { toast("API Error", "error"); }
+        }
+
+        async function downloadSingleImg(idx) {
+            const u = imgs[idx]; ctrl = new AbortController();
+            const p = createPToast(`Unduh Foto ${idx+1}`);
+            
+            let cd = 5, ok = true;
+            for (let i = 5; i > 0; i--) {
+                if (ctrl.signal.aborted) { ok = false; break; }
+                p.up(`Bersiap... (${i}s)`, 0); await new Promise(r => setTimeout(r, 1000));
+            }
+            if (ctrl.signal.aborted || !ok) { toast("Dibatalkan!", "error"); p.close(); return; }
+
+            p.upTitle("Mengunduh..."); p.up("Menghubungkan...", -1);
+            try {
+                // Menggunakan corsproxy untuk merubah gambar luar menjadi blob lokal agar terdownload otomatis
+                const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(u)}`, { signal: ctrl.signal });
+                if(!res.ok) throw 1;
+                const blob = await res.blob();
+                const bUrl = window.URL.createObjectURL(blob);
+                await silentDl(bUrl, `${title}_foto_${idx+1}.jpg`, true);
+                toast(`Foto ${idx+1} sukses disimpan!`, "success");
+            } catch {
+                if(ctrl.signal.aborted) toast("Dibatalkan!", "error");
+                else window.open(u, '_blank');
+            }
+            p.close();
         }
 
         async function downloadFile(type) {
             let url = vUrl, btnId = 'btnVid';
             if(type === 'hd') { url = vHd; btnId = 'btnHd'; }
             if(type === 'mus') { url = mUrl; btnId = 'btnMus'; }
-            if(type === 'img') { btnId = 'btnImg'; }
             
             const btn = $(btnId), txt = btn.querySelector('.txt'), orig = txt.innerHTML;
             btn.disabled = true; btn.querySelector('.txt').innerText = "Konfirmasi..."; ctrl = new AbortController();
             
-            const p = createPToast(type==='mus'?"Ekstrak Musik":type==='img'?"Unduh Foto":"Unduh Video");
+            const p = createPToast(type==='mus'?"Ekstrak Musik":"Unduh Video");
             let ok = true;
             
             for (let i = 5; i > 0; i--) {
@@ -187,15 +237,6 @@
             if (ctrl.signal.aborted || !ok) { toast("Dibatalkan!", "error"); p.close(); btn.disabled = false; txt.innerHTML = orig; return; }
 
             p.upTitle("Mengunduh..."); p.up("Menghubungkan...", -1);
-
-            if(type === 'img') {
-                for(let idx=0; idx<imgs.length; idx++) {
-                    if(ctrl.signal.aborted) break;
-                    p.up(`Foto ${idx+1}/${imgs.length}`, Math.round(((idx+1)/imgs.length)*100));
-                    await silentDl(imgs[idx], `${title}_foto_${idx+1}.jpg`);
-                }
-                toast("Semua foto terunduh!", "success"); p.close(); btn.disabled = false; txt.innerHTML = orig; return;
-            }
 
             try {
                 const res = await fetch(url, { signal: ctrl.signal });
