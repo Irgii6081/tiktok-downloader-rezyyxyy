@@ -28,10 +28,12 @@ video::-webkit-media-controls-volume-control-container,video::-webkit-media-cont
 .hst{margin-top:15px;text-align:left;background:#0f1c2e;padding:10px;border-radius:10px;font-size:12px}
 .h-it{padding:6px 0;border-bottom:1px solid #222;cursor:pointer}
 .sz{font-size:11px;color:#ffcc00;font-weight:400}
-/* CSS Modal (Popup) Baru */
+/* CSS Modal (Popup) Info & AI */
 .mdl{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);z-index:99999;display:none;justify-content:center;align-items:center}
 .mdl-c{background:#16213e;padding:20px;border-radius:15px;width:90%;max-width:400px;text-align:left;position:relative;border:2px solid #00ff88}
 .mdl-x{position:absolute;top:12px;right:12px;background:#ff3366;color:#fff;border:0;width:30px;height:30px;border-radius:8px;font-weight:700;cursor:pointer}
+/* Custom Scrollbar AI */
+#cBox::-webkit-scrollbar{width:5px}#cBox::-webkit-scrollbar-thumb{background:#00ff88;border-radius:5px}
 </style>
 </head>
 <body>
@@ -39,18 +41,22 @@ video::-webkit-media-controls-volume-control-container,video::-webkit-media-cont
 
 <div id="uMdl" class="mdl"><div class="mdl-c"><button class="mdl-x" onclick="$('uMdl').style.display='none'">X</button>
 <h3 style="color:#00ff88;margin:0 0 15px">🔔 Info Update</h3>
-<div style="font-size:13px;color:#eee;max-height:60vh;overflow-y:auto">
-<p><b style="color:#00bfff">v1.3 (Baru)</b><br>- Tombol batal "X" dibuat Raksasa anti salah pencet.<br>- Tambah Info Update & AI Asisten Web.</p>
-<p><b style="color:#00ff88">v1.2</b><br>- Info otomatis akurat untuk ukuran file KB/MB.<br>- Otomatis jeda konfirmasi 5 detik sebelum sedot kuota.</p>
-<p><b style="color:#ffcc00">v1.1</b><br>- Fitur unduh banyak foto (Slideshow).<br>- Deteksi otomatis copy-paste TikTok.</p>
+<div style="font-size:14px;color:#eee;max-height:60vh;overflow-y:auto;line-height:1.5">
+<p><b style="color:#00bfff;font-size:16px">v1.1 (Terbaru)</b><br>
+- Tombol batal "X" dibuat Raksasa anti salah pencet.<br>
+- Tambah Info Update & AI Asisten Web (ChatGPT).<br>
+- Info otomatis akurat untuk ukuran file KB/MB.<br>
+- Otomatis jeda konfirmasi 5 detik sebelum sedot kuota.<br>
+- Fitur unduh banyak foto terpisah (Slideshow).<br>
+- Deteksi otomatis copy-paste TikTok dari clipboard.</p>
 </div></div></div>
 
 <div id="aMdl" class="mdl"><div class="mdl-c"><button class="mdl-x" onclick="$('aMdl').style.display='none'">X</button>
 <h3 style="color:#00bfff;margin:0 0 10px">🤖 RezyBot AI</h3>
-<div id="cBox" style="height:250px;background:#0a0a0a;border-radius:10px;padding:10px;overflow-y:auto;border:1px solid #333;font-size:13px"></div>
+<div id="cBox" style="height:280px;background:#0a0a0a;border-radius:10px;padding:10px;overflow-y:auto;border:1px solid #333;font-size:13px"></div>
 <div class="flex" style="margin-top:10px">
-<input type="text" id="cIn" placeholder="Ketik pertanyaanmu..." style="padding:10px" onkeypress="if(event.key=='Enter')sChat()">
-<button class="btn b-main" style="width:70px;margin:0" onclick="sChat()">Kirim</button>
+<input type="text" id="cIn" placeholder="Tanya apa saja..." style="padding:10px" onkeypress="if(event.key=='Enter')sChat()">
+<button id="bKrm" class="btn b-main" style="width:70px;margin:0" onclick="sChat()">Kirim</button>
 </div></div></div>
 
 <div class="box">
@@ -72,17 +78,18 @@ video::-webkit-media-controls-volume-control-container,video::-webkit-media-cont
 let vU='',vH='',mU='',ttl='',img=[],c=null,$=i=>document.getElementById(i),PX='https://api.allorigins.win/raw?url=';
 let fMB=b=>b?`${(b/1e6).toFixed(1)} MB`:'',fKB=b=>b?`${(b/1024).toFixed(0)} KB`:'';
 
-// Sistem RezyBot AI
-let cLog=[{b:1,t:'Halo! Aku RezyBot. Kamu bingung? Tanya aja soal "foto", "batal/jeda", "lagu/suara", atau "error".'}];
-let rChat=()=>{let b=$('cBox');b.innerHTML=cLog.map(x=>`<div style="text-align:${x.b?'left':'right'};margin:5px 0"><span style="background:${x.b?'#1f4068':'#00ff88'};color:${x.b?'#eee':'#000'};padding:8px 12px;border-radius:10px;display:inline-block;max-width:85%">${x.t}</span></div>`).join('');b.scrollTop=b.scrollHeight}
-let sChat=()=>{let q=$('cIn').value.trim();if(!q)return;$('cIn').value='';cLog.push({b:0,t:q});rChat();setTimeout(()=>{let a="Maaf, aku belum ngerti. Coba tanya soal 'foto', 'lagu', 'jeda', atau 'error'.";if(/foto|gambar|slide/i.test(q))a="Untuk slideshow, TikTok gak bikin file videonya. Jadi, web ini otomatis misahin foto dan lagunya biar gampang di-download!";else if(/batal|x|cancel|jeda|detik/i.test(q))a="Tiap pencet download ada jeda 5 detik. Tinggal pencet huruf X warna merah yang gede di atas layar buat ngebatalin biar kuotamu aman!";else if(/lama|error|gagal/i.test(q))a="Kalau error/loading lama, biasanya karena server luar negeri atau sinyal lemot. Tinggal direfresh halamannya aja!";else if(/suara|lagu|audio|mp3/i.test(q))a="Gampang! Kamu klik aja tombol 'DOWNLOAD AUDIO' warna merah pink di bawah hasil pencarian.";else if(/video/i.test(q))a="Masukin link video, lalu klik tombol download warna hijau. Nanti nunggu jeda 5 detik baru file bakal ditarik ke HP kamu.";cLog.push({b:1,t:a});rChat()},500)}
+// Sistem Chatbot AI Asli (Terkoneksi ke Public API)
+let cLog=[{b:1,t:'Halo! Aku RezyBot AI. Ada yang bisa aku bantu seputar website ini atau yang lainnya?'}];
+let rChat=()=>{let b=$('cBox');b.innerHTML=cLog.map(x=>`<div style="text-align:${x.b?'left':'right'};margin:5px 0"><span style="background:${x.b?'#1f4068':'#00ff88'};color:${x.b?'#eee':'#000'};padding:8px 12px;border-radius:10px;display:inline-block;max-width:85%;line-height:1.4">${x.t}</span></div>`).join('');b.scrollTop=b.scrollHeight}
+let sChat=async()=>{let q=$('cIn').value.trim();if(!q)return;$('cIn').value='';$('bKrm').disabled=1;cLog.push({b:0,t:q});rChat();let tI=cLog.length;cLog.push({b:1,t:"⏳ Sedang berpikir..."});rChat();
+try{let r=await fetch(`https://api.ryzendesu.vip/api/ai/chatgpt?text=${encodeURIComponent(q)}`);let d=await r.json();cLog[tI].t=d.response||d.result||"Maaf, AI sedang memproses terlalu banyak data."}catch{try{let r2=await fetch(`https://api.joshweb.click/api/gpt-4o?q=${encodeURIComponent(q)}`);let d2=await r2.json();cLog[tI].t=d2.result||d2.data||"Server AI sedang sibuk."}catch{cLog[tI].t="Koneksi ke server AI terputus. Pastikan internetmu lancar ya!"}}rChat();$('bKrm').disabled=0}
 window.onload=()=>{rHst();rChat()};
 
 window.onfocus=async()=>{try{let t=await navigator.clipboard.readText();if(/tiktok\.com/i.test(t)&&!$('url').value){$('url').value=t;tst("Link terdeteksi!")}}catch{}}
 let tst=(m,e=0)=>{let t=document.createElement('div');t.className=`tst ${e?'err':''}`;t.innerHTML=m;$('tBox').appendChild(t);setTimeout(()=>t.remove(),3000)}
 
-// Tombol Batal X Raksasa di sini
-let pTst=(l)=>{let t=document.createElement('div');t.className='tst';t.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center"><b>⏳ ${l}</b><button style="background:#ff3366;color:#fff;border:0;border-radius:8px;padding:8px 18px;font-size:22px;font-weight:900;box-shadow:0 4px 10px rgba(255,51,102,.4);cursor:pointer" onclick="c?.abort()">X</button></div><div style="display:flex;justify-content:space-between;font-size:11px;color:#aaa;margin-top:8px"><span id="tb">Siap...</span><span id="tp">0%</span></div><div class="p-bar"><div class="p-f" id="tf"></div></div>`;$('tBox').prepend(t);return{uT:x=>t.querySelector('b').innerText='⏳ '+x,u:(b,p)=>{$('tb').innerText=b;if(p>=0){$('tp').innerText=p+'%';$('tf').style.width=p+'%'}else $('tp').innerText='...'},x:()=>t.remove()}}
+// TOMBOL BATAL "X" RAKSASA ANTI SALAH PENCET
+let pTst=(l)=>{let t=document.createElement('div');t.className='tst';t.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center"><b>⏳ ${l}</b><button style="background:#ff3366;color:#fff;border:0;border-radius:12px;width:45px;height:45px;font-size:26px;font-weight:900;box-shadow:0 4px 10px rgba(255,51,102,.4);cursor:pointer;display:flex;align-items:center;justify-content:center" onclick="c?.abort()">X</button></div><div style="display:flex;justify-content:space-between;font-size:11px;color:#aaa;margin-top:8px"><span id="tb">Siap...</span><span id="tp">0%</span></div><div class="p-bar"><div class="p-f" id="tf"></div></div>`;$('tBox').prepend(t);return{uT:x=>t.querySelector('b').innerText='⏳ '+x,u:(b,p)=>{$('tb').innerText=b;if(p>=0){$('tp').innerText=p+'%';$('tf').style.width=p+'%'}else $('tp').innerText='...'},x:()=>t.remove()}}
 let d5s=async(p)=>{for(let i=5;i>0;i--){if(c.signal.aborted)return 0;p.u(`Jeda... (${i}s)`,0);await new Promise(r=>setTimeout(r,1e3))}return!c.signal.aborted}
 let gSz=async(u,id,k)=>{try{let r=await fetch(u,{method:'HEAD'});let l=r.headers.get('content-length');if(l)$(id).innerText=k?fKB(l):fMB(l);else $(id).innerText=''}catch{$(id).innerText=''}}
 let pst=async()=>{try{let t=await navigator.clipboard.readText();if(/tiktok\.com/i.test(t)){$('url').value=t;tst("Ditempel!")}else tst("Bukan link TikTok!",1)}catch{tst("Gagal akses clipboard",1)}}
