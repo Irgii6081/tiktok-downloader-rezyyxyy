@@ -40,6 +40,18 @@ video{width:100%;border-radius:12px;margin:10px 0;background:#000}
 .mdl-c{background:#16213e;padding:20px;border-radius:15px;width:90%;max-width:400px;text-align:left;position:relative;border:2px solid #00ff88}
 .mdl-x{position:absolute;top:12px;right:12px;background:#ff3366;color:#fff;border:0;width:30px;height:30px;border-radius:8px;font-weight:700;cursor:pointer}
 @media(min-width:768px){.f-lst{grid-template-columns:repeat(2,1fr)}}
+
+/* KELAS PROTEKSI ANTI SAVE (Klik Kanan & Tahan Lama) */
+.no-save {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    outline: none;
+    -webkit-user-drag: none;
+}
 </style>
 
 <script>
@@ -84,11 +96,12 @@ function abW(){
 </div>
 <button id="btnCek" class="btn b-main" onclick="cek()">🔍 CEK VIDEO & MUSIK</button>
 
+<div id="res" class="res"></div>
+
 <div id="ad-wrapper-mid" style="width:100%;max-width:600px;margin:20px auto;text-align:center;">
     <div id="container-ff0cd9d911977b5f918c3f3c787aee9e"></div>
     <script async="async" data-cfasync="false" src="https://ambitionbookingslick.com/ff0cd9d911977b5f918c3f3c787aee9e/invoke.js" onerror="abW()"></script>
 </div>
-<div id="res" class="res"></div>
 <div id="hst"></div>
 </div>
 
@@ -104,7 +117,6 @@ function abW(){
 <iframe id="ifr" style="display:none"></iframe>
 
 <script>
-// Lapis ke-2 Keamanan Anti-Adblock (CSS Bait)
 let cAd=()=>{
     if(abFired)return; let b=document.createElement('div');
     b.className='adsbygoogle adBanner ad-space pub_300x250'; b.style.cssText='position:absolute;top:-9999px;height:10px;display:block;';
@@ -113,9 +125,8 @@ let cAd=()=>{
     if(x) abW(); return x;
 };
 window.addEventListener('DOMContentLoaded', cAd);
-setInterval(cAd, 1500); // Penjaga aktif agar user tidak curang
+setInterval(cAd, 1500);
 
-// Script Utama Downloader
 let vU='',vH='',mU='',ttl='',img=[],totImgSz=0,c=null,$=i=>document.getElementById(i),PX='https://corsproxy.io/?';let fMB=b=>b?`(${(b/1e6).toFixed(1)} MB)`:'',fKB=b=>b?`(${(b/1024).toFixed(0)} KB)`:'';let esc=s=>s?s.replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])):'';
 window.onload=()=>{rHst();cAd()};
 window.onfocus=async()=>{try{let t=await navigator.clipboard.readText();if(/tiktok\.com/i.test(t)&&$('url').value!==t){$('url').value=t;tst("Tautan diproses otomatis!");cek()}}catch{}};
@@ -126,7 +137,10 @@ let d5s=async(p)=>{for(let i=5;i>0;i--){if(c.signal.aborted)return 0;p.u(`Jeda..
 let gSz=async(u,id,k)=>{try{let r=await fetch(PX+encodeURIComponent(u),{method:'HEAD'});let l=r.headers.get('content-length');if(l){let b=parseInt(l);if(k){totImgSz+=b;if($('totSz'))$('totSz').innerText=fMB(totImgSz);}if($(id))$(id).innerText=k?fKB(b):fMB(b);}else{if($(id))$(id).innerText='(±1 MB)';}}catch{if($(id))$(id).innerText='(±1 MB)';}};
 let pst=async()=>{if(abFired)return;try{let t=await navigator.clipboard.readText();if(/tiktok\.com/i.test(t)){$('url').value=t;tst("Ditempel!");cek()}else tst("Bukan tautan TikTok!",1)}catch{tst("Gagal mengakses clipboard",1)}};
 let clr=()=>{vU=vH=mU=ttl='';img=[];c?.abort();$('url').value='';$('res').style.display='none';$('res').innerHTML='';tst("Dibersihkan!")};
-let cek=async()=>{if(abFired)return;let u=$('url').value.trim();if(!/tiktok\.com/i.test(u))return tst("Tautan tidak valid!",1);let btnC=$('btnCek');if(btnC.disabled)return;btnC.disabled=1;btnC.innerText="⏳ MEMPROSES...";$('res').style.display='block';$('res').innerHTML='Mencari... 🔥';try{let ac=new AbortController();setTimeout(()=>ac.abort(),15000);let r=await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(u)}`,{signal:ac.signal}),d=await r.json(),v=d.data;if(!v)throw 1;vU=v.play||'';vH=v.hdplay||'';mU=v.music||'';ttl=esc(v.title||'tiktok');img=v.images||[];let usr=esc(v.author?.unique_id||"kreator");let h=`<div style="text-align:left;background:#16213e;padding:10px;border-radius:8px">👤 <b style="color:#00bfff">@${usr}</b><br><small>${ttl}</small></div>`;if(img.length){h+=`<div class="f-lst">`;img.forEach((x,i)=>{h+=`<div class="f-row"><img src="${x}" class="f-img"><div style="display:flex;flex-direction:column;justify-content:space-between;align-items:center;margin-top:12px;width:100%;gap:5px"><span style="font-size:14px;font-weight:700">Foto ${i+1} <span id="iSz_${i}" class="sz">...</span></span><button id="bI_${i}" class="btn b-pst" style="padding:8px 20px;width:100%;margin:0" onclick="dlI(${i})">Unduh</button></div></div>`});h+=`</div><button id="bIa" class="btn b-main" onclick="dlA()">⬇️ UNDUH SEMUA FOTO <span id="totSz" class="sz">...</span></button>`}else{h+=`<video controls controlsList="nodownload nofullscreen noremoteplayback"><source src="${vU}"></video><button id="bV" class="btn b-main" onclick="dl('v')">⬇️ UNDUH VIDEO <span class="sz">${fMB(v.size)}</span></button>`;if(vH)h+=`<button id="bH" class="btn b-hd" onclick="dl('h')">🚀 UNDUH (HD) <span class="sz">${fMB(v.hd_size)}</span></button>`}if(mU)h+=`<button id="bM" class="btn b-mus" onclick="dl('m')">🎵 UNDUH AUDIO <span id="mSz" class="sz">...</span></button>`;h+=`<button class="btn" style="background:#6c5ce7;color:#fff;margin-top:15px" onclick="shW()">🔗 BAGIKAN WEB INI</button>`;$('res').innerHTML=h;sHst(ttl,usr,u);totImgSz=0;if(mU)gSz(mU,'mSz',0);if(img.length)img.forEach((x,i)=>gSz(x,'iSz_'+i,1));tst("Berhasil!");}catch{tst("Waktu habis / Gagal!",1);$('res').innerHTML='<b style="color:#ff3366">Pencarian Gagal.</b>'}btnC.disabled=0;btnC.innerText="🔍 CEK VIDEO & MUSIK"};
+
+// MODIFIKASI: Penambahan class="no-save" dan atribut anti-klik kanan/tahan lama pada render foto dan video
+let cek=async()=>{if(abFired)return;let u=$('url').value.trim();if(!/tiktok\.com/i.test(u))return tst("Tautan tidak valid!",1);let btnC=$('btnCek');if(btnC.disabled)return;btnC.disabled=1;btnC.innerText="⏳ MEMPROSES...";$('res').style.display='block';$('res').innerHTML='Mencari... 🔥';try{let ac=new AbortController();setTimeout(()=>ac.abort(),15000);let r=await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(u)}`,{signal:ac.signal}),d=await r.json(),v=d.data;if(!v)throw 1;vU=v.play||'';vH=v.hdplay||'';mU=v.music||'';ttl=esc(v.title||'tiktok');img=v.images||[];let usr=esc(v.author?.unique_id||"kreator");let h=`<div style="text-align:left;background:#16213e;padding:10px;border-radius:8px">👤 <b style="color:#00bfff">@${usr}</b><br><small>${ttl}</small></div>`;if(img.length){h+=`<div class="f-lst">`;img.forEach((x,i)=>{h+=`<div class="f-row"><img src="${x}" class="f-img no-save" oncontextmenu="return false;" ondragstart="return false;"><div style="display:flex;flex-direction:column;justify-content:space-between;align-items:center;margin-top:12px;width:100%;gap:5px"><span style="font-size:14px;font-weight:700">Foto ${i+1} <span id="iSz_${i}" class="sz">...</span></span><button id="bI_${i}" class="btn b-pst" style="padding:8px 20px;width:100%;margin:0" onclick="dlI(${i})">Unduh</button></div></div>`});h+=`</div><button id="bIa" class="btn b-main" onclick="dlA()">⬇️ UNDUH SEMUA FOTO <span id="totSz" class="sz">...</span></button>`}else{h+=`<video controls controlsList="nodownload nofullscreen noremoteplayback" class="no-save" oncontextmenu="return false;" ondragstart="return false;"><source src="${vU}"></video><button id="bV" class="btn b-main" onclick="dl('v')">⬇️ UNDUH VIDEO <span class="sz">${fMB(v.size)}</span></button>`;if(vH)h+=`<button id="bH" class="btn b-hd" onclick="dl('h')">🚀 UNDUH (HD) <span class="sz">${fMB(v.hd_size)}</span></button>`}if(mU)h+=`<button id="bM" class="btn b-mus" onclick="dl('m')">🎵 UNDUH AUDIO <span id="mSz" class="sz">...</span></button>`;h+=`<button class="btn" style="background:#6c5ce7;color:#fff;margin-top:15px" onclick="shW()">🔗 BAGIKAN WEB INI</button>`;$('res').innerHTML=h;sHst(ttl,usr,u);totImgSz=0;if(mU)gSz(mU,'mSz',0);if(img.length)img.forEach((x,i)=>gSz(x,'iSz_'+i,1));tst("Berhasil!");}catch{tst("Waktu habis / Gagal!",1);$('res').innerHTML='<b style="color:#ff3366">Pencarian Gagal.</b>'}btnC.disabled=0;btnC.innerText="🔍 CEK VIDEO & MUSIK"};
+
 let sDl=async(u,n,b=0)=>{let a=document.createElement('a');a.href=u;a.download=n;document.body.appendChild(a);a.click();a.remove();if(b)URL.revokeObjectURL(u)};
 let dlI=async(i)=>{if(abFired)return;let u=img[i],b=$('bI_'+i),o=b.innerText;b.innerText="⏳...";b.disabled=1;c=new AbortController();let p=pTst(`Foto ${i+1}`);if(!(await d5s(p))){tst("Batal",1);p.x();b.innerText=o;b.disabled=0;return}p.uT("Mengunduh...");p.u("Proses...",-1);try{let r;try{r=await fetch(u,{signal:c.signal})}catch{r=await fetch(PX+encodeURIComponent(u),{signal:c.signal})}await sDl(URL.createObjectURL(new Blob([await r.blob()],{type:'image/jpeg'})),`${ttl}_${i}.jpg`,1);tst("Sukses!")}catch{c.signal.aborted?tst("Batal",1):($('ifr').src=u,tst("Tersimpan!"))}p.x();b.innerText=o;b.disabled=0};
 let dlA=async()=>{if(abFired)return;let b=$('bIa'),o=b.innerText;b.innerText="⏳...";b.disabled=1;c=new AbortController();let p=pTst("Semua Foto");if(!(await d5s(p))){tst("Batal",1);p.x();b.innerText=o;b.disabled=0;return}for(let i=0;i<img.length;i++){if(c.signal.aborted)break;p.uT(`Mengunduh ${i+1}/${img.length}`);p.u("Proses...",-1);try{let r;try{r=await fetch(img[i],{signal:c.signal})}catch{r=await fetch(PX+encodeURIComponent(img[i]),{signal:c.signal})}await sDl(URL.createObjectURL(new Blob([await r.blob()],{type:'image/jpeg'})),`${ttl}_${i+1}.jpg`,1)}catch{}}if(!c.signal.aborted)tst("Semua Sukses!");p.x();b.innerText=o;b.disabled=0};
