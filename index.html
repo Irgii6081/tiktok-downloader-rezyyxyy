@@ -5,8 +5,9 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#eee;padding:15px;margin:0;display:flex;flex-direction:column;align-items:center;min-height:100vh}
-.box, .info-box {width:100%;max-width:500px;background:#16213e;border-radius:24px;padding:25px;box-shadow:0 15px 35px rgba(0,255,100,.1);box-sizing:border-box;margin-top:20px}
+.box, .info-box {width:100%;max-width:600px;background:#16213e;border-radius:24px;padding:25px;box-shadow:0 15px 35px rgba(0,255,100,.1);box-sizing:border-box;margin-top:20px}
 .info-box {text-align:left;box-shadow:0 15px 35px rgba(0,0,0,.3)}
+@media (min-width: 768px) { .box, .info-box { max-width: 800px; padding: 40px; } }
 h1{color:#00ff88;font-size:24px;margin:0 0 5px;text-align:center}
 input{width:100%;padding:14px;background:#0f1c2e;border:2px solid #00ff88;border-radius:12px;color:#fff;box-sizing:border-box;outline:0;font-size:14px}
 .flex{display:flex;gap:10px;margin:10px 0}
@@ -32,8 +33,7 @@ video{width:100%;border-radius:12px;margin:10px 0;background:#000}
 <div id="uMdl" class="mdl"><div class="mdl-c"><button class="mdl-x" onclick="$('uMdl').style.display='none'">X</button>
 <h3 style="color:#00ff88;margin:0 0 15px">🔔 Riwayat Pembaruan</h3>
 <div style="font-size:14px;color:#eee;max-height:60vh;overflow-y:auto;line-height:1.5">
-<p><b>v1.2.0</b><br> - Penambahan tombol "Hapus Riwayat".</p>
-<p><b>v1.1.9</b><br> - Desain klasik yang lebih nyaman.</p>
+<p><b>v1.2.1</b><br> - Desain Klasik & Profesional.<br> - Fitur Hapus Riwayat Lengkap.<br> - FAQ Lengkap & Mendetail.</p>
 </div></div></div>
 
 <div class="box">
@@ -49,18 +49,33 @@ video{width:100%;border-radius:12px;margin:10px 0;background:#000}
 <div class="info-box">
     <h2>⚡ Fitur Utama</h2>
     <ul>
-        <li><b>Video Tanpa Watermark:</b> Unduh video kualitas asli.</li>
-        <li><b>Dukungan Slideshow:</b> Unduh foto sekaligus.</li>
-        <li><b>Ekstrak Audio:</b> Konversi ke MP3 kualitas tinggi.</li>
-        <li><b>Performa Optimal:</b> Ringan dan hemat data.</li>
+        <li><b>Video Tanpa Watermark:</b> Unduh video TikTok dalam kualitas asli tanpa logo yang mengganggu.</li>
+        <li><b>Dukungan Slideshow:</b> Unduh rangkaian foto secara individu atau sekaligus dalam satu arsip.</li>
+        <li><b>Ekstrak Audio:</b> Konversi cepat video ke format audio MP3 berkualitas tinggi.</li>
+        <li><b>Performa Optimal:</b> Antarmuka ringan, cepat, dan hemat data tanpa iklan.</li>
     </ul>
+
     <h2>🛠️ Panduan Penggunaan</h2>
-    <p>1. Salin tautan TikTok.<br>2. Tempel di input.<br>3. Klik "CEK" & unduh.</p>
-    <h2>❓ FAQ</h2>
-    <p><b>Q: Aman digunakan?</b> A: Ya, data tidak disimpan di server.</p>
+    <p>1. <b>Salin Tautan:</b> Buka aplikasi TikTok, pilih video, ketuk tombol 'Bagikan' dan pilih 'Salin Tautan'.<br>
+       2. <b>Tempel Tautan:</b> Buka Rezyyxy Downloader, tempel tautan ke kolom yang tersedia.<br>
+       3. <b>Unduh:</b> Klik tombol "CEK VIDEO & MUSIK" dan pilih format file yang ingin Anda simpan.</p>
+
+    <h2>❓ Pertanyaan Umum (FAQ)</h2>
+    <p><b>Q: Apakah Rezyyxy Downloader aman digunakan?</b><br>A: Sangat aman. Kami tidak menyimpan file, video, atau data pribadi apa pun di server kami.</p>
+    <p><b>Q: Mengapa video yang diunduh tidak memiliki watermark?</b><br>A: Sistem kami secara otomatis membersihkan metadata watermark dari video asli TikTok.</p>
+    <p><b>Q: Apakah saya bisa mengunduh audio saja (MP3)?</b><br>A: Tentu, kami menyediakan opsi khusus untuk mengunduh audio dengan format MP3 berkualitas tinggi.</p>
+    <p><b>Q: Apa yang harus dilakukan jika proses unduhan gagal?</b><br>A: Pastikan koneksi stabil, segarkan halaman, atau coba tempel kembali tautan tersebut.</p>
+    <p><b>Q: Apakah web ini dapat diakses di iPhone/iOS?</b><br>A: Ya, layanan kami berjalan sempurna di iOS, Android, serta perangkat komputer.</p>
+
     <h2>⚠️ Penafian</h2>
-    <p>Kami tidak berafiliasi dengan TikTok. Hak cipta milik pencipta asli.</p>
-    <p style="text-align:center; font-size:12px; color:#666; margin-top:20px;">© 2026 Rezyyxy Downloader.</p>
+    <p>Rezyyxy Downloader tidak berafiliasi dengan TikTok. Kami hanyalah alat bantu pihak ketiga. Seluruh hak cipta konten adalah milik pencipta asli.</p>
+
+    <h2>👋 Tentang Kami</h2>
+    <p>Kami berkomitmen menyediakan pengalaman mengunduh yang lancar, cepat, dan aman.</p>
+    
+    <h2>📜 Syarat Ketentuan</h2>
+    <p>Layanan ini ditujukan untuk penggunaan pribadi dan non-komersial.</p>
+    <p style="text-align:center; font-size:12px; color:#666; margin-top:20px;">© 2026 Rezyyxy Downloader. Hak Cipta Dilindungi.</p>
 </div>
 
 <script>
@@ -76,3 +91,4 @@ let sHst=(t,u,l)=>{let h=JSON.parse(localStorage.getItem('h')||'[]');if(!h.some(
 let dHst=()=>{localStorage.removeItem('h');rHst();tst("Riwayat dihapus!")}
 let rHst=()=>{let h=JSON.parse(localStorage.getItem('h')||'[]');$('hst').innerHTML=h.length?`<div class="hst"><div style="display:flex;justify-content:space-between;align-items:center;"><b style="color:#00ff88">📜 Riwayat:</b><button onclick="dHst()" style="background:#ff3366;color:#fff;border:none;padding:2px 8px;border-radius:4px;font-size:10px;cursor:pointer;">Hapus</button></div>`+h.map(x=>`<div class="h-it" onclick="$('url').value='${x.l}';cek()"><b style="color:#00bfff">@${x.u}</b> ${x.t.slice(0,18)}...</div>`).join('')+`</div>`:''}
 </script></body></html>
+                                
