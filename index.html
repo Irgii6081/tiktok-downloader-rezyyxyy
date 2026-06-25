@@ -33,70 +33,98 @@
     </div>
 
     <script>
+        let currentVideoUrl = '';
+        let currentMusicUrl = '';
+        let currentTitle = '';
+
         async function processTikTok() {
             let url = document.getElementById('urlInput').value.trim();
             const resultDiv = document.getElementById('result');
-            
-            if (!url) {
-                alert("Link TikTok mana tolol? Kosong mulu kontol 💀");
-                return;
-            }
+            if (!url) return alert("Link mana tolol? 💀");
 
             resultDiv.style.display = "block";
-            resultDiv.innerHTML = `<p style="color:#00ff88;">Nyari video & musik... Sabar setan 🔥</p>`;
+            resultDiv.innerHTML = `<p style="color:#00ff88;">Nyari... Sabar setan 🔥</p>`;
 
             try {
                 const res = await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(url)}`);
                 const data = await res.json();
-
                 if (data.data) {
                     const v = data.data;
-                    const videoUrl = v.hdplay || v.play;
-                    const musicUrl = v.music || '';
+                    // Menggunakan hdplay jika ada, jika tidak pakai play biasa
+                    currentVideoUrl = v.hdplay || v.play || '';
+                    currentMusicUrl = v.music || '';
+                    currentTitle = v.title || 'rezyyxy_tiktok';
 
-                    let html = `
-                        <p style="color:#00ff88;">✅ Video ketemu bro!</p>
-                        <video controls><source src="${videoUrl}" type="video/mp4"></video>
-                        <button onclick="downloadVideo('\( {videoUrl}', ' \){v.title || 'tiktok'}')">⬇️ DOWNLOAD VIDEO</button>
-                    `;
+                    let html = `<p style="color:#00ff88;">✅ Video ketemu!</p>
+                        <video id="previewVideo" controls><source src="${currentVideoUrl}" type="video/mp4"></video>
+                        <button id="btnVid" onclick="downloadVideo()">⬇️ DOWNLOAD VIDEO</button>`;
 
-                    if (musicUrl) {
-                        html += `
-                            <button class="music-btn" onclick="downloadMusic('\( {musicUrl}', ' \){v.title || 'rezyyxy_music'}')">🎵 DOWNLOAD MUSIK SAJA</button>
-                        `;
-                    }
+                    if (currentMusicUrl) html += `<button id="btnMus" class="music-btn" onclick="downloadMusic()">🎵 DOWNLOAD MUSIK</button>`;
 
-                    html += `<p class="note">${v.title || 'Ga ada judul'}</p>`;
+                    html += `<p class="note">${currentTitle}</p>`;
                     resultDiv.innerHTML = html;
                 } else {
-                    throw new Error("Gagal");
+                    resultDiv.innerHTML = `<p>Video kagak ketemu. Link-nya bener gakk?</p>`;
                 }
             } catch(e) {
-                resultDiv.innerHTML = `
-                    <p style="color:#ff3366;">API rewel anjir. Coba manual:</p>
-                    <a href="https://tikwm.com/?url=${encodeURIComponent(url)}" target="_blank"><button>BUKA TIKWM.COM</button></a>
-                `;
+                resultDiv.innerHTML = `<p>API rewel. Coba lagi kontol.</p>`;
             }
         }
 
-        function downloadVideo(videoUrl, title) {
-            const a = document.createElement('a');
-            a.href = videoUrl;
-            a.download = title.replace(/[^a-zA-Z0-9]/g, '_') + '.mp4';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            alert("Video download jalan asu! 😂🖕");
+        // Fungsi helper untuk download file via Blob (biar langsung ke-download)
+        async function forceDownload(fileUrl, fileName) {
+            try {
+                const response = await fetch(fileUrl);
+                if (!response.ok) throw new Error('Gagal mengambil file.');
+                const blob = await response.blob();
+                const blobUrl = window.URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                
+                // Bersihkan element dan URL setelah selesai download
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(blobUrl);
+            } catch (error) {
+                console.error(error);
+                // Fallback jika fetch blob gagal karena CORS, buka di tab baru sebagai alternatif terakhir
+                window.open(fileUrl, '_blank');
+            }
         }
 
-        function downloadMusic(musicUrl, title) {
-            const a = document.createElement('a');
-            a.href = musicUrl;
-            a.download = title.replace(/[^a-zA-Z0-9]/g, '_') + '.mp3';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            alert("Musik Rezyyxy style jalan kontol! 🔥🗿");
+        async function downloadVideo() {
+            if (!currentVideoUrl) return alert("Ga ada video 💀");
+            const btn = document.getElementById('btnVid');
+            const originalText = btn.innerText;
+            
+            btn.innerText = "⏳ NGUNDUH... JANGAN DI-CLOSE!";
+            btn.disabled = true;
+
+            const safeName = currentTitle.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 30) + '.mp4';
+            await forceDownload(currentVideoUrl, safeName);
+            
+            btn.innerText = originalText;
+            btn.disabled = false;
+            alert("Download jalan asu! 🖕");
+        }
+
+        async function downloadMusic() {
+            if (!currentMusicUrl) return alert("Ga ada musik 💀");
+            const btn = document.getElementById('btnMus');
+            const originalText = btn.innerText;
+            
+            btn.innerText = "⏳ NGUNDUH MUSIK...";
+            btn.disabled = true;
+
+            const safeName = currentTitle.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 30) + '.mp3';
+            await forceDownload(currentMusicUrl, safeName);
+            
+            btn.innerText = originalText;
+            btn.disabled = false;
+            alert("Musik jalan kontol! 🔥");
         }
     </script>
 </body>
