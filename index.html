@@ -405,7 +405,87 @@ function applyLang() {
   renderInfoBox();
   rHst();
 }
-function setLang(l) { curLang = l; localStorage.setItem('lang', curLang); applyLang(); }
+// ============ NOTIF RELOAD KREATIF ============
+const reloadMsgs = {
+  id: { emoji:'🌏', title:'Bahasa Diubah ke Indonesia!', body:'Untuk pengalaman terbaik, reload halaman sekarang yuk!', btn:'🔄 Reload Sekarang', skip:'Nanti aja' },
+  en: { emoji:'🌍', title:'Language Changed to English!', body:'For the best experience, please reload the page now!', btn:'🔄 Reload Now', skip:'Maybe Later' },
+  ms: { emoji:'🌏', title:'Bahasa Ditukar ke Melayu!', body:'Untuk pengalaman terbaik, sila muat semula halaman sekarang!', btn:'🔄 Muat Semula', skip:'Nanti' },
+  es: { emoji:'🌎', title:'¡Idioma Cambiado a Español!', body:'Para la mejor experiencia, ¡recarga la página ahora!', btn:'🔄 Recargar Ahora', skip:'Después' },
+  pt: { emoji:'🌎', title:'Idioma Alterado para Português!', body:'Para a melhor experiência, recarregue a página agora!', btn:'🔄 Recarregar', skip:'Depois' }
+};
+
+function showReloadNotif(lang) {
+  // Hapus notif lama jika ada
+  const old = document.getElementById('reloadNotif');
+  if (old) old.remove();
+
+  const msg = reloadMsgs[lang] || reloadMsgs['id'];
+  const el = document.createElement('div');
+  el.id = 'reloadNotif';
+  el.style.cssText = `
+    position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);
+    z-index:99999;width:92%;max-width:400px;
+    background:linear-gradient(135deg,#1a1a2e,#16213e);
+    border:2px solid #00ff88;border-radius:20px;
+    padding:18px 20px;box-shadow:0 10px 40px rgba(0,255,136,0.25);
+    font-family:'Inter',sans-serif;
+    transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275),opacity 0.4s;
+    opacity:0;
+  `;
+  el.innerHTML = `
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+      <div style="font-size:32px;animation:spin 2s linear infinite">${msg.emoji}</div>
+      <div>
+        <div style="color:#00ff88;font-weight:700;font-size:15px">${msg.title}</div>
+        <div style="color:#aaa;font-size:12px;margin-top:3px">${msg.body}</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button onclick="location.reload()" style="flex:2;background:linear-gradient(135deg,#00ff88,#00bfff);color:#000;border:0;padding:10px;border-radius:12px;font-weight:700;font-size:13px;cursor:pointer;box-shadow:0 4px 15px rgba(0,255,136,0.3)">${msg.btn}</button>
+      <button onclick="document.getElementById('reloadNotif').remove()" style="flex:1;background:#222;color:#aaa;border:1px solid #333;padding:10px;border-radius:12px;font-size:12px;cursor:pointer">${msg.skip}</button>
+    </div>
+    <div style="margin-top:10px;height:3px;background:#0f1c2e;border-radius:3px;overflow:hidden">
+      <div id="reloadBar" style="height:100%;width:100%;background:linear-gradient(90deg,#00ff88,#00bfff);transition:width 8s linear"></div>
+    </div>
+  `;
+  document.body.appendChild(el);
+
+  // Animasi masuk
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      el.style.transform = 'translateX(-50%) translateY(0)';
+      el.style.opacity = '1';
+    });
+  });
+
+  // Progress bar countdown 8 detik → auto hilang
+  setTimeout(() => { const bar = document.getElementById('reloadBar'); if(bar) bar.style.width='0%'; }, 100);
+  const autoClose = setTimeout(() => {
+    if (document.getElementById('reloadNotif')) {
+      el.style.transform = 'translateX(-50%) translateY(100px)';
+      el.style.opacity = '0';
+      setTimeout(() => el.remove(), 400);
+    }
+  }, 8000);
+
+  // Kalau user klik reload, batalkan auto-close
+  el.querySelector('button').addEventListener('click', () => clearTimeout(autoClose));
+}
+
+// Tambah CSS spin
+if (!document.getElementById('spinStyle')) {
+  const s = document.createElement('style');
+  s.id = 'spinStyle';
+  s.textContent = '@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}';
+  document.head.appendChild(s);
+}
+
+function setLang(l) {
+  curLang = l;
+  localStorage.setItem('lang', curLang);
+  applyLang();
+  showReloadNotif(l);
+}
 
 // ============ MODAL UPDATE (scrollable) ============
 function openMdl() {
@@ -424,39 +504,82 @@ const fMB = b => b ? `(${(b/1048576).toFixed(2)} MB)` : '';
 const fKB = b => b ? `(${(b/1024).toFixed(0)} KB)` : '';
 const esc = s => s ? s.replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])) : '';
 
-// ============ SIZE FETCH (FIX: Range request + fallback proxy) ============
+// ============ SIZE FETCH (FIX: streaming partial read, server TikTok blokir HEAD/Range) ============
 async function gSz(u, id, isImg) {
   if (!$(id)) return;
   $(id).innerText = t9('lbl_load');
-  try {
-    // Coba langsung via proxy dengan Range header
-    let sz = 0;
-    const proxied = PX + encodeURIComponent(u);
-    // Metode 1: GET Range 0-0 via proxy
+  let sz = 0;
+  const proxied = PX + encodeURIComponent(u);
+
+  // Strategi: buka stream via proxy, baca content-length dari response header
+  // Jika tidak ada, baca ~1KB pertama lalu cancel → tidak buang bandwidth
+  const tryFetch = async (url, useRange) => {
+    const headers = useRange ? { 'Range': 'bytes=0-1023' } : {};
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 9000);
     try {
-      const r = await fetch(proxied, { method: 'GET', headers: { 'Range': 'bytes=0-0' }, signal: AbortSignal.timeout(8000) });
-      const cr = r.headers.get('content-range'); // bytes 0-0/TOTAL
-      if (cr) { const tot = parseInt(cr.split('/')[1]); if (!isNaN(tot) && tot > 0) sz = tot; }
-      if (!sz) { const cl = r.headers.get('content-length'); if (cl) sz = parseInt(cl)||0; }
-    } catch(e) {}
-    // Metode 2: HEAD via proxy jika metode 1 gagal
-    if (!sz) {
-      try {
-        const r2 = await fetch(proxied, { method: 'HEAD', signal: AbortSignal.timeout(6000) });
-        const cl = r2.headers.get('content-length');
-        if (cl) sz = parseInt(cl)||0;
-      } catch(e) {}
-    }
-    if (sz > 0) {
-      if (isImg) {
-        totImgSz += sz;
-        if ($('totSz')) $('totSz').innerText = fMB(totImgSz);
+      const r = await fetch(url, { method: 'GET', headers, signal: ctrl.signal });
+      clearTimeout(timer);
+      // Cek content-range dulu (paling akurat)
+      const cr = r.headers.get('content-range');
+      if (cr) {
+        const parts = cr.split('/');
+        const tot = parseInt(parts[1]);
+        if (!isNaN(tot) && tot > 0) { ctrl.abort(); return tot; }
       }
-      $(id).innerText = isImg ? fKB(sz) : fMB(sz);
-    } else {
-      $(id).innerText = '';
+      // Cek content-length
+      const cl = r.headers.get('content-length');
+      if (cl) {
+        const n = parseInt(cl);
+        // Jika range request, content-length = ukuran chunk (max 1024), bukan total → skip
+        if (!useRange && !isNaN(n) && n > 1024) { ctrl.abort(); return n; }
+      }
+      // Tidak dapat dari header → cancel stream
+      ctrl.abort();
+      return 0;
+    } catch(e) { clearTimeout(timer); return 0; }
+  };
+
+  // Coba 1: direct URL dengan range
+  sz = await tryFetch(u, true);
+  // Coba 2: proxy dengan range
+  if (!sz) sz = await tryFetch(proxied, true);
+  // Coba 3: proxy tanpa range (full GET tapi langsung abort setelah header)
+  if (!sz) sz = await tryFetch(proxied, false);
+  // Coba 4: API tikwm sudah kasih ukuran? (untuk foto, coba fetch gambar kecil)
+  if (!sz && isImg) {
+    try {
+      const ctrl2 = new AbortController();
+      const timer2 = setTimeout(() => ctrl2.abort(), 6000);
+      const r = await fetch(proxied, { signal: ctrl2.signal });
+      clearTimeout(timer2);
+      // Baca 4 byte pertama untuk memastikan koneksi, lalu abort
+      const reader = r.body.getReader();
+      let read = 0, chunks = [];
+      while (read < 4096) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        chunks.push(value); read += value.length;
+      }
+      ctrl2.abort();
+      // Estimasi dari berapa byte yang sudah dibaca (minimal indicator)
+      // Cek content-length di response
+      const cl = r.headers.get('content-length');
+      if (cl) { sz = parseInt(cl)||0; }
+    } catch(e) {}
+  }
+
+  if (sz > 0) {
+    if (isImg) {
+      totImgSz += sz;
+      if ($('totSz')) $('totSz').innerText = fMB(totImgSz);
     }
-  } catch(e) { if ($(id)) $(id).innerText = ''; }
+    if ($(id)) $(id).innerText = isImg ? fKB(sz) : fMB(sz);
+  } else {
+    // Fallback: tampilkan tanda tanya daripada 0
+    if ($(id)) $(id).innerText = '(? KB)';
+    if (isImg && $('totSz') && $('totSz').innerText === t9('lbl_load')) $('totSz').innerText = '(? MB)';
+  }
 }
 
 // ============ TOAST ============
