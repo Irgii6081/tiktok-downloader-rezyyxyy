@@ -3,11 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>🔥 Rezyyxy Downloader</title>
+<title>🔥 Rezyyxy Downloader Ultimate</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#eee;padding:15px;margin:0;display:flex;flex-direction:column;align-items:center;min-height:100vh}
-.box,.info-box{width:100%;max-width:600px;background:#16213e;border-radius:24px;padding:25px;box-shadow:0 15px 35px rgba(0,255,100,.1);box-sizing:border-box;margin-top:20px}
+.box,.info-box{width:100%;max-width:600px;background:#16213e;border-radius:24px;padding:25px;box-shadow:0 15px 35px rgba(0,255,100,.1);box-sizing:border-box;margin-top:20px;position:relative;}
 .info-box{text-align:left;box-shadow:0 15px 35px rgba(0,0,0,.3)}
 @media(min-width:768px){.box,.info-box{max-width:800px;padding:40px}}
 h1{color:#00ff88;font-size:24px;margin:0 0 5px;text-align:center}
@@ -32,122 +35,253 @@ video{width:100%;border-radius:12px;margin:10px 0;background:#000}
 .f-row{display:flex;flex-direction:column;padding:10px;background:#0f1c2e;border-radius:12px;border:1px solid #252525}
 .f-img{width:100%;height:220px;border-radius:8px;object-fit:contain;background:#000;border:1px solid #00ff88}
 .sz{font-size:12px;color:#ffcc00;font-weight:700;margin-left:5px}
-.info-box h2{color:#00ff88;font-size:18px;margin-top:20px}
-.info-box p,.info-box li{font-size:14px;color:#ccc;line-height:1.6}
-.hst{margin-top:15px;text-align:left;background:#0f1c2e;padding:10px;border-radius:10px;font-size:12px;max-height:200px;overflow-y:auto}
-.h-it{padding:6px 0;border-bottom:1px solid #222;cursor:pointer}
-.mdl{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);z-index:99999;display:none;justify-content:center;align-items:center}
-.mdl-c{background:#16213e;padding:20px;border-radius:15px;width:90%;max-width:400px;text-align:left;position:relative;border:2px solid #00ff88}
-.mdl-x{position:absolute;top:12px;right:12px;background:#ff3366;color:#fff;border:0;width:30px;height:30px;border-radius:8px;font-weight:700;cursor:pointer}
-@media(min-width:768px){.f-lst{grid-template-columns:repeat(2,1fr)}}
 
-/* KELAS PROTEKSI ANTI SAVE (Klik Kanan & Tahan Lama) */
-.no-save {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    outline: none;
-    -webkit-user-drag: none;
-}
+/* Riwayat Thumbnail Visual */
+.hst{margin-top:15px;text-align:left;background:#0f1c2e;padding:10px;border-radius:10px;font-size:12px;max-height:250px;overflow-y:auto}
+.h-it{display:flex;align-items:center;padding:8px;border-bottom:1px solid #222;gap:10px;transition:0.2s}
+.h-it:hover{background:#16213e;border-radius:8px;}
+.h-img{width:45px;height:45px;border-radius:8px;object-fit:cover;background:#000;}
+.h-txt{flex:1;cursor:pointer;}
+.h-del{background:#ff3366;color:#fff;border:none;border-radius:6px;width:25px;height:25px;font-weight:bold;cursor:pointer;}
+
+/* Status Offline & Multi Bahasa */
+#netStatus{width:100%;max-width:600px;padding:6px;border-radius:8px;text-align:center;font-size:12px;font-weight:bold;display:none;margin-top:10px;}
+.of-bg{background:#ff3366;color:#fff}
+.on-bg{background:#00ff88;color:#000}
+.lang-btn{position:absolute;top:20px;right:20px;background:#333;color:#fff;border:1px solid #00ff88;padding:5px 10px;border-radius:8px;font-size:12px;cursor:pointer;}
+
+.no-save { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; outline: none; -webkit-user-drag: none; }
 </style>
-
-<script>
-let abFired=0;
-function abW(){
-    if(abFired) return 1; abFired=1;
-    let s=()=>{
-        if(document.getElementById('abW_ui')) return;
-        let o=document.createElement('div'); o.id='abW_ui';
-        o.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(10,10,10,0.98);z-index:999999;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#fff;text-align:center;padding:20px;box-sizing:border-box;';
-        o.innerHTML="<h2 style='color:#ff3366;margin-bottom:10px;'>⚠️ Adblock Terdeteksi!</h2><p style='color:#ccc;line-height:1.6;max-width:400px;font-size:14px;'>Website ini beroperasi secara gratis berkat dukungan iklan.<br><br><b>Mohon matikan Adblocker Anda</b> lalu muat ulang (refresh) halaman ini untuk melanjutkan.</p><button onclick='location.reload()' style='margin-top:20px;padding:12px 24px;background:#00ff88;color:#000;border:none;border-radius:10px;font-weight:bold;cursor:pointer;font-size:14px;box-shadow:0 5px 15px rgba(0,255,136,0.3);'>🔄 Saya Sudah Mematikan Adblock</button>";
-        document.body.appendChild(o); document.body.style.overflow='hidden';
-    };
-    if(document.body) s(); else window.addEventListener('DOMContentLoaded', s);
-    return 1;
-}
-</script>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" onerror="abW()"></script>
 </head>
 
 <body>
 <div id="tBox"></div>
-<div id="uMdl" class="mdl">
-<div class="mdl-c">
-<button class="mdl-x" onclick="document.getElementById('uMdl').style.display='none'">X</button>
-<h3 style="color:#00ff88;margin:0 0 15px">🔔 Riwayat Pembaruan</h3>
-<div style="font-size:14px;color:#eee;max-height:60vh;overflow-y:auto;line-height:1.5">
-<p><b>v1.5.0 (Pro)</b><br> - Penambahan Sistem Keamanan (Anti-XSS).<br> - Perlindungan RAM (Anti-Crash) & Anti-Spam (Anti-Lag).<br> - Pembaruan FAQ Informasi Keamanan & Iklan.</p>
-</div></div></div>
+<div id="netStatus"></div>
 
 <div class="box">
-<h1>🔥 Rezyyxy Downloader</h1>
-<p style="color:#00ff88;margin:0 0 10px;font-size:13px;text-align:center">Video + Musik • Tanpa Watermark</p>
-<div class="flex" style="margin:-5px 0 15px 0">
-<button class="btn" style="background:#222;color:#00bfff;font-size:12px;padding:8px" onclick="document.getElementById('uMdl').style.display='flex'">🔔 Info Update</button>
-</div>
+<button class="lang-btn" onclick="toggleLang()" id="btnLang">ID / EN</button>
 
-<input type="text" id="url" placeholder="Tempel tautan TikTok di sini...">
+<h1>🔥 Rezyyxy Downloader</h1>
+<p style="color:#00ff88;margin:0 0 10px;font-size:13px;text-align:center" data-i18n="sub">Video + Musik • Tanpa Watermark</p>
+
+<input type="text" id="url" data-i18n-ph="placeholder" placeholder="Tempel tautan TikTok di sini...">
 <div class="flex">
-<button class="btn b-pst" onclick="pst()">📋 Tempel</button>
-<button class="btn b-clr" onclick="clr()">❌ Bersihkan</button>
+<button class="btn b-pst" onclick="pst()" data-i18n="pst">📋 Tempel</button>
+<button class="btn b-clr" onclick="clr()" data-i18n="clr">❌ Bersihkan</button>
 </div>
-<button id="btnCek" class="btn b-main" onclick="cek()">🔍 CEK VIDEO & MUSIK</button>
+<button id="btnCek" class="btn b-main" onclick="cek()" data-i18n="cek">🔍 CEK VIDEO & MUSIK</button>
 
 <div id="res" class="res"></div>
-
-<div id="ad-wrapper-mid" style="width:100%;max-width:600px;margin:20px auto;text-align:center;">
-    <div id="container-ff0cd9d911977b5f918c3f3c787aee9e"></div>
-    <script async="async" data-cfasync="false" src="https://ambitionbookingslick.com/ff0cd9d911977b5f918c3f3c787aee9e/invoke.js" onerror="abW()"></script>
-</div>
 <div id="hst"></div>
 </div>
 
 <div class="info-box">
-<h2>⚡ Fitur Utama</h2><ul><li><b>Video Tanpa Watermark:</b> Unduh video TikTok dalam kualitas asli tanpa logo.</li><li><b>Dukungan Slideshow:</b> Unduh foto (slideshow) secara individu atau dalam satu arsip ZIP.</li><li><b>Ekstrak Audio:</b> Konversi cepat video ke format audio MP3 berkualitas tinggi.</li><li><b>Performa Optimal:</b> Antarmuka ringan, anti-lag, perlindungan crash memori, dan deteksi tautan otomatis.</li></ul>
-<h2>🛠️ Panduan Penggunaan</h2><p>1. <b>Salin Tautan:</b> Buka TikTok, ketuk 'Bagikan' dan pilih 'Salin Tautan'.<br>2. <b>Tempel Tautan:</b> Buka web ini, tautan akan terdeteksi otomatis (atau tempel manual).<br>3. <b>Unduh:</b> Sistem akan memproses dan menampilkan tombol unduh secara langsung.</p>
-<h2>❓ Pertanyaan Umum (FAQ)</h2><p><b>Q: Apakah Rezyyxy Downloader aman digunakan?</b><br>A: Sangat aman. Kami menerapkan sistem filter otomatis Anti-XSS (penangkal skrip jahat) dan sistem kami sama sekali tidak pernah menyimpan file, video, atau data pribadi apa pun di dalam server.</p><p><b>Q: Mengapa sistem membatasi unduhan file berukuran besar?</b><br>A: Demi menjaga kenyamanan Anda. Kami memasang RAM Protection (Perlindungan Memori) yang akan membatalkan otomatis unduhan jika file di atas 200 MB. Fitur ini menjaga agar browser HP Anda tidak lag, membeku (hang), atau keluar sendiri (force close).</p><p><b>Q: Mengapa video hasil unduhan tidak ada tanda air (watermark)?</b><br>A: Sistem cerdas kami bekerja di latar belakang untuk membersihkan metadata tanda air langsung dari video asli TikTok sebelum file tersebut Anda simpan.</p><p><b>Q: Apakah website ini menampilkan iklan?</b><br>A: Kami mungkin menampilkan iklan banner yang bersih dan terpercaya di beberapa area strategis. Keberadaan iklan ini sepenuhnya digunakan untuk membantu biaya pemeliharaan dan sewa server agar layanan ini tetap bisa Anda akses secara gratis selamanya.</p><p><b>Q: Apa yang harus dilakukan jika proses unduhan gagal?</b><br>A: Pastikan jaringan internet Anda stabil, segarkan (refresh) halaman web ini, atau coba salin kembali tautan video baru dari aplikasi TikTok.</p>
-<h2>⚠️ Penafian</h2><p>Rezyyxy Downloader tidak berafiliasi dengan TikTok. Kami hanya alat bantu pihak ketiga. Seluruh hak cipta konten adalah milik pencipta asli.</p>
-<h2>👋 Tentang Kami</h2><p>Kami berkomitmen menyediakan pengalaman mengunduh yang lancar, cepat, stabil, dan aman untuk para pengguna.</p>
-<h2>📜 Syarat Ketentuan</h2><p>Layanan ini ditujukan murni untuk penggunaan pribadi dan non-komersial.</p>
-<p style="text-align:center;font-size:12px;color:#555;margin-top:25px;font-weight:700;letter-spacing:0.5px">©2026 Rezyyxy Downloader. Seluruh Hak Cipta Dilindungi.</p>
+<h2 data-i18n="f_title">⚡ Fitur Utama (Pro Ultimate)</h2>
+<ul>
+<li data-i18n="f1"><b>Video Tanpa Watermark:</b> Kualitas asli tanpa logo.</li>
+<li data-i18n="f2"><b>Slideshow ZIP:</b> Unduh semua foto sekaligus dalam satu file ZIP.</li>
+<li data-i18n="f3"><b>Sistem Anti-Putus (API Fallback):</b> Menggunakan jalur cadangan jika server utama penuh.</li>
+<li data-i18n="f4"><b>Antrian Offline & Auto-Paste:</b> Memori canggih untuk menyimpan tautan saat offline.</li>
+</ul>
+<p style="text-align:center;font-size:12px;color:#555;margin-top:25px;font-weight:700;">©2026 Rezyyxy Downloader.</p>
 </div>
 <iframe id="ifr" style="display:none"></iframe>
 
 <script>
-let cAd=()=>{
-    if(abFired)return; let b=document.createElement('div');
-    b.className='adsbygoogle adBanner ad-space pub_300x250'; b.style.cssText='position:absolute;top:-9999px;height:10px;display:block;';
-    document.body.appendChild(b);
-    let x=(b.offsetHeight===0 || window.getComputedStyle(b).display==='none'); b.remove();
-    if(x) abW(); return x;
+// ================= [FITUR 4] PWA DYNAMIC INJECTION =================
+// Menjadikan web ini bisa di-install ke layar utama HP tanpa file manifest.json eksternal
+(function initPWA(){
+    const manifest = {
+        "name": "Rezyyxy Downloader",
+        "short_name": "Rezyyxy",
+        "start_url": ".",
+        "display": "standalone",
+        "background_color": "#0a0a0a",
+        "theme_color": "#00ff88",
+        "icons": [{"src": "https://www.google.com/s2/favicons?domain=tiktok.com&sz=192", "sizes": "192x192", "type": "image/png"}]
+    };
+    const blob = new Blob([JSON.stringify(manifest)], {type: 'application/manifest+json'});
+    document.head.insertAdjacentHTML('beforeend', `<link rel="manifest" href="${URL.createObjectURL(blob)}">`);
+})();
+
+// ================= [FITUR 5] MULTI-BAHASA (i18n) =================
+const dict = {
+    id: { sub: "Video + Musik • Tanpa Watermark", pst: "📋 Tempel", clr: "❌ Bersihkan", cek: "🔍 CEK VIDEO & MUSIK", placeholder: "Tempel tautan TikTok di sini...", f_title: "⚡ Fitur Utama (Pro Ultimate)", f1: "<b>Video Tanpa Watermark:</b> Kualitas asli tanpa logo.", f2: "<b>Slideshow ZIP:</b> Unduh semua foto sekaligus dalam satu file ZIP.", f3: "<b>Sistem Anti-Putus (API Fallback):</b> Menggunakan jalur cadangan jika server utama penuh.", f4: "<b>Antrian Offline & Auto-Paste:</b> Memori canggih untuk menyimpan tautan saat offline.", h_title: "📜 Riwayat Visual:"},
+    en: { sub: "Video + Music • No Watermark", pst: "📋 Paste", clr: "❌ Clear", cek: "🔍 CHECK VIDEO & MUSIC", placeholder: "Paste TikTok link here...", f_title: "⚡ Main Features (Pro Ultimate)", f1: "<b>No Watermark Video:</b> Original quality without logo.", f2: "<b>ZIP Slideshow:</b> Download all photos at once in a single ZIP file.", f3: "<b>Anti-Fail System (API Fallback):</b> Uses backup lines if the main server is busy.", f4: "<b>Offline Queue & Auto-Paste:</b> Advanced memory to save links when offline.", h_title: "📜 Visual History:"}
 };
-window.addEventListener('DOMContentLoaded', cAd);
-setInterval(cAd, 1500);
+let curLang = localStorage.getItem('lang') || 'id';
 
-let vU='',vH='',mU='',ttl='',img=[],totImgSz=0,c=null,$=i=>document.getElementById(i),PX='https://corsproxy.io/?';let fMB=b=>b?`(${(b/1e6).toFixed(1)} MB)`:'',fKB=b=>b?`(${(b/1024).toFixed(0)} KB)`:'';let esc=s=>s?s.replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])):'';
-window.onload=()=>{rHst();cAd()};
-window.onfocus=async()=>{try{let t=await navigator.clipboard.readText();if(/tiktok\.com/i.test(t)&&$('url').value!==t){$('url').value=t;tst("Tautan diproses otomatis!");cek()}}catch{}};
-let tst=(m,e=0)=>{let t=document.createElement('div');t.className=`tst ${e?'err':''}`;t.innerHTML=m;$('tBox').appendChild(t);setTimeout(()=>t.remove(),3000)};
-let shW=()=>{if(navigator.share)navigator.share({title:'Rezyyxy Downloader',text:'Download TikTok Tanpa Watermark!',url:window.location.href});else tst("Browser tidak mendukung!",1)};
-let pTst=(l)=>{let t=document.createElement('div');t.className='tst';t.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center"><b>⏳ ${l}</b><button style="background:#ff3366;color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer" onclick="c?.abort()">Batal</button></div><div style="display:flex;justify-content:space-between;font-size:11px;color:#aaa;margin-top:8px"><span id="tb">Siap...</span><span id="tp">0%</span></div><div class="p-bar"><div class="p-f" id="tf"></div></div>`;$('tBox').prepend(t);return{uT:x=>t.querySelector('b').innerText='⏳ '+x,u:(b,p)=>{$('tb').innerText=b;if(p>=0){$('tp').innerText=p+'%';$('tf').style.width=p+'%'}else $('tp').innerText='...'},x:()=>t.remove()}};
-let d5s=async(p)=>{for(let i=5;i>0;i--){if(c.signal.aborted)return 0;p.u(`Jeda... (${i} detik)`,0);await new Promise(r=>setTimeout(r,1e3))}return!c.signal.aborted};
-let gSz=async(u,id,k)=>{try{let r=await fetch(PX+encodeURIComponent(u),{method:'HEAD'});let l=r.headers.get('content-length');if(l){let b=parseInt(l);if(k){totImgSz+=b;if($('totSz'))$('totSz').innerText=fMB(totImgSz);}if($(id))$(id).innerText=k?fKB(b):fMB(b);}else{if($(id))$(id).innerText='(±1 MB)';}}catch{if($(id))$(id).innerText='(±1 MB)';}};
-let pst=async()=>{if(abFired)return;try{let t=await navigator.clipboard.readText();if(/tiktok\.com/i.test(t)){$('url').value=t;tst("Ditempel!");cek()}else tst("Bukan tautan TikTok!",1)}catch{tst("Gagal mengakses clipboard",1)}};
-let clr=()=>{vU=vH=mU=ttl='';img=[];c?.abort();$('url').value='';$('res').style.display='none';$('res').innerHTML='';tst("Dibersihkan!")};
+function applyLang() {
+    $('btnLang').innerText = curLang === 'id' ? "ID / EN" : "EN / ID";
+    document.querySelectorAll('[data-i18n]').forEach(el => el.innerHTML = dict[curLang][el.getAttribute('data-i18n')]);
+    document.querySelectorAll('[data-i18n-ph]').forEach(el => el.placeholder = dict[curLang][el.getAttribute('data-i18n-ph')]);
+    rHst(); // Refresh history text
+}
+function toggleLang() {
+    curLang = curLang === 'id' ? 'en' : 'id';
+    localStorage.setItem('lang', curLang);
+    applyLang();
+}
 
-// MODIFIKASI: Penambahan class="no-save" dan atribut anti-klik kanan/tahan lama pada render foto dan video
-let cek=async()=>{if(abFired)return;let u=$('url').value.trim();if(!/tiktok\.com/i.test(u))return tst("Tautan tidak valid!",1);let btnC=$('btnCek');if(btnC.disabled)return;btnC.disabled=1;btnC.innerText="⏳ MEMPROSES...";$('res').style.display='block';$('res').innerHTML='Mencari... 🔥';try{let ac=new AbortController();setTimeout(()=>ac.abort(),15000);let r=await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(u)}`,{signal:ac.signal}),d=await r.json(),v=d.data;if(!v)throw 1;vU=v.play||'';vH=v.hdplay||'';mU=v.music||'';ttl=esc(v.title||'tiktok');img=v.images||[];let usr=esc(v.author?.unique_id||"kreator");let h=`<div style="text-align:left;background:#16213e;padding:10px;border-radius:8px">👤 <b style="color:#00bfff">@${usr}</b><br><small>${ttl}</small></div>`;if(img.length){h+=`<div class="f-lst">`;img.forEach((x,i)=>{h+=`<div class="f-row"><img src="${x}" class="f-img no-save" oncontextmenu="return false;" ondragstart="return false;"><div style="display:flex;flex-direction:column;justify-content:space-between;align-items:center;margin-top:12px;width:100%;gap:5px"><span style="font-size:14px;font-weight:700">Foto ${i+1} <span id="iSz_${i}" class="sz">...</span></span><button id="bI_${i}" class="btn b-pst" style="padding:8px 20px;width:100%;margin:0" onclick="dlI(${i})">Unduh</button></div></div>`});h+=`</div><button id="bIa" class="btn b-main" onclick="dlA()">⬇️ UNDUH SEMUA FOTO <span id="totSz" class="sz">...</span></button>`}else{h+=`<video controls controlsList="nodownload nofullscreen noremoteplayback" class="no-save" oncontextmenu="return false;" ondragstart="return false;"><source src="${vU}"></video><button id="bV" class="btn b-main" onclick="dl('v')">⬇️ UNDUH VIDEO <span class="sz">${fMB(v.size)}</span></button>`;if(vH)h+=`<button id="bH" class="btn b-hd" onclick="dl('h')">🚀 UNDUH (HD) <span class="sz">${fMB(v.hd_size)}</span></button>`}if(mU)h+=`<button id="bM" class="btn b-mus" onclick="dl('m')">🎵 UNDUH AUDIO <span id="mSz" class="sz">...</span></button>`;h+=`<button class="btn" style="background:#6c5ce7;color:#fff;margin-top:15px" onclick="shW()">🔗 BAGIKAN WEB INI</button>`;$('res').innerHTML=h;sHst(ttl,usr,u);totImgSz=0;if(mU)gSz(mU,'mSz',0);if(img.length)img.forEach((x,i)=>gSz(x,'iSz_'+i,1));tst("Berhasil!");}catch{tst("Waktu habis / Gagal!",1);$('res').innerHTML='<b style="color:#ff3366">Pencarian Gagal.</b>'}btnC.disabled=0;btnC.innerText="🔍 CEK VIDEO & MUSIK"};
+// ================= CORE & OFFLINE ENGINE =================
+let vU='',vH='',mU='',ttl='',img=[],cv='',totImgSz=0,c=null,$=i=>document.getElementById(i),PX='https://corsproxy.io/?';
+let fMB=b=>b?`(${(b/1e6).toFixed(1)} MB)`:'',fKB=b=>b?`(${(b/1024).toFixed(0)} KB)`:'';
+let esc=s=>s?s.replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])):'';
+
+window.onload=()=>{ applyLang(); rHst(); checkNetInit(); initClipboardWatcher(); };
+
+function checkNetInit() {
+    let updateStatus = () => {
+        let ns = $('netStatus');
+        if(!navigator.onLine) { ns.className = "of-bg"; ns.innerText = "⚠️ Mode Offline. Tautan akan masuk antrian."; ns.style.display = "block"; } 
+        else { ns.className = "on-bg"; ns.innerText = "🌐 Online! Memproses antrian..."; setTimeout(() => ns.style.display = "none", 2500); processOfflineQueue(); }
+    };
+    window.addEventListener('online', updateStatus); window.addEventListener('offline', updateStatus);
+    if(!navigator.onLine) updateStatus();
+}
+function processOfflineQueue() { let q = localStorage.getItem('of_q'); if(q) { localStorage.removeItem('of_q'); $('url').value = q; tst("Memproses antrian!"); cek(); } }
+
+// ================= CLIPBOARD =================
+let lastClip = ""; let isCheckingClip = false;
+function initClipboardWatcher() {
+    let handleVisibility = async () => {
+        if (document.visibilityState === 'visible' && !isCheckingClip) {
+            isCheckingClip = true;
+            setTimeout(async () => { 
+                try {
+                    let perm = localStorage.getItem('clip_perm');
+                    if (perm === 'denied') { isCheckingClip = false; return; }
+                    let t = await navigator.clipboard.readText();
+                    if (/tiktok\.com/i.test(t) && $('url').value !== t && lastClip !== t) {
+                        lastClip = t;
+                        if (perm === 'granted') autoExecutePaste(t); else askClipPermission(t);
+                    }
+                } catch(e) {}
+                isCheckingClip = false;
+            }, 300);
+        }
+    };
+    document.addEventListener('visibilitychange', handleVisibility); window.addEventListener('focus', handleVisibility);
+}
+function askClipPermission(text) {
+    if($('clip_toast')) return;
+    let t = document.createElement('div'); t.id = 'clip_toast'; t.className = 'tst'; t.style.cssText = 'border-left:5px solid #00bfff; background:#111a2e;';
+    t.innerHTML = `<div style="font-weight:bold;color:#00ff88;margin-bottom:5px;">📋 Tautan Terdeteksi</div><div style="font-size:12px;color:#ccc;margin-bottom:10px;">Proses otomatis?</div><div style="display:flex;gap:8px;"><button onclick="grantClip(true,'${btoa(text)}')" style="background:#00ff88;color:#000;border:0;padding:5px 10px;border-radius:6px;font-size:12px;font-weight:bold;cursor:pointer;">Ya, Proses</button><button onclick="grantClip(false)" style="background:#333;color:#fff;border:0;padding:5px 10px;border-radius:6px;font-size:12px;cursor:pointer;">Tolak</button></div>`;
+    $('tBox').prepend(t);
+}
+function grantClip(isGranted, encodedText) {
+    $('clip_toast')?.remove();
+    if(isGranted) { localStorage.setItem('clip_perm', 'granted'); autoExecutePaste(atob(encodedText)); } 
+    else { localStorage.setItem('clip_perm', 'denied'); tst("Auto-paste dinonaktifkan.", 1); }
+}
+function autoExecutePaste(t) { $('url').value = t; tst("Memproses otomatis!"); cek(); }
+
+let tst=(m,e=0)=>{let t=document.createElement('div');t.className=`tst ${e?'err':''}`;t.innerHTML=m;$('tBox').appendChild(t);setTimeout(()=>t.remove(),3500)};
+let pTst=(l)=>{let t=document.createElement('div');t.className='tst';t.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center"><b>⏳ ${l}</b><button style="background:#ff3366;color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer" onclick="c?.abort()">Stop</button></div><div style="display:flex;justify-content:space-between;font-size:11px;color:#aaa;margin-top:8px"><span id="tb">Siap...</span><span id="tp">0%</span></div><div class="p-bar"><div class="p-f" id="tf"></div></div>`;$('tBox').prepend(t);return{uT:x=>t.querySelector('b').innerText='⏳ '+x,u:(b,p)=>{$('tb').innerText=b;if(p>=0){$('tp').innerText=p+'%';$('tf').style.width=p+'%'}else $('tp').innerText='...'},x:()=>t.remove()}};
+let d5s=async(p)=>{for(let i=5;i>0;i--){if(c?.signal.aborted)return 0;p.u(`Jeda API... (${i}s)`,0);await new Promise(r=>setTimeout(r,1e3))}return!c?.signal.aborted};
+
+let pst=async()=>{try{let t=await navigator.clipboard.readText();if(/tiktok\.com/i.test(t)){$('url').value=t;cek()}else tst("Bukan tautan!",1)}catch{tst("Gagal akses clipboard",1)}};
+let clr=()=>{vU=vH=mU=ttl='';img=[];cv='';c?.abort();$('url').value='';$('res').style.display='none';$('res').innerHTML='';tst("Dibersihkan")};
+
+// ================= [FITUR 2] API FALLBACK (API CADANGAN) =================
+let cek=async()=>{
+    let u=$('url').value.trim(); if(!/tiktok\.com/i.test(u)) return tst("Tautan tidak valid!",1);
+    if(!navigator.onLine) { localStorage.setItem('of_q', u); return tst("Offline! Masuk antrian otomatis.", 1); }
+    let btnC=$('btnCek');if(btnC.disabled)return;btnC.disabled=1;btnC.innerText="⏳...";$('res').style.display='block';$('res').innerHTML='Mencari... 🔥';
+    
+    try {
+        let ac=new AbortController(); setTimeout(()=>ac.abort(), 15000);
+        let v = null;
+        
+        // Coba API Utama
+        try {
+            let r = await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(u)}`,{signal:ac.signal});
+            let d = await r.json(); if(d.data) v = d.data; else throw "fail";
+        } catch(e) {
+            // API Cadangan jika API Utama down / diblokir
+            tst("Mengalihkan ke Server Cadangan...", 0);
+            let r2 = await fetch(PX+`https://tikwm.com/api/?url=${encodeURIComponent(u)}`,{signal:ac.signal});
+            let d2 = await r2.json(); if(d2.data) v = d2.data; else throw "fail";
+        }
+
+        vU=v.play||''; vH=v.hdplay||''; mU=v.music||''; ttl=esc(v.title||'tiktok'); img=v.images||[]; cv=v.cover||''; let usr=esc(v.author?.unique_id||"kreator");
+        
+        let h=`<div style="text-align:left;background:#16213e;padding:10px;border-radius:8px">👤 <b style="color:#00bfff">@${usr}</b><br><small>${ttl}</small></div>`;
+        if(img.length){
+            h+=`<div class="f-lst">`;img.forEach((x,i)=>{h+=`<div class="f-row"><img src="${x}" class="f-img no-save" oncontextmenu="return false;" ondragstart="return false;"><div style="display:flex;flex-direction:column;justify-content:space-between;align-items:center;margin-top:12px;width:100%;gap:5px"><span style="font-size:14px;font-weight:700">Foto ${i+1}</span><button id="bI_${i}" class="btn b-pst" style="padding:8px 20px;width:100%;margin:0" onclick="dlI(${i})">Unduh Satuan</button></div></div>`});h+=`</div><button id="bIa" class="btn b-main" onclick="dlAZip()">📦 UNDUH SEMUA FOTO (ZIP)</button>`
+        } else {
+            h+=`<video controls controlsList="nodownload nofullscreen noremoteplayback" class="no-save" oncontextmenu="return false;" ondragstart="return false;" poster="${cv}"><source src="${vU}"></video><button id="bV" class="btn b-main" onclick="dl('v')">⬇️ UNDUH VIDEO</button>`;
+            if(vH) h+=`<button id="bH" class="btn b-hd" onclick="dl('h')">🚀 UNDUH (HD)</button>`
+        }
+        if(mU) h+=`<button id="bM" class="btn b-mus" onclick="dl('m')">🎵 UNDUH AUDIO</button>`;
+        $('res').innerHTML=h; sHst(ttl,usr,u,cv); tst("Berhasil!");
+    } catch {
+        tst("Gagal / Server Penuh!",1); $('res').innerHTML='<b style="color:#ff3366">Pencarian Gagal. Coba lagi nanti.</b>'
+    }
+    btnC.disabled=0; btnC.innerText= curLang==='id'?"🔍 CEK VIDEO & MUSIK":"🔍 CHECK VIDEO";
+};
 
 let sDl=async(u,n,b=0)=>{let a=document.createElement('a');a.href=u;a.download=n;document.body.appendChild(a);a.click();a.remove();if(b)URL.revokeObjectURL(u)};
-let dlI=async(i)=>{if(abFired)return;let u=img[i],b=$('bI_'+i),o=b.innerText;b.innerText="⏳...";b.disabled=1;c=new AbortController();let p=pTst(`Foto ${i+1}`);if(!(await d5s(p))){tst("Batal",1);p.x();b.innerText=o;b.disabled=0;return}p.uT("Mengunduh...");p.u("Proses...",-1);try{let r;try{r=await fetch(u,{signal:c.signal})}catch{r=await fetch(PX+encodeURIComponent(u),{signal:c.signal})}await sDl(URL.createObjectURL(new Blob([await r.blob()],{type:'image/jpeg'})),`${ttl}_${i}.jpg`,1);tst("Sukses!")}catch{c.signal.aborted?tst("Batal",1):($('ifr').src=u,tst("Tersimpan!"))}p.x();b.innerText=o;b.disabled=0};
-let dlA=async()=>{if(abFired)return;let b=$('bIa'),o=b.innerText;b.innerText="⏳...";b.disabled=1;c=new AbortController();let p=pTst("Semua Foto");if(!(await d5s(p))){tst("Batal",1);p.x();b.innerText=o;b.disabled=0;return}for(let i=0;i<img.length;i++){if(c.signal.aborted)break;p.uT(`Mengunduh ${i+1}/${img.length}`);p.u("Proses...",-1);try{let r;try{r=await fetch(img[i],{signal:c.signal})}catch{r=await fetch(PX+encodeURIComponent(img[i]),{signal:c.signal})}await sDl(URL.createObjectURL(new Blob([await r.blob()],{type:'image/jpeg'})),`${ttl}_${i+1}.jpg`,1)}catch{}}if(!c.signal.aborted)tst("Semua Sukses!");p.x();b.innerText=o;b.disabled=0};
-let dl=async(t)=>{if(abFired)return;let u=vU,b='bV',m='video/mp4',e='.mp4';if(t=='h'){u=vH;b='bH'}if(t=='m'){u=mU;b='bM';m='audio/mp3';e='.mp3'}let ob=$(b).innerText;$(b).innerText="⏳...";$(b).disabled=1;c=new AbortController();let p=pTst(t=='m'?"Audio":"Video");if(!(await d5s(p))){tst("Batal",1);p.x();$(b).innerText=ob;$(b).disabled=0;return}p.uT("Mengunduh...");p.u("Proses...",-1);try{let r;try{r=await fetch(u,{signal:c.signal})}catch{r=await fetch(PX+encodeURIComponent(u),{signal:c.signal})}let l=r.headers.get('content-length')||0,rd=r.body.getReader(),rc=0,ch=[];while(1){let{done,value}=await rd.read();if(done)break;ch.push(value);rc+=value.length;if(rc>200000000){c.abort();tst("Ukuran > 200MB! Dicegah agar HP tidak lag.",1);break;}p.u((rc/1e6).toFixed(1)+" MB",l>0?Math.round(rc/l*100):-1)}if(!c.signal.aborted){let a=new Uint8Array(rc),ps=0;for(let x of ch){a.set(x,ps);ps+=x.length}await sDl(URL.createObjectURL(new Blob([a],{type:m})),`${ttl}${e}`,1);tst("Sukses!")}}catch{c.signal.aborted?tst("Batal",1):($('ifr').src=u+(u.includes('?')?'&':'?')+'attachments=1',tst("Selesai!"))}p.x();$(b).innerText=ob;$(b).disabled=0};
-let sHst=(t,u,l)=>{let h=JSON.parse(localStorage.getItem('h')||'[]');if(!h.some(x=>x.l==l)){h.unshift({t,u,l});localStorage.setItem('h',JSON.stringify(h));rHst()}};
-let dHst=()=>{localStorage.removeItem('h');rHst();tst("Riwayat dihapus!")};
-let rHst=()=>{let h=JSON.parse(localStorage.getItem('h')||'[]');$('hst').innerHTML=h.length?`<div class="hst"><div style="display:flex;justify-content:space-between;align-items:center;"><b style="color:#00ff88">📜 Riwayat:</b><button onclick="dHst()" style="background:#ff3366;color:#fff;border:none;padding:2px 8px;border-radius:4px;font-size:10px;cursor:pointer;">Hapus</button></div>`+h.map(x=>`<div class="h-it" onclick="document.getElementById('url').value='${x.l}';cek()"><b style="color:#00bfff">@${x.u}</b> ${x.t.slice(0,18)}...</div>`).join('')+`</div>`:''};
+
+let dlI=async(i)=>{if(!navigator.onLine) return tst("Offline!",1); let u=img[i],b=$('bI_'+i),o=b.innerText;b.innerText="⏳...";b.disabled=1;c=new AbortController();let p=pTst(`Foto ${i+1}`);if(!(await d5s(p))){p.x();b.innerText=o;b.disabled=0;return}p.uT("Proses...");p.u("...",-1);try{let r=await fetch(PX+encodeURIComponent(u),{signal:c.signal});await sDl(URL.createObjectURL(await r.blob()),`${ttl}_${i}.jpg`,1);tst("Sukses!")}catch{}p.x();b.innerText=o;b.disabled=0};
+
+// ================= [FITUR 1] UNDUH SEMUA SEBAGAI ZIP (JSZip) =================
+let dlAZip=async()=>{
+    if(!navigator.onLine) return tst("Offline!",1);
+    if(typeof JSZip === 'undefined') return tst("Menyiapkan mesin kompresi...", 1);
+    let b=$('bIa'),o=b.innerText;b.innerText="⏳ MEMBUAT ZIP...";b.disabled=1;c=new AbortController();
+    let p=pTst("Mengekstrak ke ZIP"); if(!(await d5s(p))){p.x();b.innerText=o;b.disabled=0;return}
+    
+    let zip = new JSZip();
+    for(let i=0;i<img.length;i++){
+        if(c.signal.aborted) break;
+        p.uT(`Mengunduh ${i+1}/${img.length}`); p.u("Proses...", -1);
+        try{
+            let r = await fetch(PX+encodeURIComponent(img[i]),{signal:c.signal});
+            let blob = await r.blob();
+            zip.file(`Rezyyxy_${i+1}.jpg`, blob);
+        }catch{}
+    }
+    if(!c.signal.aborted){
+        p.uT("Menyatukan File...");
+        let content = await zip.generateAsync({type:"blob"});
+        await sDl(URL.createObjectURL(content), `Rezyyxy_Slideshow.zip`, 1);
+        tst("ZIP Berhasil Diunduh!");
+    }
+    p.x();b.innerText=o;b.disabled=0;
+};
+
+let dl=async(t)=>{
+    if(!navigator.onLine) return tst("Offline!",1);
+    let u=vU,b='bV',m='video/mp4',e='.mp4';if(t=='h'){u=vH;b='bH'}if(t=='m'){u=mU;b='bM';m='audio/mp3';e='.mp3'}
+    let ob=$(b).innerText;$(b).innerText="⏳...";$(b).disabled=1;c=new AbortController();let p=pTst(t=='m'?"Audio":"Video");if(!(await d5s(p))){p.x();$(b).innerText=ob;$(b).disabled=0;return}p.uT("Unduh...");p.u("...",-1);
+    try{
+        let r=await fetch(PX+encodeURIComponent(u),{signal:c.signal});
+        let l=r.headers.get('content-length')||0,rd=r.body.getReader(),rc=0,ch=[];
+        while(1){
+            let{done,value}=await rd.read();if(done)break;ch.push(value);rc+=value.length;
+            if(rc>200000000){c.abort();tst("Max 200MB! Dicegah.",1);break;}
+            p.u((rc/1e6).toFixed(1)+" MB",l>0?Math.round(rc/l*100):-1)
+        }
+        if(!c.signal.aborted){let a=new Uint8Array(rc),ps=0;for(let x of ch){a.set(x,ps);ps+=x.length}await sDl(URL.createObjectURL(new Blob([a],{type:m})),`${ttl}${e}`,1);tst("Sukses!")}
+    }catch{} p.x();$(b).innerText=ob;$(b).disabled=0;
+};
+
+// ================= [FITUR 3] RIWAYAT VISUAL (THUMBNAIL & HAPUS SATUAN) =================
+let sHst=(t,u,l,c)=>{
+    let h=JSON.parse(localStorage.getItem('h')||'[]');
+    if(!h.some(x=>x.l==l)){h.unshift({t,u,l,c});localStorage.setItem('h',JSON.stringify(h));rHst()}
+};
+let clearHst=()=>{localStorage.removeItem('h');rHst();tst("Semua riwayat dihapus!")};
+let dHstItem=(idx)=>{
+    let h=JSON.parse(localStorage.getItem('h')||'[]');
+    h.splice(idx,1); localStorage.setItem('h',JSON.stringify(h)); rHst(); tst("Dihapus");
+};
+let rHst=()=>{
+    let h=JSON.parse(localStorage.getItem('h')||'[]');
+    let titleStr = dict[curLang].h_title;
+    $('hst').innerHTML=h.length?`<div class="hst"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><b style="color:#00ff88">${titleStr}</b><button onclick="clearHst()" style="background:#ff3366;color:#fff;border:none;padding:4px 8px;border-radius:4px;font-size:10px;cursor:pointer;">Clear All</button></div>`+h.map((x,i)=>`<div class="h-it"><img src="${x.c||'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" class="h-img" onerror="this.src=''"><div class="h-txt" onclick="document.getElementById('url').value='${x.l}';cek()"><b style="color:#00bfff">@${x.u}</b><br><span style="color:#aaa">${x.t.slice(0,25)}...</span></div><button class="h-del" onclick="dHstItem(${i})">×</button></div>`).join('')+`</div>`:''
+};
 </script>
 </body>
 </html>
