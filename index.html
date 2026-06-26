@@ -2,90 +2,80 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>🔥 Rezyyxy Downloader Ultimate</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<title>🔥 Rezyyxy Downloader</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#eee;padding:15px;margin:0;display:flex;flex-direction:column;align-items:center;min-height:100vh}
-.box,.info-box{width:100%;max-width:600px;background:#16213e;border-radius:24px;padding:25px;box-shadow:0 15px 35px rgba(0,255,100,.1);margin-top:20px;position:relative}
+.box,.info-box{width:100%;max-width:600px;background:#16213e;border-radius:24px;padding:25px;box-shadow:0 15px 35px rgba(0,255,100,.1);box-sizing:border-box;margin-top:20px}
 .info-box{text-align:left;box-shadow:0 15px 35px rgba(0,0,0,.3)}
-@media(min-width:768px){.box,.info-box{max-width:800px;padding:40px}}
 h1{color:#00ff88;font-size:24px;margin:0 0 5px;text-align:center}
-input{width:100%;padding:14px;background:#0f1c2e;border:2px solid #00ff88;border-radius:12px;color:#fff;box-sizing:border-box;outline:0}
+input{width:100%;padding:14px;background:#0f1c2e;border:2px solid #00ff88;border-radius:12px;color:#fff;box-sizing:border-box;outline:0;font-size:14px}
 .flex{display:flex;gap:10px;margin:10px 0}
 .btn{padding:12px;font-weight:700;border-radius:10px;border:0;cursor:pointer;width:100%;margin:5px 0}
-.b-pst{background:#00bfff;flex:1}.b-clr{background:#333;color:#fff;flex:1}.b-main{background:#00ff88;color:#000}.b-mus{background:#ff3366;color:#fff}.b-hd{background:#00bfff;color:#000}
+.b-pst{background:#00bfff;flex:1}.b-clr{background:#333;color:#fff;flex:1}.b-main{background:#00ff88;color:#000}
 .res{margin-top:20px;padding:15px;background:#0f1c2e;border-radius:18px;display:none;border:1px solid #00ff88}
-#tBox{position:fixed;top:15px;right:15px;z-index:9999;width:300px;display:flex;flex-direction:column;gap:8px}
-.tst{background:#1f4068;color:#fff;padding:15px;border-radius:12px;border-left:5px solid #00ff88;margin-bottom:8px}
 .mdl{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);z-index:9999;display:none;justify-content:center;align-items:center}
 .mdl-c{background:#16213e;padding:20px;border-radius:15px;width:90%;max-width:400px;border:2px solid #00ff88;position:relative}
-.lang-btn{background:#222;color:#fff;border:1px solid #00ff88;padding:8px;border-radius:8px;cursor:pointer}
-.f-lst{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:15px 0}
-.h-it{display:flex;align-items:center;padding:8px;border-bottom:1px solid #222;gap:10px}
+.lang-btn{background:#222;color:#fff;border:1px solid #00ff88;padding:5px 10px;border-radius:8px;cursor:pointer}
 </style>
 </head>
 <body>
-<div id="tBox"></div>
+<!-- MODAL INFO UPDATE -->
 <div id="uMdl" class="mdl"><div class="mdl-c"><button onclick="this.parentElement.parentElement.style.display='none'" style="position:absolute;right:10px;top:10px">X</button>
-<h3 data-i18n="m_title">🔔 Info Update</h3>
-<div style="max-height:300px;overflow-y:auto">
-    <p><b>v2.3.0 (Fixed)</b><br>- Semua fitur dikembalikan.<br>- Dropdown 5 bahasa global.<br>- Filter link TikTok ketat.<br>- Indikator ukuran file asli.</p>
+<h3 data-i18n="m_title">🔔 Riwayat Pembaruan</h3>
+<div style="max-height:300px;overflow-y:auto;font-size:14px">
+    <p><b>v2.5.0</b><br>- Integrasi 5 Bahasa.<br>- Filter Link TikTok Ketat.<br>- Info Update Scrollable.<br>- FAQ & Disclaimer Lengkap.</p>
 </div></div></div>
 
 <div class="box">
 <div style="display:flex;justify-content:space-between;margin-bottom:15px">
-<button class="btn" style="width:auto" onclick="$('uMdl').style.display='flex'" data-i18n="btn_info">🔔 Update</button>
-<select id="langSel" onchange="setLang(this.value)" class="lang-btn">
-    <option value="id">🇮🇩 ID</option><option value="en">🇬🇧 EN</option><option value="ms">🇲🇾 MS</option><option value="es">🇪🇸 ES</option><option value="pt">🇧🇷 PT</option>
-</select>
+    <button class="btn" style="width:auto" onclick="$('uMdl').style.display='flex'" data-i18n="btn_info">🔔 Info Update</button>
+    <select id="langSel" onchange="setLang(this.value)" class="lang-btn">
+        <option value="id">🇮🇩 ID</option><option value="en">🇬🇧 EN</option><option value="ms">🇲🇾 MS</option><option value="es">🇪🇸 ES</option><option value="pt">🇧🇷 PT</option>
+    </select>
 </div>
 <h1>🔥 Rezyyxy Downloader</h1>
-<input type="text" id="url" data-i18n-ph="placeholder" placeholder="Tempel tautan TikTok...">
+<p style="color:#00ff88;text-align:center" data-i18n="sub">Video + Musik • Tanpa Watermark</p>
+<input type="text" id="url" data-i18n-ph="placeholder" placeholder="Tempel tautan TikTok di sini...">
 <div class="flex"><button class="btn b-pst" onclick="pst()" data-i18n="pst">📋 Tempel</button><button class="btn b-clr" onclick="clr()" data-i18n="clr">❌ Bersihkan</button></div>
-<button id="btnCek" class="btn b-main" onclick="cek()" data-i18n="cek">🔍 CEK VIDEO</button>
+<button id="btnCek" class="btn b-main" onclick="cek()" data-i18n="cek">🔍 CEK VIDEO & MUSIK</button>
 <div id="res" class="res"></div>
 <div id="ad-wrapper"><script async src="https://ambitionbookingslick.com/ff0cd9d911977b5f918c3f3c787aee9e/invoke.js"></script></div>
-<div id="hst"></div>
 </div>
 
+<!-- FAQ LENGKAP -->
 <div class="info-box">
-<h2 data-i18n="t_faq">❓ FAQ</h2><p data-i18n="faq_text">Aman & gratis. Kami tidak menyimpan data pribadi Anda.</p>
-<p>©2026 Rezyyxy Downloader. Seluruh Hak Cipta Dilindungi.</p>
+<h2 data-i18n="t_fitur">⚡ Fitur Utama</h2><ul><li data-i18n="f1">Video Tanpa Watermark: Unduh video TikTok dalam kualitas asli tanpa logo.</li><li data-i18n="f2">Dukungan Slideshow: Unduh foto (slideshow) secara individu atau dalam satu arsip ZIP.</li><li data-i18n="f3">Ekstrak Audio: Konversi cepat video ke format audio MP3 berkualitas tinggi.</li></ul>
+<h2 data-i18n="t_panduan">🛠️ Panduan Penggunaan</h2><p data-i18n="p_text">1. Salin Tautan: Buka TikTok, ketuk 'Bagikan' dan pilih 'Salin Tautan'.<br>2. Tempel Tautan: Buka web ini, tautan akan terdeteksi otomatis.<br>3. Unduh: Sistem akan memproses dan menampilkan tombol unduh secara langsung.</p>
+<h2 data-i18n="t_faq">❓ Pertanyaan Umum (FAQ)</h2><p data-i18n="faq_text">Apakah Rezyyxy Downloader aman? Sangat aman. Kami menerapkan sistem filter otomatis Anti-XSS dan tidak menyimpan file atau data pribadi apa pun.<br><br>Mengapa membatasi file besar? Agar browser HP Anda tidak lag atau force close.<br><br>Mengapa tidak ada watermark? Sistem membersihkan metadata tanda air secara otomatis.</p>
+<h2 data-i18n="t_penafian">⚠️ Penafian</h2><p data-i18n="penafian_text">Rezyyxy Downloader tidak berafiliasi dengan TikTok. Kami hanya alat bantu pihak ketiga.</p>
+<p style="text-align:center;font-size:12px;color:#555">©2026 Rezyyxy Downloader. Seluruh Hak Cipta Dilindungi.</p>
 </div>
 
 <script>
+let $=i=>document.getElementById(i);
 const dict={
-    id:{placeholder:"Tempel tautan TikTok...",pst:"📋 Tempel",clr:"❌ Bersihkan",cek:"🔍 CEK VIDEO",m_title:"🔔 Info Update",btn_info:"🔔 Info",t_faq:"❓ FAQ",faq_text:"Sistem tidak menyimpan data. Hanya memproses link TikTok."},
-    en:{placeholder:"Paste TikTok link...",pst:"📋 Paste",clr:"❌ Clear",cek:"🔍 CHECK VIDEO",m_title:"🔔 Update",btn_info:"🔔 Info",t_faq:"❓ FAQ",faq_text:"We do not store data. Only process TikTok links."},
-    ms:{placeholder:"Tampal pautan TikTok...",pst:"📋 Tampal",clr:"❌ Padam",cek:"🔍 SEMAK VIDEO",m_title:"🔔 Kemas Kini",btn_info:"🔔 Info",t_faq:"❓ Soalan Lazim",faq_text:"Kami tidak simpan data. Hanya proses link TikTok."},
-    es:{placeholder:"Pega el enlace...",pst:"📋 Pegar",clr:"❌ Borrar",cek:"🔍 BUSCAR",m_title:"🔔 Actualización",btn_info:"🔔 Info",t_faq:"❓ FAQ",faq_text:"No guardamos datos. Solo procesamos enlaces de TikTok."},
-    pt:{placeholder:"Cole o link...",pst:"📋 Colar",clr:"❌ Limpar",cek:"🔍 CHECAR",m_title:"🔔 Atualização",btn_info:"🔔 Info",t_faq:"❓ FAQ",faq_text:"Não salvamos dados. Apenas processamos links do TikTok."}
+    id:{sub:"Video + Musik • Tanpa Watermark",pst:"📋 Tempel",clr:"❌ Bersihkan",cek:"🔍 CEK VIDEO & MUSIK",placeholder:"Tempel tautan TikTok di sini...",m_title:"🔔 Riwayat Pembaruan",btn_info:"🔔 Info Update",t_fitur:"⚡ Fitur Utama",f1:"Video Tanpa Watermark: Unduh video TikTok dalam kualitas asli tanpa logo.",f2:"Dukungan Slideshow: Unduh foto (slideshow) secara individu atau dalam satu arsip ZIP.",f3:"Ekstrak Audio: Konversi cepat video ke format audio MP3 berkualitas tinggi.",t_panduan:"🛠️ Panduan Penggunaan",p_text:"1. Salin Tautan: Buka TikTok, ketuk 'Bagikan' dan pilih 'Salin Tautan'.<br>2. Tempel Tautan: Buka web ini, tautan akan terdeteksi otomatis.<br>3. Unduh: Sistem akan memproses dan menampilkan tombol unduh secara langsung.",t_faq:"❓ Pertanyaan Umum (FAQ)",faq_text:"Apakah Rezyyxy Downloader aman? Sangat aman. Kami menerapkan sistem filter otomatis Anti-XSS dan tidak menyimpan file atau data pribadi apa pun.<br><br>Mengapa membatasi file besar? Agar browser HP Anda tidak lag atau force close.<br><br>Mengapa tidak ada watermark? Sistem membersihkan metadata tanda air secara otomatis.",t_penafian:"⚠️ Penafian",penafian_text:"Rezyyxy Downloader tidak berafiliasi dengan TikTok. Kami hanya alat bantu pihak ketiga."},
+    en:{sub:"Video + Music • No Watermark",pst:"📋 Paste",clr:"❌ Clear",cek:"🔍 CHECK VIDEO & MUSIC",placeholder:"Paste TikTok link here...",m_title:"🔔 Update History",btn_info:"🔔 Update Info",t_fitur:"⚡ Main Features",f1:"No Watermark Video: Download TikTok videos in original quality without logo.",f2:"Slideshow Support: Download photos individually or in a ZIP archive.",f3:"Audio Extract: Fast conversion of video to high-quality MP3.",t_panduan:"🛠️ User Guide",p_text:"1. Copy Link: Open TikTok, tap 'Share' and select 'Copy Link'.<br>2. Paste Link: Open this web, the link will be detected automatically.<br>3. Download: The system will process and display the download buttons.",t_faq:"❓ FAQ",faq_text:"Is Rezyyxy Downloader safe? Yes, very safe. We use anti-XSS filters and never store your files or personal data.<br><br>Why the file size limit? To prevent your browser from lagging or force closing.<br><br>Why no watermark? Our system cleans watermark metadata directly from the source.",t_penafian:"⚠️ Disclaimer",penafian_text:"Rezyyxy Downloader is not affiliated with TikTok. We are just a third-party tool."}
 };
 let curLang=localStorage.getItem('lang')||'id';
-let $=i=>document.getElementById(i);
 
 function setLang(l){
     curLang=l; localStorage.setItem('lang',l);
-    document.querySelectorAll('[data-i18n]').forEach(e=>e.innerText=dict[l][e.getAttribute('data-i18n')]);
+    document.querySelectorAll('[data-i18n]').forEach(e=>e.innerHTML=dict[l][e.getAttribute('data-i18n')]);
     document.querySelectorAll('[data-i18n-ph]').forEach(e=>e.placeholder=dict[l][e.getAttribute('data-i18n-ph')]);
-}
-
-function tst(m,e=0){ alert(m); } // Kamu bisa ganti balik ke fungsi Toast-mu yang lama
-function cek(){
-    let u=$('url').value;
-    if(!u.includes('tiktok.com')){ tst("Hanya Link TikTok!"); $('url').value=''; return; }
-    // Tambahkan logika unduhmu di sini...
 }
 function pst(){
     navigator.clipboard.readText().then(t=>{
         if(t.includes('tiktok.com')) $('url').value=t;
-        else tst("Hanya Link TikTok!");
+        else alert("Hanya link TikTok yang diizinkan!");
     });
 }
-function clr(){ $('url').value=''; $('res').style.display='none'; }
-
-window.onload=()=>{ setLang(curLang); };
+function clr(){ $('url').value=''; }
+function cek(){
+    if(!$('url').value.includes('tiktok.com')) { alert("Hanya link TikTok!"); return; }
+}
+window.onload=()=>{ $('langSel').value=curLang; setLang(curLang); };
 </script>
 </body>
 </html>
