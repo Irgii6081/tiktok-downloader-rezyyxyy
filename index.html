@@ -93,7 +93,6 @@ pt:{sub:"Vídeo + Música • Sem Marca d'Água",pst:"📋 Colar",clr:"❌ Limpa
 };
 let curLang=localStorage.getItem('lang')||'id';
 let $=i=>document.getElementById(i),applyLang=()=>{if($('langSel'))$('langSel').value=curLang;document.querySelectorAll('[data-i18n]').forEach(e=>e.innerHTML=dict[curLang][e.getAttribute('data-i18n')]);document.querySelectorAll('[data-i18n-ph]').forEach(e=>e.placeholder=dict[curLang][e.getAttribute('data-i18n-ph')]);rHst()},setLang=l=>{curLang=l;localStorage.setItem('lang',curLang);applyLang()};
-let vU='',vH='',mU='',ttl='',img='',cv='',totImgSz=0,c=null,PX='https://corsproxy.io/?',fMB=b=>b?`(${(b/1048576).toFixed(2)} MB)`:'',fKB=b=>b?`(${(b/1024).toFixed(0)} KB)`:'',esc=s=>s?s.replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])):'';
 
 // Fungsi uSig yang diperbarui agar lebih "Realtime" dan akurat berdasarkan nilai ms
 let uSig=()=>{
@@ -105,12 +104,13 @@ let uSig=()=>{
     
     // Logika warna berdasarkan ping (ms)
     // < 50ms = Hijau (Sangat bagus), < 100ms = Kuning (Sedang), > 100ms = Merah (Buruk)
-    let color = ms < 50 ? '#00ff88' : (ms < 100 ? '#ffcc00' : '#ff3366');
+    let color = !on ? '#ff3366' : (ms < 50 ? '#00ff88' : (ms < 100 ? '#ffcc00' : '#ff3366'));
     
     for(let i=0; i<3; i++){
         s[i].classList.toggle('active', on);
-        s[i].style.background = on ? color : '#555';
+        s[i].style.background = color;
     }
+    $('wifi').style.borderColor = color;
 };
 
 window.addEventListener('online',uSig);window.addEventListener('offline',uSig);setInterval(uSig,1500);
