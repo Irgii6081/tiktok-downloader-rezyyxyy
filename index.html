@@ -66,7 +66,10 @@ let abFired=0;function abW(){if(abFired)return 1;abFired=1;let s=()=>{if(documen
 <div class="flex"><button class="btn b-pst" onclick="pst()" data-i18n="pst">📋 Tempel</button><button class="btn b-clr" onclick="clr()" data-i18n="clr">❌ Bersihkan</button></div>
 <button id="btnCek" class="btn b-main" onclick="cek()" data-i18n="cek">🔍 CEK VIDEO & MUSIK</button>
 <div id="res" class="res"></div>
-<div id="ad-wrapper-mid" style="width:100%;max-width:600px;margin:20px auto;text-align:center;"><div id="container-ff0cd9d911977b5f918c3f3c787aee9e"></div></div>
+<div id="ad-wrapper-mid" style="width:100%;max-width:600px;margin:20px auto;text-align:center;">
+<script async="async" data-cfasync="false" src="https://ambitionbookingslick.com/ff0cd9d911977b5f918c3f3c787aee9e/invoke.js"></script>
+<div id="container-ff0cd9d911977b5f918c3f3c787aee9e"></div>
+</div>
 <div id="hst"></div>
 </div>
 <div class="info-box">
@@ -93,7 +96,6 @@ pt:{sub:"Vídeo + Música • Sem Marca d'Água",pst:"📋 Colar",clr:"❌ Limpa
 };
 let curLang=localStorage.getItem('lang')||'id';
 let $=i=>document.getElementById(i),applyLang=()=>{if($('langSel'))$('langSel').value=curLang;document.querySelectorAll('[data-i18n]').forEach(e=>e.innerHTML=dict[curLang][e.getAttribute('data-i18n')]);document.querySelectorAll('[data-i18n-ph]').forEach(e=>e.placeholder=dict[curLang][e.getAttribute('data-i18n-ph')]);rHst()},setLang=l=>{curLang=l;localStorage.setItem('lang',curLang);applyLang()};
-let vU='',vH='',mU='',ttl='',img='',cv='',totImgSz=0,c=null,PX='https://corsproxy.io/?',fMB=b=>b?`(${(b/1048576).toFixed(2)} MB)`:'',fKB=b=>b?`(${(b/1024).toFixed(0)} KB)`:'',esc=s=>s?s.replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])):'';
 
 // Fungsi uSig yang diperbarui agar lebih "Realtime" dan akurat berdasarkan nilai ms
 let uSig=()=>{
@@ -105,12 +107,15 @@ let uSig=()=>{
     
     // Logika warna berdasarkan ping (ms)
     // < 50ms = Hijau (Sangat bagus), < 100ms = Kuning (Sedang), > 100ms = Merah (Buruk)
-    let color = ms < 50 ? '#00ff88' : (ms < 100 ? '#ffcc00' : '#ff3366');
+    let color = !on ? '#ff3366' : (ms < 50 ? '#00ff88' : (ms < 100 ? '#ffcc00' : '#ff3366'));
     
     for(let i=0; i<3; i++){
-        s[i].classList.toggle('active', on);
-        s[i].style.background = on ? color : '#555';
+        if(s[i]){
+            s[i].classList.toggle('active', on);
+            s[i].style.background = color;
+        }
     }
+    if($('wifi')) $('wifi').style.borderColor = color;
 };
 
 window.addEventListener('online',uSig);window.addEventListener('offline',uSig);setInterval(uSig,1500);
